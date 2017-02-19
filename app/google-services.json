@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "356537033896",
+    "firebase_url": "https://iapconfapp.firebaseio.com",
+    "project_id": "iapconfapp",
+    "storage_bucket": "iapconfapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356537033896:android:ab264124ff0aba3c",
+        "android_client_info": {
+          "package_name": "com.affiliates.iap.iapspring2017"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "356537033896-dcqjet8lfh4ukbbm2dvvsjjopfirkb9l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.affiliates.iap.iapspring2017",
+            "certificate_hash": "4FA151F24195BA59EE0244C10E0E2AB4E4FAFCDE"
+          }
+        },
+        {
+          "client_id": "356537033896-v4r2gadc5vblhqg9lnvqmb1072lc77od.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkYLhYvy-q8PcLxCR1HtxL7s5hgOBZYMo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "356537033896-v4r2gadc5vblhqg9lnvqmb1072lc77od.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "356537033896-ge0uia5bj80ing35pdo1jiqqr3bq7a2b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "IAP-Conference-UPRM.IAP"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
