@@ -1,12 +1,16 @@
+//
+//  OverallVote.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 2/19/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017.Models;
 
-import com.affiliates.iap.iapspring2017.exeptions.VoteErrorExeption;
+import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-/**
- * Created by gsantiago on 02-19-17.
- */
 
 public class OverallVote {
    private String voteID;
@@ -17,7 +21,7 @@ public class OverallVote {
       this.voteID = voteID;
    }
 
-   public static void submitVote(String projecID) throws VoteErrorExeption{
+   public static void submitVote(String projecID) throws VoteErrorException {
       DatabaseReference ref = FirebaseDatabase.getInstance()
                                                .getReference()
                                                .child("Votes")

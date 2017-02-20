@@ -1,7 +1,15 @@
+//
+//  Advisor.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 2/19/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017.Models;
 
-import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountType;
-import com.affiliates.iap.iapspring2017.exeptions.VoteErrorExeption;
+import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
+import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -10,11 +18,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Objects;
-
-/**
- * Created by gsantiago on 02-19-17.
- */
 
 public class Advisor extends Users implements UserDelegate {
    private String[] classes;
@@ -26,7 +29,7 @@ public class Advisor extends Users implements UserDelegate {
    private String webPage;
 
    public Advisor(JSONObject data, AccountType accountType, String id)
-      throws InvalidAccountType, JSONException{
+      throws InvalidAccountTypeExeption, JSONException{
       this(checkType(accountType), data, accountType, id );
    }
 
@@ -42,9 +45,9 @@ public class Advisor extends Users implements UserDelegate {
    }
 
    private static Void checkType(AccountType accountType)
-      throws InvalidAccountType, JSONException{
+      throws InvalidAccountTypeExeption, JSONException{
       if (accountType != AccountType.Advisor)
-         throw new InvalidAccountType("Advisor(): Invalid account type; " + accountType);
+         throw new InvalidAccountTypeExeption("Advisor(): Invalid account type; " + accountType);
       return null;
    }
 
@@ -65,7 +68,7 @@ public class Advisor extends Users implements UserDelegate {
    }
 
    @Override
-   public void vote(String projectID) throws VoteErrorExeption {
+   public void vote(String projectID) throws VoteErrorException {
 
    }
 

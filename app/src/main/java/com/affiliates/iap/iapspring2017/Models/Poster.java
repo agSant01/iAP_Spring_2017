@@ -1,16 +1,20 @@
+//
+//  Poster.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 2/19/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017.Models;
 
-import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountType;
+import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-/**
- * Created by gsantiago on 02-19-17.
- */
 
 public class Poster {
    private String _abstract;
@@ -22,7 +26,7 @@ public class Poster {
    private String projectName;
    private String[] sponsors;
 
-   public Poster(JSONObject data, String id) throws InvalidAccountType, JSONException{
+   public Poster(JSONObject data, String id) throws InvalidAccountTypeExeption, JSONException{
       this._abstract = data.getString("Abstract");
       this.advisorID = data.getString("AdvisorRef");
       this.team = getTeamIDs(data.getJSONArray("TeamMembers"));

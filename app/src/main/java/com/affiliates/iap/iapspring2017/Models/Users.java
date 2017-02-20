@@ -1,11 +1,15 @@
+//
+//  Users.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 2/19/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017.Models;
 
-import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountType;
+import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.google.firebase.database.FirebaseDatabase;
-
-/**
- * Created by gsantiago on 02-18-17.
- */
 
 public class Users {
    private String email;
@@ -34,7 +38,7 @@ public class Users {
       this.name = name;
       this.userID = userID;
       if (accType == AccountType.NA){
-         throw new InvalidAccountType("Users(): Invalid account type" + accType);
+         throw new InvalidAccountTypeExeption("Users(): Invalid account type" + accType);
       }
       this.accountType = accType;
    }

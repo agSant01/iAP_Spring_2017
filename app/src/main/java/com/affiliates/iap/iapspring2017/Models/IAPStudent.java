@@ -1,31 +1,35 @@
+//
+//  IAPStudent.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 2/19/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017.Models;
 
-import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountType;
-import com.affiliates.iap.iapspring2017.exeptions.VoteErrorExeption;
+import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
+import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by gsantiago on 02-19-17.
- */
-
-public class IAPStudents extends Users implements UserDelegate{
+public class IAPStudent extends Users implements UserDelegate{
    private String department;
    private String gradDate;
    private String objective;
    private String photoURL;
-   private String proyectID;;
+   private String proyectID;
    private String resumeURL;
    private boolean voted;
 
-   public IAPStudents(JSONObject data, AccountType accountType, String id)
-      throws InvalidAccountType, JSONException {
+   public IAPStudent(JSONObject data, AccountType accountType, String id)
+      throws InvalidAccountTypeExeption, JSONException {
       this(checkType(accountType), data, accountType, id );
    }
 
-   private IAPStudents(Void d, JSONObject data, AccountType accountType, String id) throws JSONException{
+   private IAPStudent(Void d, JSONObject data, AccountType accountType, String id) throws JSONException{
       super(data.getString("Email"), data.getString("Name"), id, accountType);
       this.department = data.getString("Department");
       this.photoURL = data.getString("PhotoURL");
@@ -38,9 +42,9 @@ public class IAPStudents extends Users implements UserDelegate{
    }
 
    private static Void checkType(AccountType accountType)
-      throws InvalidAccountType, JSONException{
+      throws InvalidAccountTypeExeption, JSONException{
       if (accountType != AccountType.Advisor)
-         throw new InvalidAccountType("IAPStudent(): Invalid account type; " + accountType);
+         throw new InvalidAccountTypeExeption("IAPStudent(): Invalid account type; " + accountType);
       return null;
    }
 
@@ -50,7 +54,7 @@ public class IAPStudents extends Users implements UserDelegate{
    }
 
    @Override
-   public void vote(String projectID) throws VoteErrorExeption {
+   public void vote(String projectID) throws VoteErrorException {
 
    }
 }
