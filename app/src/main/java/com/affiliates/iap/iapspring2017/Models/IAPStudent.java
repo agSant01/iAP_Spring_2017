@@ -8,21 +8,25 @@
 
 package com.affiliates.iap.iapspring2017.Models;
 
+import android.content.Context;
+
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
+import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
+import com.affiliates.iap.iapspring2017.services.DataService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class IAPStudent extends Users implements UserDelegate{
+public class IAPStudent extends User implements UserDelegate{
    private String department;
    private String gradDate;
    private String objective;
    private String photoURL;
    private String proyectID;
    private String resumeURL;
-   private boolean voted;
+   private Voted voted;
 
    public IAPStudent(JSONObject data, AccountType accountType, String id)
       throws InvalidAccountTypeExeption, JSONException {
@@ -30,31 +34,79 @@ public class IAPStudent extends Users implements UserDelegate{
    }
 
    private IAPStudent(Void d, JSONObject data, AccountType accountType, String id) throws JSONException{
-      super(data.getString("Email"), data.getString("Name"), id, accountType);
+      super(data.getString("Email"), data.getString("Name"), id, data.getString("Sex"), accountType);
       this.department = data.getString("Department");
       this.photoURL = data.getString("PhotoURL");
       this.gradDate = data.getString("GradDate");
       this.objective = data.getString("Objective");
       this.resumeURL = data.getString("ResumeLink");
       this.proyectID = data.getString("Project");
-      this.voted = data.getBoolean("Voted");
+      this.voted = new Voted(data.getJSONObject("Voted"));
 
    }
 
    private static Void checkType(AccountType accountType)
       throws InvalidAccountTypeExeption, JSONException{
-      if (accountType != AccountType.Advisor)
+      if (accountType != AccountType.IAPStudent)
          throw new InvalidAccountTypeExeption("IAPStudent(): Invalid account type; " + accountType);
       return null;
    }
 
-   private void setVoted(){
-      this.voted = true;
-      //TODO: Set voted FBDatabase
+   private boolean hasVoted(OverallVote vote){
+      switch (vote.getVoteType()){
+         case BestPoster:
+            return voted.bestPoster;
+         case BestPresentation:
+            return voted.bestPresentation;
+         default:
+            return false;
+      }
+   }
+
+   private void setVoted(OverallVote vote){
+      switch (vote.getVoteType()){
+         case BestPoster:
+            this.voted.bestPoster = true;
+            break;
+         case BestPresentation:
+            voted.bestPresentation = true;
+            break;
+      }
+      DataService.sharedInstance().setVoted(this, vote);
    }
 
    @Override
-   public void vote(String projectID) throws VoteErrorException {
+   public void vote(String projectID, final Vote vote, Context context, final Callback callback) throws VoteErrorException {
+      if (vote instanceof OverallVote){
+         if(this.hasVoted((OverallVote) vote)){
+            DataService.sharedInstance().submitGeneralVote(projectID, ((OverallVote) vote).getNumberFromType(), new Callback() {
+               @Override
+               public void success(Object data) {
+                  setVoted((OverallVote) vote);
+                  callback.success(null);
+               }
 
+               @Override
+               public void failure(String message) {
+                  callback.failure(message);
+               }
+            });
+         } else {
+            callback.failure("Vote Error: Already voted");
+         }
+      } else {
+         callback.failure("Vote Error: Downcasting failed.");
+      }
+   }
+
+
+   private class Voted{
+      private boolean bestPoster = false;
+      private boolean bestPresentation = false;
+
+      public Voted (JSONObject data) throws JSONException{
+         this.bestPoster = data.getBoolean("BestPoster");
+         this.bestPresentation = data.getBoolean("BestPresentation");
+      }
    }
 }

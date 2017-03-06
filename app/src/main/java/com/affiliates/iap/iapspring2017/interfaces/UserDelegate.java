@@ -8,8 +8,11 @@
 
 package com.affiliates.iap.iapspring2017.interfaces;
 
+import android.content.Context;
+
+import com.affiliates.iap.iapspring2017.Models.Vote;
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 
 public interface UserDelegate {
-   void vote(String projectID) throws VoteErrorException;
+   void vote(String projectID, Vote vote, Context context, Callback callback) throws VoteErrorException;
 }
