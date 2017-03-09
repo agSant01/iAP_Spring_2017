@@ -1,8 +1,12 @@
-package com.affiliates.iap.iapspring2017.exeptions;
+//
+//  AuthenticationErrorExeption.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 2/19/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
 
-/**
- * Created by gsantiago on 02-23-17.
- */
+package com.affiliates.iap.iapspring2017.exeptions;
 
 public class AuthenticationErrorExeption extends RuntimeException {
    public AuthenticationErrorExeption() {

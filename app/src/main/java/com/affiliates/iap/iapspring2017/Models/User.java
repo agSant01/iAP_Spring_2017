@@ -13,14 +13,17 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
-import com.affiliates.iap.iapspring2017.services.*;
+import com.affiliates.iap.iapspring2017.services.AccountAdministration;
+import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class User {
@@ -42,6 +45,10 @@ public class User {
 
    public String getUserID() {
       return userID;
+   }
+
+   public String getGender() {
+      return gender;
    }
 
    public AccountType getAccountType() {
@@ -71,7 +78,7 @@ public class User {
                // signed in user can be handled in the listener.
                if (!task.isSuccessful()) {
                   Log.w(TAG, "signInWithEmail:failed", task.getException());
-                  Toast.makeText(context, "Failed", Toast.LENGTH_LONG).show();
+                  Toast.makeText(context, "Failed to Sign In", Toast.LENGTH_LONG).show();
                   return;
                }
                DataService.sharedInstance().getUserData(task.getResult().getUser().getUid(), callback);
@@ -88,8 +95,11 @@ public class User {
       });
    }
 
-   public boolean logOut(){
-      return false;
+   public void logOut(Context context) throws FirebaseAuthException{
+      FirebaseAuth.getInstance().signOut();
+      AccountAdministration aa = new AccountAdministration(context);
+      aa.saveUserID("");
+      Constants.setCurrentLogedInUser(null);
    }
 
    public void getUserData(String userID){

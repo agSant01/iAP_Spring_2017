@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Poster {
    private String _abstract;
@@ -30,13 +31,13 @@ public class Poster {
 
    public Poster(JSONObject data, String id) throws InvalidAccountTypeExeption, JSONException{
       this._abstract = data.getString("Abstract");
-      this.advisors = parseData(data.getJSONArray("AdvisorRef"));
-      this.team = parseData(data.getJSONArray("TeamMembers"));
+      this.advisors = parseData(data.getJSONObject("Advisors"));
+      this.team = parseData(data.getJSONObject("TeamMembers"));
       this.posterURL = data.getString("PosterImg");
-      this.categories = parseData(data.getJSONArray("Categories"));
+      this.categories = parseData(data.getJSONObject("Categories"));
       this.posterID = id;
       this.projectName = data.getString("ProjectName");
-      this.sponsors = parseData(data.getJSONArray("Sponsors"));
+      this.sponsors = parseData(data.optJSONObject("Sponsors"));
    }
 
    public void getTeamData(Callback callback){
@@ -58,10 +59,14 @@ public class Poster {
 
    }
 
-   private static ArrayList<String> parseData(JSONArray data) throws JSONException{
+   private static ArrayList<String> parseData(JSONObject data) throws JSONException{
+      if(data == null){
+         return null;
+      }
       ArrayList<String> ids = new ArrayList<String>();
+      Iterator<String> keys = data.keys();
       for (int i = 0; i < data.length(); i++)
-         ids.add(data.getString(i));
+         ids.add(keys.next());
       return ids;
    }
 

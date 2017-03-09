@@ -15,7 +15,6 @@ import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
 import com.affiliates.iap.iapspring2017.services.DataService;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;

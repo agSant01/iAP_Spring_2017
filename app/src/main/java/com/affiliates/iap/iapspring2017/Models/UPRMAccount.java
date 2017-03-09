@@ -10,7 +10,6 @@ package com.affiliates.iap.iapspring2017.Models;
 
 import android.content.Context;
 
-import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;

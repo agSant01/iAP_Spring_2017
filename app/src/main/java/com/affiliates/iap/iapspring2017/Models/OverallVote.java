@@ -9,16 +9,11 @@
 package com.affiliates.iap.iapspring2017.Models;
 
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.Objects;
-import java.util.StringTokenizer;
 
-import static com.affiliates.iap.iapspring2017.Models.OverallVote.VoteType.*;
+import static com.affiliates.iap.iapspring2017.Models.OverallVote.VoteType.BestPoster;
+import static com.affiliates.iap.iapspring2017.Models.OverallVote.VoteType.BestPresentation;
 
 public class OverallVote extends Vote {
    private String voteID;

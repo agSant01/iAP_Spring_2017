@@ -8,11 +8,19 @@
 
 package com.affiliates.iap.iapspring2017;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 
+import com.affiliates.iap.iapspring2017.tabs.MoreFragment;
 import com.affiliates.iap.iapspring2017.tabs.PostersFragment;
+import com.affiliates.iap.iapspring2017.tabs.ScheduleFragment;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -20,8 +28,18 @@ import com.affiliates.iap.iapspring2017.tabs.PostersFragment;
  */
 public class TabManager extends FragmentPagerAdapter {
 
-   public TabManager(FragmentManager fm) {
+
+   // Icons of the tabs
+   private int tabIcons[] = { R.drawable.ic_schedule,
+           R.drawable.ic_poster,
+           R.drawable.ic_more };
+   private Context context;
+
+   private final int PAGE_COUNT = tabIcons.length;
+
+   public TabManager(FragmentManager fm, Context context) {
       super(fm);
+      this.context = context;
    }
 
    @Override
@@ -29,9 +47,11 @@ public class TabManager extends FragmentPagerAdapter {
       // getItem is called to instantiate the fragment for the given page.
       // Return a PlaceholderFragment (defined as a static inner class below).
       if(position == 0) {
-         return PostersFragment.newInstance(position + 1);
+         return ScheduleFragment.newInstance();
+      } else if(position == 1){
+         return PostersFragment.newInstance();
       }
-      return PostersFragment.newInstance(position + 1);
+      return MoreFragment.newInstance();
    }
 
    @Override
@@ -40,16 +60,13 @@ public class TabManager extends FragmentPagerAdapter {
       return 3;
    }
 
-   @Override
-   public CharSequence getPageTitle(int position) {
-      switch (position) {
-         case 0:
-            return "SECTION 1";
-         case 1:
-            return "SECTION 2";
-         case 2:
-            return "SECTION 3";
-      }
-      return null;
-   }
+//   @Override
+//   public CharSequence getPageTitle(int position) {
+//      Drawable image = ContextCompat.getDrawable(context,tabIcons[position]);
+//      image.setBounds(0,0,image.getIntrinsicWidth(),image.getIntrinsicHeight());
+//      SpannableString spannableString = new SpannableString(" ");
+//      ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
+//      spannableString.setSpan(imageSpan, 0 , 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//      return spannableString;
+//   }
 }

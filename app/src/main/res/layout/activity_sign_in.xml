@@ -3,46 +3,95 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    app:theme="@style/SplashScreen"
+
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
 
-    <EditText
-        android:layout_width="215dp"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/email_box"
-        android:hint="Email"
-        android:gravity="center"
-        android:selectAllOnFocus="false"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/password_box"
-        android:layout_marginBottom="8dp"/>
 
-    <EditText
-        android:layout_width="215dp"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/password_box"
-        android:hint="Password"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="278dp"
+        android:layout_height="130dp"
+        android:src="@drawable/ic_logo"
         app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintVertical_bias="0.36"/>
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/email_box"
+        app:layout_constraintVertical_bias="0.688"
+        tools:layout_editor_absoluteY="67dp" />
+
+    <EditText
+        android:id="@+id/email_box"
+        android:layout_width="260dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Email"
+
+        android:inputType="textEmailAddress"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.477"
+        tools:layout_editor_absoluteY="266dp" />
+
+    <EditText
+        android:id="@+id/password_box"
+        android:layout_width="260dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_box"
+        app:layout_constraintVertical_bias="0.005"
+        tools:layout_editor_absoluteY="271dp" />
 
     <Button
-        android:text="Submit"
-        android:layout_width="105dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/submit_button"
-        app:layout_constraintRight_toRightOf="@+id/password_box"
-        android:layout_marginTop="40dp"
+        android:background="@drawable/button_oval_shape"
+        android:id="@+id/sign_in_button"
+        android:layout_width="119dp"
+        android:layout_height="33dp"
+
+        android:text="Sign In"
+        android:textSize="16sp"
+        android:textColor="@color/appWhite"
+
+        android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/password_box"
-        app:layout_constraintLeft_toLeftOf="@+id/password_box"/>
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.191"
+        app:layout_constraintHorizontal_bias="0.502" />
 
 </android.support.constraint.ConstraintLayout>

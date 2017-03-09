@@ -8,7 +8,6 @@
 
 package com.affiliates.iap.iapspring2017.Models;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

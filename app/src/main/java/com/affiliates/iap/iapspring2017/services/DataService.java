@@ -1,10 +1,16 @@
+//
+//  DataService.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 2/19/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017.services;
 
 import android.support.annotation.NonNull;
-import android.telecom.Call;
 import android.util.Log;
 
-import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Advisor;
 import com.affiliates.iap.iapspring2017.Models.CompanyUser;
 import com.affiliates.iap.iapspring2017.Models.CompanyVote;
@@ -13,16 +19,13 @@ import com.affiliates.iap.iapspring2017.Models.OverallVote;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.Models.UPRMAccount;
 import com.affiliates.iap.iapspring2017.Models.User;
-import com.affiliates.iap.iapspring2017.SignInActivity;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
-import com.google.android.gms.common.UserRecoverableException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,7 +42,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 
 public class DataService {
    private static final String TAG = "DataService";
@@ -145,7 +147,7 @@ public class DataService {
 
    public void submitGeneralVote(String projecID, int voteType, final Callback callback) throws VoteErrorException{
 
-      if(voteType != 0 || voteType != 1)
+      if(voteType != 0 && voteType != 1)
          callback.failure("Vote type value can only be 1 or 0.");
 
       final String voteID = generalVoteRef().push().getKey();
@@ -239,13 +241,18 @@ public class DataService {
       postersRef().addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot) {
-            JSONArray jsonArray = dataSnapshot.getValue(JSONArray.class);
+            JSONObject json = new JSONObject((Map<String, Object>) dataSnapshot.getValue());
             ArrayList<Poster> posters = new ArrayList<Poster>();
             try {
                JSONObject object;
-               for(int i = 0; i < jsonArray.length(); i++){
-                  object = jsonArray.getJSONObject(i);
-                  posters.add(new Poster(object, object.keys().toString()));
+               Iterator<String> x = json.keys();
+               for(int i = 0; i < json.length(); i++){
+                  String name = x.next();
+                  Log.d(TAG, "POSTERID" +name );
+                  JSONObject posterObject = json.getJSONObject(name);
+                  posters.add(new Poster(posterObject, name));
+
+                  Log.v(TAG, posters.get(i).getProjectName());
 
                   System.out.println("TESTING: " + posters.get(i).getProjectName());
                }

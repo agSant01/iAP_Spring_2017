@@ -8,12 +8,11 @@
 
 package com.affiliates.iap.iapspring2017;
 
-import android.view.View;
 import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class RegisterActivity extends BaseActivity {
+public class   RegisterActivity extends BaseActivity {
 
    private static final String TAG = "RegiterActivity";
 

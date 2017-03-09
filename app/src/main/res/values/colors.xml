@@ -2,5 +2,7 @@
 <resources>
     <color name="appGreen">#4BBA2D</color>
     <color name="appGrey">#4C4C4C</color>
-    <color name="appWhite">#FFFfFF</color>
+    <color name="appWhite">#FFFFFF</color>
+    <color name="appBlack">#000000</color>
+    <color name="appLightGrey">#dcdcdc</color>
 </resources>

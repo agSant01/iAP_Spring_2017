@@ -10,14 +10,7 @@ package com.affiliates.iap.iapspring2017.Models;
 
 import android.content.Context;
 
-import com.affiliates.iap.iapspring2017.Constants;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;

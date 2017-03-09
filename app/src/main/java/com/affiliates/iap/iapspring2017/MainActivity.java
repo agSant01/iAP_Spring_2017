@@ -9,13 +9,13 @@
 package com.affiliates.iap.iapspring2017;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
 
    private static final String TAG = "MainActivity";
    public static final String ANONYMOUS = "anonymous";
+
+   // Icons of the tabs
+   private int tabIcons[] = { R.drawable.ic_schedule,
+           R.drawable.ic_poster,
+           R.drawable.ic_more };
 
    private TabManager mSectionsPagerAdapter;
    private FirebaseDatabase mFirebaseDatabase;
@@ -73,9 +78,10 @@ public class MainActivity extends AppCompatActivity {
 
       Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
+      toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
       // Create the adapter that will return a fragment for each of the three
       // primary sections of the activity.
-      mSectionsPagerAdapter = new TabManager(getSupportFragmentManager());
+      mSectionsPagerAdapter = new TabManager(getSupportFragmentManager(), MainActivity.this);
 
       // Set up the ViewPager with the sections adapter.
       mViewPager = (ViewPager) findViewById(R.id.container);
@@ -83,5 +89,9 @@ public class MainActivity extends AppCompatActivity {
 
       TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
       tabLayout.setupWithViewPager(mViewPager);
+
+      tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+      tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+      tabLayout.getTabAt(2).setIcon(tabIcons[2]);
    }
 }

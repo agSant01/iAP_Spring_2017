@@ -1,3 +1,11 @@
+//
+//  Sponsors.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 3/06/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017.Models;
 
 import org.json.JSONArray;
