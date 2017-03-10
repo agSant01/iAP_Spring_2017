@@ -34,13 +34,13 @@ public class IAPStudent extends User implements UserDelegate{
    }
 
    private IAPStudent(Void d, JSONObject data, AccountType accountType, String id) throws JSONException{
-      super(data.getString("Email"), data.getString("Name"), id, data.getString("Sex"), accountType);
-      this.department = data.getString("Department");
-      this.photoURL = data.getString("PhotoURL");
-      this.gradDate = data.getString("GradDate");
-      this.objective = data.getString("Objective");
-      this.resumeURL = data.getString("ResumeLink");
-      this.proyectID = data.getString("Project");
+      super(data.optString("Email"), data.optString("Name"), id, data.optString("Sex"), accountType);
+      this.department = data.optString("Department");
+      this.photoURL = data.optString("PhotoURL");
+      this.gradDate = data.optString("GradDate");
+      this.objective = data.optString("Objective");
+      this.resumeURL = data.optString("ResumeLink");
+      this.proyectID = data.optString("Project");
       this.voted = new Voted(data.getJSONObject("Voted"));
 
    }
@@ -108,5 +108,33 @@ public class IAPStudent extends User implements UserDelegate{
          this.bestPoster = data.getBoolean("BestPoster");
          this.bestPresentation = data.getBoolean("BestPresentation");
       }
+   }
+
+   public String getDepartment() {
+      return department;
+   }
+
+   public String getGradDate() {
+      return gradDate;
+   }
+
+   public String getObjective() {
+      return objective;
+   }
+
+   public String getPhotoURL() {
+      return photoURL;
+   }
+
+   public String getProyectID() {
+      return proyectID;
+   }
+
+   public String getResumeURL() {
+      return resumeURL;
+   }
+
+   public Voted getVoted() {
+      return voted;
    }
 }

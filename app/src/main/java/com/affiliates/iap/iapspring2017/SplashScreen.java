@@ -1,11 +1,9 @@
 package com.affiliates.iap.iapspring2017;
 
 import android.app.Activity;
-import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.affiliates.iap.iapspring2017.Models.User;
@@ -13,6 +11,7 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
+import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
 
 public class SplashScreen extends Activity {
     private static final String TAG = "SplashScreen";
@@ -44,7 +43,6 @@ public class SplashScreen extends Activity {
                                 Intent in = new Intent(SplashScreen.this, MainActivity.class);
                                 startActivity(in);
                                 finish();
-                                overridePendingTransition(0,0);
                             }
 
                             @Override
@@ -60,7 +58,7 @@ public class SplashScreen extends Activity {
                     }
                 }
             }
-        }, 2000);
+        },1000);
     }
 
 }

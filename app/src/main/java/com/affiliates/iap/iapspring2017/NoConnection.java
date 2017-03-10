@@ -9,6 +9,8 @@ import android.widget.Button;
 
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
+import com.affiliates.iap.iapspring2017.sing_in.RegisterActivity;
+import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
 
 public class NoConnection extends Activity{
     private Client mClient;

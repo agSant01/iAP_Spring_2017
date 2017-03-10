@@ -12,16 +12,17 @@ import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.Models.User;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Constants {
    private static User currentLogedInUser;
-   private static ArrayList<Poster> posters;
+   private static Map<String, Poster> posters;
 
-   public static ArrayList<Poster> getPosters() {
+   public static Map<String, Poster> getPosters() {
       return posters;
    }
 
-   public static void setPosters(ArrayList<Poster> posters) {
+   public static void setPosters(Map<String, Poster> posters) {
       Constants.posters = posters;
    }
 

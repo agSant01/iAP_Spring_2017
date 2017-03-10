@@ -6,13 +6,14 @@
 //  Copyright © 2017 IAP Conference UPRM. All rights reserved.
 //
 
-package com.affiliates.iap.iapspring2017;
+package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.widget.EditText;
 
+import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class   RegisterActivity extends BaseActivity {
+public class RegisterActivity extends BaseActivity {
 
    private static final String TAG = "RegiterActivity";
 

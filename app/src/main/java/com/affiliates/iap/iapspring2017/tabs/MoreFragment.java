@@ -18,14 +18,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.Constants;
-import com.affiliates.iap.iapspring2017.MainActivity;
-import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.SignInActivity;
-import com.affiliates.iap.iapspring2017.services.DataService;
+import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
 import com.google.firebase.auth.FirebaseAuthException;
-
-import org.w3c.dom.Text;
 
 public class MoreFragment extends Fragment {
     private static final String TAG = "MoreFragment";

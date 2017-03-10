@@ -6,6 +6,6 @@
     <padding android:top="8dp"/>
     <size android:width="200dp"/>
 
-    <corners android:radius="20dp"/> <!-- increasing the value, increases the rounding. And as  TTransmit said, to make it like a capsule make the radius half of your button height -->
+    <corners android:radius="50dp"/> <!-- increasing the value, increases the rounding. And as  TTransmit said, to make it like a capsule make the radius half of your button height -->
 
 </shape>

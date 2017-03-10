@@ -16,12 +16,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
+import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
    /**
     * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
    private static final String TAG = "MainActivity";
    public static final String ANONYMOUS = "anonymous";
+   private TextView mTitle;
 
    // Icons of the tabs
    private int tabIcons[] = { R.drawable.ic_schedule,
@@ -41,13 +44,6 @@ public class MainActivity extends AppCompatActivity {
            R.drawable.ic_more };
 
    private TabManager mSectionsPagerAdapter;
-   private FirebaseDatabase mFirebaseDatabase;
-   private FirebaseAuth mFirebaseAuth;
-   private FirebaseUser mFirebaseUser;
-
-   private String mUsername;
-   private String mPhotoUrl;
-
 
    /**
     * The {@link ViewPager} that will host the section contents.
@@ -59,26 +55,11 @@ public class MainActivity extends AppCompatActivity {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
 
-      mFirebaseAuth = FirebaseAuth.getInstance();
-      mFirebaseUser = mFirebaseAuth.getCurrentUser();
-      mUsername = ANONYMOUS;
-
-      if (mFirebaseUser == null) {
-         // Not signed in, launch the Sign In activity
-         startActivity(new Intent(this, SignInActivity.class));
-         finish();
-         return;
-      } else {
-         mUsername = mFirebaseUser.getDisplayName();
-         if (mFirebaseUser.getPhotoUrl() != null) {
-            mPhotoUrl = mFirebaseUser.getPhotoUrl().toString();
-         }
-      }
-
-
-      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+      final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
-      toolbar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+      getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+      mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
       // Create the adapter that will return a fragment for each of the three
       // primary sections of the activity.
       mSectionsPagerAdapter = new TabManager(getSupportFragmentManager(), MainActivity.this);
@@ -87,11 +68,35 @@ public class MainActivity extends AppCompatActivity {
       mViewPager = (ViewPager) findViewById(R.id.container);
       mViewPager.setAdapter(mSectionsPagerAdapter);
 
-      TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+      final TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
       tabLayout.setupWithViewPager(mViewPager);
 
       tabLayout.getTabAt(0).setIcon(tabIcons[0]);
       tabLayout.getTabAt(1).setIcon(tabIcons[1]);
       tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+
+      tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+         @Override
+         public void onTabSelected(TabLayout.Tab tab) {
+            int pos = tab.getPosition();
+            if (pos == 0){
+               mTitle.setText("Schedule");
+            } else if(pos == 1){
+               mTitle.setText("Posters");
+            } else {
+               mTitle.setText("More");
+            }
+         }
+
+         @Override
+         public void onTabUnselected(TabLayout.Tab tab) {
+
+         }
+
+         @Override
+         public void onTabReselected(TabLayout.Tab tab) {
+
+         }
+      });
    }
 }

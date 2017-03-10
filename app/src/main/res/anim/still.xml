@@ -2,6 +2,6 @@
 <translate
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="250"
-    android:fromXDelta="0%p"
-    android:toXDelta="-100%p">
+    android:fromXDelta="1%p"
+    android:toXDelta="1%p">
 </translate>

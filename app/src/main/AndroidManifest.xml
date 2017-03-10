@@ -17,20 +17,31 @@
 
         <activity
             android:name=".SplashScreen"
-            android:theme="@style/SplashScreen">
+            android:theme="@style/SplashScreen"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity
-            android:name=".SignInActivity"
-            android:theme="@style/SplashScreen">
+            android:name=".sing_in.SignInActivity"
+            android:theme="@style/SplashScreen"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">>
+            android:label="Schedule"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
         </activity>
-
+        <activity
+            android:name=".PosterDescription"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".MainActivity"
+            android:label="Posters">
+        </activity>
     </application>
 </manifest>

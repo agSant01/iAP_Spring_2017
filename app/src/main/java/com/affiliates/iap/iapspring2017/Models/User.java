@@ -78,7 +78,7 @@ public class User {
                // signed in user can be handled in the listener.
                if (!task.isSuccessful()) {
                   Log.w(TAG, "signInWithEmail:failed", task.getException());
-                  Toast.makeText(context, "Failed to Sign In", Toast.LENGTH_LONG).show();
+                  callback.failure(task.getException().getMessage());
                   return;
                }
                DataService.sharedInstance().getUserData(task.getResult().getUser().getUid(), callback);

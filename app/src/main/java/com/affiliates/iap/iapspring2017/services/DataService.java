@@ -34,7 +34,6 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -93,20 +92,23 @@ public class DataService {
 
    public void getUserData(String id, final Callback<User> callback) throws InvalidAccountTypeExeption{
       final String ID = id;
-
-      usersRef().child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+      usersRef().child(id).addValueEventListener(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot){
-            JSONObject json = new JSONObject((Map<String, Object>) dataSnapshot.getValue());
-            String accType = null;
-            User user = null;
 
-            try {
-               accType = json.getString("AccountType");
-            } catch (JSONException e) {
-               Log.e(TAG, "DataService -> getUserData()", e);
-               e.printStackTrace();
+            Log.v(TAG, " ID: " + ID);
+            Log.v(TAG, " DATA: " + dataSnapshot.getValue());
+            if (dataSnapshot.getValue() == null) {
+               callback.failure("Invalid Account Type Exeption");
+               return;
             }
+            JSONObject json =  new JSONObject((Map) dataSnapshot.getValue());
+
+            String accType;
+            User user;
+
+            accType = json.optString("AccountType");
+
             try {
                switch (User.AccountType.determineAccType(accType)) {
                   case CompanyUser:
@@ -241,20 +243,18 @@ public class DataService {
       postersRef().addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot) {
-            JSONObject json = new JSONObject((Map<String, Object>) dataSnapshot.getValue());
-            ArrayList<Poster> posters = new ArrayList<Poster>();
+            JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
+            Map<String, Poster> posters = new HashMap<String, Poster>();
             try {
                JSONObject object;
                Iterator<String> x = json.keys();
+               Poster p;
                for(int i = 0; i < json.length(); i++){
                   String name = x.next();
-                  Log.d(TAG, "POSTERID" +name );
+                  Log.d(TAG, "POSTERID: " + name );
                   JSONObject posterObject = json.getJSONObject(name);
-                  posters.add(new Poster(posterObject, name));
-
-                  Log.v(TAG, posters.get(i).getProjectName());
-
-                  System.out.println("TESTING: " + posters.get(i).getProjectName());
+                  p = new Poster(posterObject, name);
+                  posters.put(p.getPosterID(), p);
                }
             }catch (JSONException e){
                Log.e(TAG, "getPosters(): "  + e);
@@ -267,14 +267,17 @@ public class DataService {
       });
    }
 
-   public void getPosterTeamMembers(Poster poster, final Callback callback){
+   public void getPosterTeamMembers(final Poster poster, final Callback callback){
       final ArrayList<IAPStudent> team = new ArrayList<IAPStudent>();
-      for (String id : poster.getTeam()){
-         getUserData(id, new Callback<User>() {
+      for (int i = 0; i < poster.getTeam().size(); i++){
+         getUserData(poster.getTeam().get(i), new Callback<User>() {
             @Override
             public void success(User user) {
+               System.out.println(TAG + team.size() + "  " + poster.getTeam().size());
                if (user instanceof IAPStudent) {
                   team.add((IAPStudent) user);
+                  if (team.size() == poster.getTeam().size())
+                     callback.success(team);
                }
             }
             @Override
@@ -283,10 +286,9 @@ public class DataService {
             }
          });
       }
-      callback.success(team);
    }
 
-   public void getPosterAdvisorMembers(Poster poster, final Callback callback){
+   public void getPosterAdvisorMembers(final Poster poster, final Callback callback){
       final ArrayList<Advisor> advisors = new ArrayList<Advisor>();
       for (String id : poster.getAdvisors()){
          getUserData(id, new Callback<User>() {
@@ -294,6 +296,8 @@ public class DataService {
             public void success(User user) {
                if (user instanceof Advisor){
                   advisors.add((Advisor) user);
+                  if(advisors.size() == poster.getAdvisors().size())
+                     callback.success(advisors);
                }
             }
 
@@ -303,6 +307,5 @@ public class DataService {
             }
          });
       }
-      callback.success(advisors);
    }
 }

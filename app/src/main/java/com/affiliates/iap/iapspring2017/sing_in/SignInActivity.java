@@ -6,21 +6,25 @@
 //  Copyright © 2017 IAP Conference UPRM. All rights reserved.
 //
 
-package com.affiliates.iap.iapspring2017;
+package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.affiliates.iap.iapspring2017.BaseActivity;
+import com.affiliates.iap.iapspring2017.Constants;
+import com.affiliates.iap.iapspring2017.MainActivity;
 import com.affiliates.iap.iapspring2017.Models.User;
+import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 
-public class SignInActivity extends Activity {
+public class SignInActivity extends  BaseActivity {
 
    // View
    private EditText mEmailField;
@@ -49,6 +53,7 @@ public class SignInActivity extends Activity {
                   String password = mPasswordField.getText().toString();
                   if (email.length() > 0 && password.length() > 0 ){
                      System.out.println( "DATA: " + email +"   " + password);
+                     showProgressDialog();
                      User.login(getBaseContext(), email, password, new Callback<User>(){
                         @Override
                         public void success(User user) {
@@ -57,16 +62,35 @@ public class SignInActivity extends Activity {
                            System.out.println("DATA -> " + Constants.getCurrentLoggedInUser().getName());
                            Intent in = new Intent(SignInActivity.this, MainActivity.class);
 
+                           hideProgressDialog();
                            startActivity(in);
-                           finish();
                            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                        }
+                           finish();
+                          }
 
                         @Override
                         public void failure(String message) {
-                           System.err.println(message);
+                           String s = "";
+                           if(message.contains("password is invalid")){
+                              s = "Incorrect Password";
+                           } else if (message.contains("There is no user record corresponding to this identifier.")){
+                              s = "Incorrect Email";
+                           } else if (message.contains("badly formatted")){
+                              s = "Invalid Email";
+                           }
+                           hideProgressDialog();
+
+                           Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                         }
                      });
+                  }else if (email.length() == 0 && password.length() == 0) {
+                     Toast.makeText(getBaseContext(), "Enter Information", Toast.LENGTH_SHORT).show();
+                  }
+                  else if (email.length() == 0){
+                     Toast.makeText(getBaseContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
+                  } else if(password.length() == 0){
+                     Toast.makeText(getBaseContext(), "Invalid Password", Toast.LENGTH_SHORT).show();
+                     System.out.println("IVSN");
                   }
                }
             });
