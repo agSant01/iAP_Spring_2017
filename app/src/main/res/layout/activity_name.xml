@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:theme="@style/SplashScreen"
+
+    android:layout_width="match_parent"
+    android:background="@color/appWhite"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/logoView"
+        android:layout_width="257dp"
+        android:layout_height="149dp"
+        android:src
+            ="@drawable/ic_logo"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="70dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.504" />
+
+    <EditText
+        android:id="@+id/nameField"
+        android:layout_width="263dp"
+        android:layout_height="54dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="56dp"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textCapWords|textPersonName"
+        android:textAlignment="center"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logoView" />
+
+    <Button
+        android:id="@+id/backButton"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="157dp"
+        android:layout_height="58dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="16dp"
+        android:background="@drawable/button_oval_shape"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <Button
+        android:id="@+id/nextButton"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="165dp"
+        android:layout_height="61dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="16dp"
+        android:background="@drawable/button_oval_shape"
+        android:text="Next"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toRightOf="@+id/loginButton"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp" />
+
+
+</android.support.constraint.ConstraintLayout>
