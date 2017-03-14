@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="appGreen">#4bba2d</color>
+    <color name="appGreen">#4BBA2D</color>
     <color name="appGrey">#4C4C4C</color>
     <color name="appWhite">#FFFFFF</color>
     <color name="appBlack">#000000</color>

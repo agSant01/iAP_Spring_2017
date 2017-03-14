@@ -23,11 +23,11 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logoView"
+        app:layout_constraintTop_toBottomOf="@+id/imageView"
         app:layout_constraintVertical_bias="0.181" />
 
     <ImageView
-        android:id="@+id/logoView"
+        android:id="@+id/imageView"
         android:layout_width="257dp"
         android:layout_height="149dp"
         android:src
