@@ -19,10 +19,6 @@ import com.affiliates.iap.iapspring2017.services.DataService;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by gsantiago on 02-19-17.
- */
-
 public class UPRMAccount extends User implements UserDelegate {
    private UPRMAccountType userType;
    private Voted voted;

@@ -8,9 +8,9 @@
 
 package com.affiliates.iap.iapspring2017.sing_in;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +23,7 @@ import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
+import com.affiliates.iap.iapspring2017.services.Client;
 
 public class SignInActivity extends  BaseActivity {
 
@@ -36,7 +37,7 @@ public class SignInActivity extends  BaseActivity {
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       final AccountAdministration accAdmin = new AccountAdministration(getBaseContext());
-
+      final Client client = new Client(getBaseContext());
       //Set view
       //Set view elements
       //set buttons
@@ -54,6 +55,16 @@ public class SignInActivity extends  BaseActivity {
                   if (email.length() > 0 && password.length() > 0 ){
                      System.out.println( "DATA: " + email +"   " + password);
                      showProgressDialog();
+                     if(!client.isConnectionAvailable()){
+                        try {
+                           Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                           e.printStackTrace();
+                        }
+                        hideProgressDialog();
+                        Toast.makeText(getBaseContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                     }
+
                      User.login(getBaseContext(), email, password, new Callback<User>(){
                         @Override
                         public void success(User user) {
@@ -79,7 +90,6 @@ public class SignInActivity extends  BaseActivity {
                               s = "Invalid Email";
                            }
                            hideProgressDialog();
-
                            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                         }
                      });

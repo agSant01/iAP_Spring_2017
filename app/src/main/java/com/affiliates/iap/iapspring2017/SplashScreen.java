@@ -1,3 +1,11 @@
+//
+//  SplashScreen.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 2/19/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017;
 
 import android.app.Activity;
@@ -23,42 +31,40 @@ public class SplashScreen extends Activity {
 
         final Client client = new Client(getBaseContext());
         final AccountAdministration aa = new AccountAdministration(getBaseContext());
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(!client.isConnectionAvailable()){
-                    Intent in = new Intent(SplashScreen.this , NoConnection.class);
-                    startActivity(in);
-                } else {
-                    String id = aa.getUserID();
-                    if(id != null && id != ""){
-                        Log.v(TAG, "UserID from Memory succesfull");
-                        DataService.sharedInstance().getUserData(id, new Callback<User>() {
-                            @Override
-                            public void success(User user) {
-                                Log.v(TAG, "Get user data successfull");
-                                Constants.setCurrentLogedInUser(user);
-
-                                Intent in = new Intent(SplashScreen.this, MainActivity.class);
-                                startActivity(in);
-                                finish();
-                            }
-
-                            @Override
-                            public void failure(String message) {
-                                Log.e(TAG, "Failed get user data");
-                            }
-                        });
-                    } else {
-                        Log.v(TAG,"No user signed in.");
-                        Intent in = new Intent(SplashScreen.this, SignInActivity.class);
+        if(!client.isConnectionAvailable()){
+            Intent in = new Intent(SplashScreen.this , NoConnection.class);
+            startActivity(in);
+        } else {
+            String id = aa.getUserID();
+            if(id != null && id != ""){
+                Log.v(TAG, "UserID from Memory succesfull");
+                DataService.sharedInstance().getUserData(id, new Callback<User>() {
+                    @Override
+                    public void success(User user) {
+                        Log.v(TAG, "Get user data successfull");
+                        Constants.setCurrentLogedInUser(user);
+                        Intent in = new Intent(SplashScreen.this, MainActivity.class);
                         startActivity(in);
                         finish();
                     }
-                }
+
+                    @Override
+                    public void failure(String message) {
+                        Log.e(TAG, "Failed get user data");
+                    }
+                });
+            } else {
+                Log.v(TAG,"No user signed in.");
+                Intent in = new Intent(SplashScreen.this, SignInActivity.class);
+                startActivity(in);
+                finish();
             }
-        },1000);
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

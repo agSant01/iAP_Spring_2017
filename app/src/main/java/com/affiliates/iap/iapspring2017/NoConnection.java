@@ -1,6 +1,13 @@
+//
+//  NoConnection.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 2/19/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -12,7 +19,7 @@ import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.sing_in.RegisterActivity;
 import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
 
-public class NoConnection extends Activity{
+public class NoConnection extends BaseActivity{
     private Client mClient;
     private AccountAdministration mAccAdmin;
 
@@ -30,23 +37,27 @@ public class NoConnection extends Activity{
         tryAgain.setOnClickListener(new View.OnClickListener() {                                       // Listener for try again
             @Override
             public void onClick(View v) {
+                showProgressDialog();
                 if (mClient.isConnectionAvailable()){
                     if(mAccAdmin.getUserID() != null){
+                        hideProgressDialog();
                         Intent in = new Intent(NoConnection.this, MainActivity.class);
                         startActivity(in);
                         finish();
                     } else {
+                        hideProgressDialog();
                         Intent in = new Intent(NoConnection.this, SignInActivity.class);
                         startActivity(in);
                         finish();
                     }
-
+                    hideProgressDialog();
                     Snackbar.make(findViewById(R.id.no_conection), Tmessage, Snackbar.LENGTH_SHORT).show();
                     Intent in = new Intent(NoConnection.this, RegisterActivity.class);
                     startActivity(in);
                     finish();
                 } else {
                     //There is no internet yet.
+                    hideProgressDialog();
                     Snackbar.make(findViewById(R.id.no_conection), message, Snackbar.LENGTH_SHORT).show();
                 }
             }

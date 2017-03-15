@@ -1,5 +1,5 @@
 //
-//  Poster.java
+//  PosterEval.java
 //  IAP
 //
 //  Created by Gabriel S. Santiago on 2/19/17.
@@ -9,14 +9,12 @@
 package com.affiliates.iap.iapspring2017.Models;
 
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
-import com.affiliates.iap.iapspring2017.interfaces.Callback;
-import com.affiliates.iap.iapspring2017.services.DataService;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class Poster {
@@ -28,35 +26,20 @@ public class Poster {
    private ArrayList<String> categories;
    private String projectName;
    private ArrayList<String> sponsors;
+   private int posterNumber;
+   private String posterDptm;
 
    public Poster(JSONObject data, String id) throws InvalidAccountTypeExeption, JSONException{
-      this._abstract = data.getString("Abstract");
-      this.advisors = parseData(data.getJSONObject("Advisors"));
-      this.team = parseData(data.getJSONObject("TeamMembers"));
-      this.posterURL = data.getString("PosterImg");
-      this.categories = parseData(data.getJSONObject("Categories"));
       this.posterID = id;
-      this.projectName = data.getString("ProjectName");
+      this._abstract = data.optString("Abstract");
+      this.advisors = parseData(data.optJSONObject("Advisors"));
+      this.team = parseData(data.optJSONObject("TeamMembers"));
+      this.posterURL = data.optString("PosterImg");
+      this.categories = parseData(data.optJSONObject("Categories"));
+      this.projectName = data.optString("ProjectName");
       this.sponsors = parseData(data.optJSONObject("Sponsors"));
-   }
-
-   public void getTeamData(Callback callback){
-      final ArrayList<IAPStudent> team = new ArrayList<>();
-      for (String id : this.team){
-            DataService.sharedInstance().getUserData(id, new Callback<User>() {
-               @Override
-               public void success(User user) {
-                  if(user instanceof IAPStudent){
-                     team.add((IAPStudent) user);
-                  }
-               }
-               @Override
-               public void failure(String message) {
-                  throw new InvalidAccountTypeExeption("Poster.class -> getTeamData(): " + message);
-               }
-            });
-      }
-
+      this.posterNumber = data.optInt("number");
+      this.posterDptm = data.optString("Department");
    }
 
    private static ArrayList<String> parseData(JSONObject data) throws JSONException{
@@ -100,5 +83,13 @@ public class Poster {
 
    public ArrayList<String> getSponsors() {
       return sponsors;
+   }
+
+   public int getPosterNumber() {
+      return posterNumber;
+   }
+
+   public String getPosterDptm() {
+      return posterDptm;
    }
 }

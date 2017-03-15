@@ -8,20 +8,16 @@
 
 package com.affiliates.iap.iapspring2017;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.TextView;
 
-import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.FirebaseDatabase;
+import com.affiliates.iap.iapspring2017.tabs.PostersFragment;
+import com.affiliates.iap.iapspring2017.tabs.TabManager;
 
 public class MainActivity extends BaseActivity {
 
@@ -39,8 +35,9 @@ public class MainActivity extends BaseActivity {
    private TextView mTitle;
 
    // Icons of the tabs
-   private int tabIcons[] = { R.drawable.ic_schedule,
+   private int tabIcons[] = {
            R.drawable.ic_poster,
+           R.drawable.ic_schedule,
            R.drawable.ic_more };
 
    private TabManager mSectionsPagerAdapter;
@@ -80,9 +77,9 @@ public class MainActivity extends BaseActivity {
          public void onTabSelected(TabLayout.Tab tab) {
             int pos = tab.getPosition();
             if (pos == 0){
-               mTitle.setText("Schedule");
-            } else if(pos == 1){
                mTitle.setText("Posters");
+            } else if(pos == 1){
+               mTitle.setText("Schedule");
             } else {
                mTitle.setText("More");
             }
@@ -98,5 +95,16 @@ public class MainActivity extends BaseActivity {
 
          }
       });
+   }
+
+   public void updateFragment(int position){
+      Fragment f =  mSectionsPagerAdapter.getItem(position);
+      f.getFragmentManager().beginTransaction().detach(f).commit();
+      f.getFragmentManager().beginTransaction().attach(f).commit();
+   }
+
+   @Override
+   protected void onResume() {
+      super.onResume();
    }
 }

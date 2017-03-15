@@ -6,21 +6,15 @@
 //  Copyright © 2017 IAP Conference UPRM. All rights reserved.
 //
 
-package com.affiliates.iap.iapspring2017;
+package com.affiliates.iap.iapspring2017.tabs;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ImageSpan;
 
-import com.affiliates.iap.iapspring2017.tabs.MoreFragment;
-import com.affiliates.iap.iapspring2017.tabs.PostersFragment;
-import com.affiliates.iap.iapspring2017.tabs.ScheduleFragment;
+import com.affiliates.iap.iapspring2017.BaseActivity;
+import com.affiliates.iap.iapspring2017.R;
 
 /**
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -47,9 +41,9 @@ public class TabManager extends FragmentPagerAdapter {
       // getItem is called to instantiate the fragment for the given page.
       // Return a PlaceholderFragment (defined as a static inner class below).
       if(position == 0) {
-         return ScheduleFragment.newInstance();
+         return PostersFragment.newInstance(position);
       } else if(position == 1){
-         return PostersFragment.newInstance();
+         return ScheduleFragment.newInstance();
       }
       return MoreFragment.newInstance();
    }
@@ -59,14 +53,4 @@ public class TabManager extends FragmentPagerAdapter {
       // Show 3 total pages.
       return 3;
    }
-
-//   @Override
-//   public CharSequence getPageTitle(int position) {
-//      Drawable image = ContextCompat.getDrawable(context,tabIcons[position]);
-//      image.setBounds(0,0,image.getIntrinsicWidth(),image.getIntrinsicHeight());
-//      SpannableString spannableString = new SpannableString(" ");
-//      ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
-//      spannableString.setSpan(imageSpan, 0 , 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//      return spannableString;
-//   }
 }

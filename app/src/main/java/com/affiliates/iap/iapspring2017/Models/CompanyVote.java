@@ -12,10 +12,11 @@ import android.content.Context;
 
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CompanyVote extends Vote {
+public class CompanyVote extends Vote implements Serializable {
    private int posterTotal;
    private int presentationTotal;
    private Technical technicalScore;
@@ -47,20 +48,20 @@ public class CompanyVote extends Vote {
    public HashMap<String, Object> makeJSON(){
       this.updateTotal();
       final Map<String,Object> tech = new HashMap<String, Object>(){{
-         put("Presentation", technicalScore.presentation);
-         put("Poster", technicalScore.poster);
+         put("PresentationEval", technicalScore.presentation);
+         put("PosterEval", technicalScore.poster);
       }};
       final Map<String,Object> res = new HashMap<String, Object>(){{
-         put("Presentation", resultsScore.presentation);
-         put("Poster", resultsScore.poster);
+         put("PresentationEval", resultsScore.presentation);
+         put("PosterEval", resultsScore.poster);
       }};
       final Map<String,Object> pres = new HashMap<String, Object>(){{
-         put("Presentation", presentationScore.presentation);
-         put("Poster", presentationScore.poster);
+         put("PresentationEval", presentationScore.presentation);
+         put("PosterEval", presentationScore.poster);
       }};
       final Map<String,Object> method = new HashMap<String, Object>(){{
-         put("Presentation", methodologyScore.presentation);
-         put("Poster", methodologyScore.poster);
+         put("PresentationEval", methodologyScore.presentation);
+         put("PosterEval", methodologyScore.poster);
       }};
 
       return new HashMap<String, Object>(){{
@@ -69,29 +70,29 @@ public class CompanyVote extends Vote {
          put("Project", getProjectID());
          put("Methodology", method);
          put("TechnicalContent", tech);
-         put("Results&Presentation", res);
-         put("Presentation", pres);
+         put("Results&PresentationEval", res);
+         put("PresentationEval", pres);
       }};
    }
 
-   private class Technical{
-      private int presentation = 0;
-      private int poster = 0;
+   public class Technical{
+      public int presentation = 0;
+      public int poster = 0;
    }
 
-   private class Results{
-      private int presentation = 0;
-      private int poster = 0;
+   public class Results{
+      public int presentation = 0;
+      public int poster = 0;
    }
 
-   private class Presentation{
-      private int presentation = 0;
-      private int poster = 0;
+   public class Presentation{
+      public int presentation = 0;
+      public int poster = 0;
    }
 
-   private class Methodology{
-      private int presentation = 0;
-      private int poster = 0;
+   public class Methodology{
+      public int presentation = 0;
+      public int poster = 0;
    }
 
 
@@ -101,6 +102,31 @@ public class CompanyVote extends Vote {
 
    public int getPresentationTotal() {
       return presentationTotal;
+   }
+
+
+   public Technical getTechnicalScore() {
+      return technicalScore;
+   }
+
+   public Results getResultsScore() {
+      return resultsScore;
+   }
+
+   public Presentation getPresentationScore() {
+      return presentationScore;
+   }
+
+   public Methodology getMethodologyScore() {
+      return methodologyScore;
+   }
+
+   public void setPosterTotal(int posterTotal) {
+      this.posterTotal = posterTotal;
+   }
+
+   public void setPresentationTotal(int presentationTotal) {
+      this.presentationTotal = presentationTotal;
    }
 
    public boolean validate(){

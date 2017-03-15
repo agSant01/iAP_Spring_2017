@@ -5,4 +5,7 @@
     <color name="appWhite">#FFFFFF</color>
     <color name="appBlack">#000000</color>
     <color name="appLightGrey">#dcdcdc</color>
+    <color name="appDevilRed">#E05263</color>
+    <color name="appRed">#D33E43</color>
+    <color name="appCyan">#7AA095</color>
 </resources>

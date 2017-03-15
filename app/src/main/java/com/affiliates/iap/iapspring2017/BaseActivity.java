@@ -10,6 +10,7 @@ package com.affiliates.iap.iapspring2017;
 
 import android.app.ProgressDialog;
 import android.support.annotation.VisibleForTesting;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {

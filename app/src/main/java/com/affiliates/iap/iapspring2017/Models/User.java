@@ -11,7 +11,6 @@ package com.affiliates.iap.iapspring2017.Models;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
@@ -80,8 +79,12 @@ public class User {
                   Log.w(TAG, "signInWithEmail:failed", task.getException());
                   callback.failure(task.getException().getMessage());
                   return;
+               }try{
+                  DataService.sharedInstance().getUserData(task.getResult().getUser().getUid(), callback);
+               } catch (InvalidAccountTypeExeption e){
+                  callback.failure("User.class -> login(): Invalid Account Exeption");
                }
-               DataService.sharedInstance().getUserData(task.getResult().getUser().getUid(), callback);
+
             }
          });
    }

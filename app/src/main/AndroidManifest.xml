@@ -43,5 +43,24 @@
             android:parentActivityName=".MainActivity"
             android:label="Posters">
         </activity>
+
+        <activity
+            android:name=".profiles.IAPStudentProfile"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".profiles.AdvisorProfile"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".evaluation_center.EvaluationActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+
     </application>
 </manifest>

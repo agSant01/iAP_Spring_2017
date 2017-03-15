@@ -41,7 +41,7 @@ public class IAPStudent extends User implements UserDelegate{
       this.objective = data.optString("Objective");
       this.resumeURL = data.optString("ResumeLink");
       this.proyectID = data.optString("Project");
-      this.voted = new Voted(data.getJSONObject("Voted"));
+      this.voted = new Voted(data.optJSONObject("Voted"));
 
    }
 

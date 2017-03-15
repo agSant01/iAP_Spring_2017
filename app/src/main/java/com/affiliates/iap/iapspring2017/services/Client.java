@@ -1,14 +1,16 @@
+//
+//  Client.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 3/7/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017.services;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
-import static java.security.AccessController.getContext;
-
-/**
- * Created by gsantiago on 03-07-17.
- */
 
 public class Client {
     private static final String TAG = "Client";

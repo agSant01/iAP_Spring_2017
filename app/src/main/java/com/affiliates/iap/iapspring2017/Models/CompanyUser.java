@@ -9,6 +9,7 @@
 package com.affiliates.iap.iapspring2017.Models;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
@@ -16,12 +17,15 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -30,6 +34,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class CompanyUser extends User implements UserDelegate {
    private ArrayList<String> votes;
@@ -40,26 +45,29 @@ public class CompanyUser extends User implements UserDelegate {
    }
 
    private CompanyUser(Void d, JSONObject data, AccountType accountType, String id) throws JSONException{
-      super(data.getString("Email"), data.getString("Name"), id,data.getString("Sex"), accountType);
-      this.votes = getVotesFromJSON(data.getJSONArray("Votes"));
-      this.companName = data.getString("Company");
+      super(data.optString("Email"), data.optString("Name"), id,data.optString("Sex"), accountType);
+      this.votes = getVotesFromJSON(data.optJSONObject("Votes"));
+      this.companName = data.optString("Company");
    }
 
    private static Void checkType(AccountType accountType) throws InvalidAccountTypeExeption, JSONException{
-      if (accountType != AccountType.Advisor)
-         throw new InvalidAccountTypeExeption("IAPStudent(): Invalid account type; " + accountType);
+     if (accountType != AccountType.CompanyUser)
+         throw new InvalidAccountTypeExeption("CompanyUser(): Invalid account type; " + accountType);
       return null;
    }
 
-   private static ArrayList<String> getVotesFromJSON(JSONArray data) throws JSONException{
+   private static ArrayList<String> getVotesFromJSON(JSONObject data) throws JSONException{
+      if(data == null) return new ArrayList<String>();
+      Iterator<String> x = data.keys();
       ArrayList<String> votes = new ArrayList<>();
       for (int i = 0; i < data.length(); i++){
-         votes.add(data.getString(i));
+         votes.add(x.next());
       }
       return votes;
    }
 
    public boolean hasEvaluated(String projectID){
+      if (votes == null) return false;
       return this.votes.contains(projectID);
    }
 
@@ -93,41 +101,34 @@ public class CompanyUser extends User implements UserDelegate {
       }});
    }
 
-   CompanyVote loadVote(String projectID, Context context){
+   public CompanyVote loadVote(String projectID, Context context){
       if (hasEvaluated(projectID)){
          return null;
       }
-      FileInputStream fileInputStream = null;
       CompanyVote vote = null;
-      try {
-         fileInputStream = context.openFileInput(projectID);
-      } catch (FileNotFoundException e) {
-         e.printStackTrace();
-      }
-      if(fileInputStream != null){
-         ObjectInputStream objectInputStream = null;
-         try {
-            objectInputStream = new ObjectInputStream(fileInputStream);
-            vote = (CompanyVote) objectInputStream.readObject();
-         } catch (IOException e) {
-            e.printStackTrace();
-         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-         }
-      } else {
-         vote = new CompanyVote(projectID);
-         FileOutputStream fileOutputStream = null;
-         try {
-            fileOutputStream = context.openFileOutput(projectID, Context.MODE_PRIVATE);
 
-            ObjectOutputStream os = new ObjectOutputStream(fileOutputStream);
-            os.writeObject(vote);
-            os.close();
-            fileOutputStream.close();
-         }  catch (IOException e) {
-            e.printStackTrace();
+      try {
+         FileInputStream fi = context.openFileInput(projectID);
+         BufferedInputStream bis = new BufferedInputStream(fi);
+         StringBuilder buffer = new StringBuilder();
+         while(bis.available()!= 0){
+            char c = (char) bis.read();
+            buffer.append(c);
          }
+         Gson gson = new Gson();
+         if(buffer.length() > 3)
+            return  gson.fromJson(buffer.toString(), CompanyVote.class);
+         return null;
+      } catch (Exception e) {
+         e.printStackTrace();
+         Log.e("CompanyUser.class", "loadVote() + e");
       }
+      if(vote==null)
+         return new CompanyVote(projectID);
       return vote;
+   }
+
+   public ArrayList<String> getVotes() {
+      return votes;
    }
 }
