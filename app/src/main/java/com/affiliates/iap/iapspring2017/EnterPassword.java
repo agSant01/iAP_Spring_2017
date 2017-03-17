@@ -21,13 +21,14 @@ public class EnterPassword extends AppCompatActivity {
             }
         });
 
-//        Button next = (Button) findViewById(R.id.nextButton);
-//        next.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(NameActivity.this, EnterEmail.class);
-//                startActivity(intent);
-//            }
-//        });
+        Button next = (Button) findViewById(R.id.nextButton);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(EnterPassword.this, MainActivity.class);
+                startActivity(in);
+                finish();
+            }
+        });
     }
 }
