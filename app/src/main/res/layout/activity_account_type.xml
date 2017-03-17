@@ -38,8 +38,9 @@
         android:text="IAP Student"
         android:textColor="@color/appGreen"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="227dp"
-        tools:layout_editor_absoluteY="300dp" />
+        tools:layout_editor_absoluteY="300dp"
+        android:layout_marginRight="63dp"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <TextView
         android:id="@+id/studentProfessorButton"
@@ -58,12 +59,13 @@
         android:id="@+id/advisorButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="91dp"
+        android:layout_marginTop="89dp"
         android:text="Advisor"
         android:textColor="@color/appGreen"
         android:textSize="18sp"
         app:layout_constraintTop_toBottomOf="@+id/iapStudentButton"
-        tools:layout_editor_absoluteX="243dp" />
+        android:layout_marginRight="80dp"
+        app:layout_constraintRight_toRightOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>
