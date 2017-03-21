@@ -44,9 +44,9 @@
         <activity android:name=".NameActivity" />
         <activity android:name=".LoginOrRegister" />
         <activity android:name=".EnterEmail" />
-        <activity android:name=".EnterPassword" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".AccountType"></activity>
+        <activity android:name=".AccountType" />
+        <activity android:name=".EmailConfirmation"></activity>
     </application>
 
 </manifest>

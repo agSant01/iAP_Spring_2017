@@ -30,7 +30,7 @@ public class EnterEmail extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(Utils.isValidEmail(email.getText().toString())) {
-                    Intent intent = new Intent(EnterEmail.this, EnterPassword.class);
+                    Intent intent = new Intent(EnterEmail.this,EmailConfirmation.class);
                     startActivity(intent);
                 }
                 else System.out.println("Email is not valid");
