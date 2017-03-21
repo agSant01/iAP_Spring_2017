@@ -40,7 +40,7 @@ public class SplashScreen extends Activity {
                                 Log.v(TAG, "Get user data successfull");
                                 Constants.setCurrentLogedInUser(user);
 
-                                Intent in = new Intent(SplashScreen.this, MainActivity.class);
+                                Intent in = new Intent(SplashScreen.this, SignInActivity.class);
                                 startActivity(in);
                                 finish();
                             }
