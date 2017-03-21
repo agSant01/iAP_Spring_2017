@@ -52,7 +52,7 @@ public class SplashScreen extends Activity {
                         });
                     } else {
                         Log.v(TAG,"No user signed in.");
-                        Intent in = new Intent(SplashScreen.this, SignInActivity.class);
+                        Intent in = new Intent(SplashScreen.this, LoginOrRegister.class);
                         startActivity(in);
                         finish();
                     }
