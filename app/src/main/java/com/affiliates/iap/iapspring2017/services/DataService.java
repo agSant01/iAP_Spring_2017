@@ -8,6 +8,7 @@
 
 package com.affiliates.iap.iapspring2017.services;
 
+import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -41,6 +42,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 public class DataService {
    private static final String TAG = "DataService";
@@ -207,11 +211,11 @@ public class DataService {
    }
 
    private void runCompanyVoteTransaction(final CompanyVote vote){
-      final DatabaseReference ref = votesRef().child("Sumary/CompanyEval/"+(vote.getProjectID()));
+      final DatabaseReference ref = votesRef().child("Summary/CompanyEval/"+(vote.getProjectID()));
       ref.child("Presentation").runTransaction(new Transaction.Handler() {
          @Override
          public Transaction.Result doTransaction(MutableData mutableData) {
-            Integer score = (Integer) ((mutableData.getValue() == null) ? 0 : mutableData.getValue());
+            Integer score = ((mutableData.getValue() == null) ? 0 : mutableData.getValue(Integer.class));
             score += vote.getPresentationTotal();
             mutableData.setValue(score);
             return Transaction.success(mutableData);
@@ -226,7 +230,7 @@ public class DataService {
       ref.child("Poster").runTransaction(new Transaction.Handler() {
          @Override
          public Transaction.Result doTransaction(MutableData mutableData) {
-            Integer score = (Integer) ((mutableData.getValue() == null) ? 0 : mutableData.getValue());
+            Integer score =  ((mutableData.getValue() == null) ? 0 : mutableData.getValue(Integer.class));
             score += vote.getPosterTotal();
             mutableData.setValue(score);
             return Transaction.success(mutableData);
@@ -240,26 +244,25 @@ public class DataService {
    }
 
    public void getPosters(final Callback callback) {
-      postersRef().addListenerForSingleValueEvent(new ValueEventListener() {
+      postersRef().orderByChild("number").addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot) {
             JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
-            Map<String, Poster> posters = new HashMap<String, Poster>();
+            HashMap<Integer, Poster> poster = new HashMap<Integer, Poster>();
             try {
-               JSONObject object;
                Iterator<String> x = json.keys();
                Poster p;
-               for(int i = 0; i < json.length(); i++){
+               for (int i = 0; i < json.length(); i++) {
                   String name = x.next();
-                  Log.d(TAG, "POSTERID: " + name );
+                  Log.d(TAG, "POSTERID: " + name);
                   JSONObject posterObject = json.getJSONObject(name);
                   p = new Poster(posterObject, name);
-                  posters.put(p.getPosterID(), p);
+                  poster.put(p.getPosterNumber(), p);
                }
-            }catch (JSONException e){
-               Log.e(TAG, "getPosters(): "  + e);
+            } catch (JSONException e) {
+               Log.e(TAG, "getPosters(): " + e);
             }
-            callback.success(posters);
+            callback.success(poster);
          }
 
          @Override

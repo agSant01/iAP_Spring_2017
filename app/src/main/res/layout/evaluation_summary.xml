@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:theme="@style/AppTheme.NoActionBar">
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="61dp"
+        android:text="Total"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        app:layout_constraintRight_toLeftOf="@+id/sumary_total_poster"
+        android:layout_marginRight="22dp"
+        android:layout_marginEnd="22dp" />
+
+    <TextView
+        android:id="@+id/sumary_total_poster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/appGreen"
+        android:textSize="18sp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/sumary_res_poster"
+        app:layout_constraintRight_toLeftOf="@+id/sumary_total_oral"
+        android:layout_marginRight="49dp"
+        android:layout_marginEnd="49dp" />
+
+    <View
+        android:id="@+id/view8"
+        android:layout_width="164dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="21dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="3dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView23"
+        android:layout_marginStart="21dp" />
+
+    <TextView
+        android:id="@+id/sumary_total_oral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/appGreen"
+        android:textSize="18sp"
+        android:layout_marginRight="50dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="50dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/sumary_res_oral" />
+
+    <TextView
+        android:id="@+id/sumary_tech_oral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5"
+        android:textColor="@color/appGreen"
+        android:textSize="18sp"
+        android:layout_marginRight="50dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="14dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView22"
+        android:layout_marginEnd="50dp" />
+
+    <TextView
+        android:id="@+id/sumary_presentation_oral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4"
+        android:textColor="@color/appGreen"
+        android:textSize="18sp"
+        android:layout_marginRight="50dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/sumary_tech_oral"
+        android:layout_marginEnd="50dp" />
+
+    <TextView
+        android:id="@+id/sumary_method_oral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3"
+        android:textColor="@color/appGreen"
+        android:textSize="18sp"
+        android:layout_marginRight="50dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/sumary_presentation_oral"
+        android:layout_marginEnd="50dp" />
+
+    <TextView
+        android:id="@+id/sumary_res_oral"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textColor="@color/appGreen"
+        android:textSize="18sp"
+        android:layout_marginRight="50dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="17dp"
+        app:layout_constraintTop_toBottomOf="@+id/sumary_method_oral"
+        android:layout_marginEnd="50dp" />
+
+    <TextView
+        android:id="@+id/textView22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Oral"
+        android:textSize="16sp"
+        android:layout_marginRight="37dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/evaluation_summary_project_name"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginEnd="37dp" />
+
+    <TextView
+        android:id="@+id/evaluation_summary_project_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="IAP App"
+        android:maxLines="2"
+        android:textAlignment="center"
+        android:gravity="center_horizontal"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:textSize="18sp"
+        android:textColor="@color/appGrey"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="23dp"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Technical Content"
+        android:id="@+id/textView7"
+        android:textSize="16sp"
+        android:layout_marginTop="41dp"
+        app:layout_constraintTop_toBottomOf="@+id/evaluation_summary_project_name"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintVertical_bias="0.005"
+        app:layout_constraintRight_toLeftOf="@+id/sumary_tech_poster"
+        android:layout_marginRight="11dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="1.0" />
+
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="164dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="21dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        android:layout_marginStart="21dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Presentation"
+        android:textSize="16sp"
+        android:id="@+id/textView5"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:layout_constraintRight_toLeftOf="@+id/sumary_presentation_poster"
+        android:layout_marginRight="14dp" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="164dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        android:layout_marginStart="21dp"
+        app:layout_constraintRight_toLeftOf="@+id/sumary_presentation_poster"
+        android:layout_marginRight="8dp"
+        app:layout_constraintHorizontal_bias="0.133" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Methodology"
+        android:textSize="16sp"
+        android:layout_marginTop="19dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView5"
+        android:id="@+id/textView6"
+        app:layout_constraintRight_toLeftOf="@+id/sumary_method_poster"
+        android:layout_marginRight="14dp" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="164dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="21dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        android:layout_marginStart="21dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Results &amp; Discusions"
+        android:textSize="16sp"
+        android:layout_marginTop="18dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        android:id="@+id/textView16"
+        app:layout_constraintRight_toLeftOf="@+id/sumary_res_poster"
+        android:layout_marginRight="14dp" />
+
+    <View
+        android:id="@+id/view4"
+        android:layout_width="164dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="21dp"
+        android:layout_marginTop="2dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView16"
+        android:layout_marginStart="21dp" />
+
+    <TextView
+        android:id="@+id/sumary_tech_poster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/appGreen"
+        android:layout_marginTop="12dp"
+        android:text="5"
+        app:layout_constraintTop_toBottomOf="@+id/textView17"
+        app:layout_constraintRight_toLeftOf="@+id/sumary_tech_oral"
+        android:layout_marginRight="49dp"
+        android:layout_marginEnd="49dp" />
+
+    <TextView
+        android:id="@+id/sumary_presentation_poster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/appGreen"
+        android:text="4"
+        app:layout_constraintRight_toLeftOf="@+id/sumary_presentation_oral"
+        android:layout_marginRight="49dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/sumary_tech_poster"
+        android:layout_marginEnd="49dp" />
+
+    <TextView
+        android:id="@+id/sumary_method_poster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/appGreen"
+        android:layout_marginTop="15dp"
+        android:text="3"
+        app:layout_constraintTop_toBottomOf="@+id/sumary_presentation_poster"
+        app:layout_constraintRight_toLeftOf="@+id/sumary_method_oral"
+        android:layout_marginRight="49dp"
+        android:layout_marginEnd="49dp" />
+
+    <TextView
+        android:id="@+id/sumary_res_poster"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:text="0"
+        android:textColor="@color/appGreen"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/sumary_method_poster"
+        app:layout_constraintRight_toLeftOf="@+id/sumary_res_oral"
+        android:layout_marginRight="49dp"
+        android:layout_marginEnd="49dp" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Poster"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/evaluation_summary_project_name"
+        app:layout_constraintRight_toLeftOf="@+id/textView22"
+        android:layout_marginRight="26dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginEnd="26dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="126dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_oval_shape"
+        android:backgroundTint="@color/appRed"
+        android:text="Cancel"
+        android:textColor="@color/appWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.807"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/button3"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.908" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="126dp"
+        android:layout_height="33dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_oval_shape"
+        android:text="Submit"
+        android:textColor="@color/appWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/button2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.909" />
+
+    <TextView
+        android:id="@+id/textView26"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rating Scale"
+        android:textSize="20sp"
+        android:textColor="@color/appGrey"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="47dp" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView26"
+        app:srcCompat="@drawable/rating_" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline"
+        app:layout_constraintGuide_begin="20dp"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteY="20dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline2"
+        android:orientation="vertical"
+        app:layout_constraintGuide_end="340dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="-18dp" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline3"
+        app:layout_constraintGuide_begin="20dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="20dp" />
+</android.support.constraint.ConstraintLayout>

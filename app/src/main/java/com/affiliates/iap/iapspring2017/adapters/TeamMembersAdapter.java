@@ -1,9 +1,14 @@
+//
+//  TeamMembersAdapter.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 3/10/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +20,7 @@ import com.affiliates.iap.iapspring2017.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TeamMembersAdapter extends ArrayAdapter<IAPStudent> {
@@ -37,7 +43,7 @@ public class TeamMembersAdapter extends ArrayAdapter<IAPStudent> {
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        convertView = mInflater.inflate(R.layout.team_member, null);
+        convertView = mInflater.inflate(R.layout.poster_team_member, null);
         holder = new ViewHolder();
         holder.image = (CircleImageView) convertView.findViewById(R.id.profile_image);
 

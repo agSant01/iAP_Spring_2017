@@ -30,8 +30,7 @@
         android:id="@+id/logoView"
         android:layout_width="257dp"
         android:layout_height="149dp"
-        android:src
-            ="@drawable/ic_logo"
+        android:src="@drawable/ic_logo"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="114dp"
         android:layout_marginRight="8dp"

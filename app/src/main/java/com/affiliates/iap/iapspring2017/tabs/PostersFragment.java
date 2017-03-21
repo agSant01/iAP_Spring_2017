@@ -8,18 +8,23 @@
 
 package com.affiliates.iap.iapspring2017.tabs;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.Constants;
+import com.affiliates.iap.iapspring2017.MainActivity;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.PosterDescription;
 import com.affiliates.iap.iapspring2017.R;
@@ -28,16 +33,28 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
-public class PostersFragment extends android.support.v4.app.Fragment{
+public class PostersFragment extends Fragment {
    private static final String TAG = "PostersFragment";
-   private ArrayList<Poster> mPosters;
    private PosterAdapter mPosterAdapter;
    private ListView mListView;
    private View mRootView;
+   private ProgressBar mPB;
 
-   public static PostersFragment newInstance(){
+   private static int position;
+
+   public static PostersFragment newInstance(int p){
+      position = p;
       return new PostersFragment();
    }
 
@@ -51,19 +68,40 @@ public class PostersFragment extends android.support.v4.app.Fragment{
                          Bundle savedInstance) {
 
       mRootView = inflater.inflate(R.layout.fragment_posters, container, false);
+      mListView = (ListView) mRootView.findViewById(R.id.poster_listview);
+      mPB = (ProgressBar) mRootView.findViewById(R.id.progressBar);
+      mPB.setVisibility(ProgressBar.VISIBLE);
+      mPB.setVerticalFadingEdgeEnabled(true);
+      final AlphaAnimation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);//fade from 1 to 0 alpha
+      fadeOutAnimation.setDuration(1000);
+      fadeOutAnimation.setFillAfter(true);//to keep it at 0 when animation ends
+
+      // run a background job and once complete
 
       if(Constants.getPosters() == null){
          DataService.sharedInstance().getPosters(new Callback() {
             @Override
             public void success(Object data) {
                Log.v(TAG, "Get posters succesfull");
-               Constants.setPosters((Map<String, Poster>) data);
+               HashMap<Integer, Poster> d = (HashMap<Integer, Poster>) data;
+               SortedSet<Integer> l = new TreeSet<Integer>(d.keySet());
+               Iterator<Integer> x = l.iterator();
+               SortedMap<String, Poster> ptr = new TreeMap<String, Poster>();
+               while (x.hasNext()){
+                  int k = x.next();
+                  Log.v(TAG, k+"<_ T" + d.get(k).getProjectName());
+                  ptr.put(d.get(k).getPosterID(), d.get(k));
+               }
+               for(Poster p : ptr.values())
+                  Log.v(TAG, p.getProjectName() + "<_ptr.val");
+
+               Constants.setPosters(ptr);
 
                mPosterAdapter = new PosterAdapter(getActivity().getBaseContext(), new ArrayList<Poster>(Constants.getPosters().values()));
+               for(Poster p : Constants.getPosters().values())
+                  Log.v(TAG, p.getProjectName() + "<_");
 
-               mListView = (ListView) mRootView.findViewById(R.id.poster_listview);
                mListView.setAdapter(mPosterAdapter);
-
                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                   @Override
                   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -73,18 +111,20 @@ public class PostersFragment extends android.support.v4.app.Fragment{
                      startActivity(in);
                   }
                });
+               //mPB.setVisibility(ProgressBar.INVISIBLE);
+               mPB.startAnimation(fadeOutAnimation);
+               mPB.setVisibility(ProgressBar.INVISIBLE);
             }
 
             @Override
             public void failure(String message) {
+               ((MainActivity) getActivity()).updateFragment(position);
                Log.e(TAG, "Failed to get posters");
             }
          });
       } else{
          mPosterAdapter = new PosterAdapter(getActivity().getBaseContext(),new ArrayList<Poster>(Constants.getPosters().values()));
-         mListView = (ListView) mRootView.findViewById(R.id.poster_listview);
          mListView.setAdapter(mPosterAdapter);
-
          mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -94,8 +134,20 @@ public class PostersFragment extends android.support.v4.app.Fragment{
                startActivity(in);
             }
          });
+         mPB.startAnimation(fadeOutAnimation);
+         mPB.setVisibility(ProgressBar.INVISIBLE);
       }
 
       return mRootView;
+   }
+
+   @Override
+   public void onResume() {
+      super.onResume();
+      Log.v(TAG, "passed by");
+      if(mPosterAdapter != null){
+         mPosterAdapter.notifyDataSetChanged();
+         mListView.setAdapter(mPosterAdapter);
+      }
    }
 }

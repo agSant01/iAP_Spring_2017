@@ -22,12 +22,13 @@ public class Sponsors {
 
    public Sponsors(JSONObject data, String id) throws JSONException {
       companyID = id;
-      companyLogo = data.getString("Logo");
-      companyReps = getReps(data.getJSONArray("Representatives"));
-      companyName = data.getString("CompanyName");
+      companyLogo = data.optString("Logo");
+      companyReps = getReps(data.optJSONArray("Representatives"));
+      companyName = data.optString("CompanyName");
    }
 
    private static ArrayList<String> getReps(JSONArray d) throws JSONException {
+      if(d == null) return null;
       ArrayList<String> reps = new ArrayList<String>();
       for (int i = 0; i < d.length(); i++){
          reps.add(d.getString(i));

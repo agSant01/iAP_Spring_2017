@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Advisor extends User implements UserDelegate {
    private ArrayList<String> classes;
@@ -37,14 +38,14 @@ public class Advisor extends User implements UserDelegate {
    }
 
    private Advisor(Void d, JSONObject data, AccountType accountType, String id) throws JSONException{
-      super(data.getString("Email"), data.getString("Name"), id,data.getString("Sex"), accountType);
-      this.classes = parseData(data.getJSONArray("Classes"));
-      this.projects = parseData(data.getJSONArray("Projects"));
-      this.department = data.getString("Department");
-      this.photoURL = data.getString("PhotoURL");
-      this.researchIntent = data.getString("ResearchIntent");
-      this.voted = new Voted(data.getJSONObject("Voted"));
-      this.webPage = data.getString("webpage");
+      super(data.optString("Email"), data.optString("Name"), id,data.optString("Sex"), accountType);
+      this.classes = parseData(data.optJSONObject("Classes"));
+      this.projects = parseData(data.optJSONObject("Projects"));
+      this.department = data.optString("Department");
+      this.photoURL = data.optString("PhotoURL");
+      this.researchIntent = data.optString("ResearchIntent");
+      this.voted = new Voted(data.optJSONObject("Voted"));
+      this.webPage = data.optString("webpage");
    }
 
    private static Void checkType(AccountType accountType)
@@ -54,11 +55,12 @@ public class Advisor extends User implements UserDelegate {
       return null;
    }
 
-   private static ArrayList<String> parseData(JSONArray data) throws JSONException{
-      ArrayList<String> d = new ArrayList<>();
-      for (int i = 0; i < data.length(); i++){
-         d.add(data.getString(i));
-      }
+   private static ArrayList<String> parseData(JSONObject data) throws JSONException{
+      if(data == null) return null;
+      ArrayList<String> d = new ArrayList<String>();
+      Iterator<String> keys = data.keys();
+      for (int i = 0; i < data.length(); i++)
+         d.add(keys.next());
       return d;
    }
 
@@ -111,5 +113,33 @@ public class Advisor extends User implements UserDelegate {
          this.bestPoster = data.getBoolean("BestPoster");
          this.bestPresentation = data.getBoolean("BestPresentation");
       }
+   }
+
+   public ArrayList<String> getClasses() {
+      return classes;
+   }
+
+   public String getDepartment() {
+      return department;
+   }
+
+   public String getPhotoURL() {
+      return photoURL;
+   }
+
+   public ArrayList<String> getProjects() {
+      return projects;
+   }
+
+   public String getResearchIntent() {
+      return researchIntent;
+   }
+
+   public Voted getVoted() {
+      return voted;
+   }
+
+   public String getWebPage() {
+      return webPage;
    }
 }

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.Constants;
@@ -26,6 +27,9 @@ public class MoreFragment extends Fragment {
     private static final String TAG = "MoreFragment";
 
     private Button mSignOut;
+    private TextView mCompanies;
+    private TextView mStudInt;
+    private TextView mAbout;
 
     public static MoreFragment newInstance(){
         return new MoreFragment();
@@ -43,10 +47,38 @@ public class MoreFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_more, container, false);
 
         mSignOut = (Button) view.findViewById(R.id.button_sign_out);
+        mCompanies = (TextView) view.findViewById(R.id.more_companies);
+        mStudInt = (TextView) view.findViewById(R.id.more_students_interest);
+        mCompanies = (TextView) view.findViewById(R.id.more_companies);
+
+//        mCompanies.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent in = new Intent(getActivity(), CompanyProfile.class );
+//                startActivity(in);
+//            }
+//        });
+//
+//        mStudInt.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent in = new Intent(getActivity(), StudentsOfInterest.class );
+//                startActivity(in);
+//            }
+//        });
+//
+//        mAbout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent in = new Intent(getActivity(), About.class);
+//                startActivity(in);
+//            }
+//        });
 
         mSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 try {
                     Constants.getCurrentLoggedInUser().logOut(getContext());
                 } catch (FirebaseAuthException e) {

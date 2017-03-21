@@ -8,10 +8,12 @@
 
 package com.affiliates.iap.iapspring2017;
 
+import android.support.v4.app.Fragment;
+
+import com.affiliates.iap.iapspring2017.Models.CompanyVote;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.Models.User;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class Constants {
