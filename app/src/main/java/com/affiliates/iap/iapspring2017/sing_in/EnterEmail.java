@@ -9,9 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.affiliates.iap.iapspring2017.Password;
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.myUtils.Utils;
 
 public class EnterEmail extends AppCompatActivity {
 
@@ -37,8 +35,13 @@ public class EnterEmail extends AppCompatActivity {
                 int error = checkEmail(email.getText().toString());
                 Log.v("EnterEmail", ""+error);
                 if(error==0){
-                    Utils.tmpEmail = email.getText().toString();
                     Intent intent = new Intent(EnterEmail.this,Password.class);
+                    intent.putExtra("Email", email.getText().toString());
+                    intent.putExtra("AccountType", getIntent().getStringExtra("AccountType"));
+                    intent.putExtra("Name", getIntent().getStringExtra("Name"));
+                    intent.putExtra("UserType", getIntent().getStringExtra("UserType"));
+
+
                     startActivity(intent);
                 }
                else{

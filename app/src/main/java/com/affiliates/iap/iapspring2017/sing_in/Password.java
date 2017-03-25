@@ -1,4 +1,4 @@
-package com.affiliates.iap.iapspring2017;
+package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,9 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.affiliates.iap.iapspring2017.myUtils.Utils;
-import com.affiliates.iap.iapspring2017.sing_in.EmailConfirmation;
-import com.affiliates.iap.iapspring2017.sing_in.EnterEmail;
+import com.affiliates.iap.iapspring2017.R;
 
 public class Password extends AppCompatActivity {
 
@@ -18,7 +16,7 @@ public class Password extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
-
+        final String email = getIntent().getStringExtra("Email");
         Button back, next;
         final EditText password = (EditText) findViewById(R.id.passwordField),
                 confirm = (EditText) findViewById(R.id.confirmPasswordField);
@@ -37,8 +35,15 @@ public class Password extends AppCompatActivity {
             public void onClick(View v) {
                 int error = checkPassword(password.getText().toString(), confirm.getText().toString());
                 if(error==0) {
-                    Utils.tmpPass = password.getText().toString();
-                    startActivity(new Intent(Password.this, EmailConfirmation.class));
+                    Intent intent = new Intent(Password.this, EmailConfirmation.class);
+                    intent.putExtra("Email", email);
+                    intent.putExtra("Pass", password.getText().toString());
+                    intent.putExtra("AccountType", getIntent().getStringExtra("AccountType"));
+                    intent.putExtra("Name", getIntent().getStringExtra("Name"));
+                    intent.putExtra("UserType", getIntent().getStringExtra("UserType"));
+
+
+                    startActivity(intent);
                 }
                 else
                     switch (error){

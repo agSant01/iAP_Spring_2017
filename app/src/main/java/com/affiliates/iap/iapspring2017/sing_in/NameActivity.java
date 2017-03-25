@@ -22,7 +22,7 @@ public class NameActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NameActivity.this, LoginOrRegister.class);
+                Intent intent = new Intent(NameActivity.this, AccountType.class);
                 startActivity(intent);
             }
         });
@@ -33,8 +33,11 @@ public class NameActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int error = checkName(name.getText().toString());
                 if(error==0) {
-                    Utils.tempName = name.getText().toString();
                     Intent intent = new Intent(NameActivity.this, EnterEmail.class);
+                    intent.putExtra("Name", name.getText().toString());
+                    intent.putExtra("AccountType", getIntent().getStringExtra("AccountType"));
+                    intent.putExtra("UserType", getIntent().getStringExtra("UserType"));
+
                     startActivity(intent);
 
                 }

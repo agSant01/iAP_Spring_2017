@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.affiliates.iap.iapspring2017.AccountType;
 import com.affiliates.iap.iapspring2017.R;
 
 public class LoginOrRegister extends AppCompatActivity {
@@ -15,7 +14,7 @@ public class LoginOrRegister extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_or_register);
-       TextView login = (TextView) findViewById(R.id.loginButton),
+       TextView login = (TextView) findViewById(R.id.studentButton),
                 register = (TextView) findViewById((R.id.registerButton));
         login.setOnClickListener(new View.OnClickListener() {
             @Override

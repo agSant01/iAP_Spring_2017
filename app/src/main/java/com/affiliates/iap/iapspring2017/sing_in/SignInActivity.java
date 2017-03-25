@@ -11,6 +11,7 @@ package com.affiliates.iap.iapspring2017.sing_in;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -90,6 +91,7 @@ public class SignInActivity extends BaseActivity {
                               s = "Invalid Email";
                            }
                            hideProgressDialog();
+                           Log.e(TAG, message);
                            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                         }
                      });

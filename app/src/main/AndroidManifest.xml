@@ -54,12 +54,13 @@
             android:name=".ProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AccountType"
+            android:name=".sing_in.AccountType"
             android:screenOrientation="portrait" />
         <activity
             android:name=".sing_in.EmailConfirmation"
             android:screenOrientation="portrait" />
-        <activity android:name=".Password"></activity>
+        <activity android:name=".sing_in.Password" />
+        <activity android:name=".sing_in.UserType"></activity>
     </application>
 
 </manifest>
