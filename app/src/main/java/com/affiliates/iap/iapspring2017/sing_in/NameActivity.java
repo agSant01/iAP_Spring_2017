@@ -1,4 +1,4 @@
-package com.affiliates.iap.iapspring2017;
+package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.myUtils.Utils;
 
 public class NameActivity extends AppCompatActivity {
 
@@ -29,12 +31,33 @@ public class NameActivity extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!name.getText().toString().isEmpty()) {
+                int error = checkName(name.getText().toString());
+                if(error==0) {
+                    Utils.tempName = name.getText().toString();
                     Intent intent = new Intent(NameActivity.this, EnterEmail.class);
                     startActivity(intent);
+
                 }
-                else System.out.println("Please enter your name");
+                else{
+                    switch(error) {
+                        case 1:
+                            Toast.makeText(getApplicationContext(), "Enter Name", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 2:
+                            Toast.makeText(getApplicationContext(), "Invalid Name", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                }
             }
         });
+    }
+
+    private int checkName(String name){
+        if(name.isEmpty()) return 1;
+        for(int index=0; index<name.length(); index++){
+            if(!Character.isLetter(name.charAt(index))) return 2;
+
+        }
+        return 0;
     }
 }

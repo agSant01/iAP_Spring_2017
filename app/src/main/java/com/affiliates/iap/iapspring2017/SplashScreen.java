@@ -11,7 +11,7 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
-import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
+import com.affiliates.iap.iapspring2017.sing_in.LoginOrRegister;
 
 public class SplashScreen extends Activity {
     private static final String TAG = "SplashScreen";

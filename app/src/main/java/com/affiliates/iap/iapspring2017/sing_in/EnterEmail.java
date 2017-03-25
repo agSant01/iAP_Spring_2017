@@ -1,13 +1,16 @@
-package com.affiliates.iap.iapspring2017;
+package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.affiliates.iap.iapspring2017.Utils.Utils;
+import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.myUtils.Utils;
 
 public class EnterEmail extends AppCompatActivity {
 
@@ -29,12 +32,29 @@ public class EnterEmail extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Utils.isValidEmail(email.getText().toString())) {
+                System.out.println("It's here");
+                int error = checkEmail(email.getText().toString());
+                Log.v("EnterEmail", ""+error);
+                if(error==0){
+                    Utils.tmpEmail = email.getText().toString();
                     Intent intent = new Intent(EnterEmail.this,EmailConfirmation.class);
                     startActivity(intent);
                 }
-                else System.out.println("Email is not valid");
+               else{
+                    switch(error){
+                        case 1: Toast.makeText(getApplicationContext(), "Enter your email", Toast.LENGTH_SHORT).show(); break;
+                        case 2: Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show(); break;
+
+                    }
+                }
+
             }
         });
+    }
+
+    private int checkEmail(String email){
+        if(email.length()==0) return 1;
+        if(!email.contains(".") || !email.contains("@")) return 2;
+        return 0;
     }
 }

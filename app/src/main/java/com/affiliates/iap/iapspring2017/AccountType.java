@@ -1,11 +1,12 @@
 package com.affiliates.iap.iapspring2017;
 
 import android.content.Intent;
-import android.media.RemoteController;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+
+import com.affiliates.iap.iapspring2017.sing_in.NameActivity;
 
 public class AccountType extends AppCompatActivity {
 

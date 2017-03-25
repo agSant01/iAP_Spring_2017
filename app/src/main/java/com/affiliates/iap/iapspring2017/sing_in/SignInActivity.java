@@ -25,7 +25,7 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
 
-public class SignInActivity extends  BaseActivity {
+public class SignInActivity extends BaseActivity {
 
    // View
    private EditText mEmailField;
