@@ -55,7 +55,7 @@ public class NameActivity extends AppCompatActivity {
     private int checkName(String name){
         if(name.isEmpty()) return 1;
         for(int index=0; index<name.length(); index++){
-            if(!Character.isLetter(name.charAt(index))) return 2;
+            if( !Character.isLetter(name.charAt(index)) && name.charAt(index)!=' ') return 2;
 
         }
         return 0;
