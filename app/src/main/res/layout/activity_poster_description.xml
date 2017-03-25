@@ -216,46 +216,6 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-            <org.lucasr.twowayview.TwoWayView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/poster_team_members"
-                style="@style/TwoWayView"
-                android:layout_width="0dp"
-                android:layout_height="139dp"
-
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:drawSelectorOnTop="false"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view5"
-                tools:context=".MainActivity" />
-
-            <TextView
-                android:id="@+id/advisors"
-                android:layout_width="wrap_content"
-
-                android:layout_height="wrap_content"
-
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="sans-serif"
-                android:text="Team Advisors"
-                android:textColor="@color/appGrey"
-                android:textSize="22sp"
-                app:layout_constraintHorizontal_bias="0.504"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/poster_team_members" />
-
             <View
                 android:id="@+id/view6"
                 android:layout_width="0dp"
@@ -270,27 +230,6 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/advisors" />
-
-            <org.lucasr.twowayview.TwoWayView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/poster_team_advisors"
-                style="@style/TwoWayView"
-                android:layout_width="0dp"
-                android:layout_height="139dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:drawSelectorOnTop="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view6"
-                app:layout_constraintVertical_bias="1.0"
-                tools:context=".MainActivity" />
 
             <TextView
                 android:id="@+id/textView2"
@@ -324,7 +263,64 @@
                 android:text="See More"
                 android:textColor="@color/appGreen"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/poster_desc_abstract" />
+                app:layout_constraintTop_toBottomOf="@+id/poster_desc_abstract"
+                android:layout_marginEnd="38dp" />
+
+            <org.lucasr.twowayview.TwoWayView
+                android:id="@+id/poster_team_members"
+                style="@style/TwoWayView"
+                android:layout_width="0dp"
+                android:layout_height="139dp"
+
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="7dp"
+                android:drawSelectorOnTop="false"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view5"
+                tools:context=".MainActivity" />
+
+            <TextView
+                android:id="@+id/advisors"
+                android:layout_width="0dp"
+
+                android:layout_height="wrap_content"
+
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="17dp"
+                android:fontFamily="sans-serif"
+                android:text="Team Advisors"
+                android:textAlignment="center"
+                android:textColor="@color/appGrey"
+                android:textSize="22sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/poster_team_members" />
+
+            <org.lucasr.twowayview.TwoWayView
+                android:id="@+id/poster_team_advisors"
+                style="@style/TwoWayView"
+                android:layout_width="match_parent"
+
+                android:layout_height="119dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="202dp"
+                android:drawSelectorOnTop="false"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/poster_team_members"
+                tools:context=".MainActivity"
+                android:layout_marginRight="8dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintHorizontal_bias="1.0" />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
