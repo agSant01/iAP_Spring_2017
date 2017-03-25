@@ -11,6 +11,7 @@ package com.affiliates.iap.iapspring2017.sing_in;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +26,7 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
 
-public class SignInActivity extends  BaseActivity {
+public class SignInActivity extends BaseActivity {
 
    // View
    private EditText mEmailField;
@@ -90,6 +91,7 @@ public class SignInActivity extends  BaseActivity {
                               s = "Invalid Email";
                            }
                            hideProgressDialog();
+                           Log.e(TAG, message);
                            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
                         }
                      });

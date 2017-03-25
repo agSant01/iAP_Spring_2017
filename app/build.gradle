@@ -25,34 +25,30 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.2.0'
-
-    compile 'com.android.support:design:25.2.0'
-    testCompile 'junit:junit:4.12'
-
-    compile 'io.reactivex:rxandroid:1.2.0'
-    compile 'io.reactivex:rxjava:1.1.4'
 
     //FireBase
+
+    //Image Download Manager
+    //Horizontal scrollview cell library
+    //Circle imageview for profile pictures
+    //Ratingbar Material
+    //Helper Library for introduction screens
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:design:25.2.0'
+    compile 'io.reactivex:rxandroid:1.2.0'
+    compile 'io.reactivex:rxjava:1.1.4'
     compile 'com.google.firebase:firebase-core:10.2.0'
     compile 'com.google.firebase:firebase-storage:10.2.0'
     compile 'com.google.firebase:firebase-database:10.2.0'
     compile 'com.google.firebase:firebase-auth:10.2.0'
-
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.code.gson:gson:2.8.0'
-
-
-    //Image Download Manager
     compile 'com.squareup.picasso:picasso:2.5.2'
-    //Horizontal scrollview cell library
     compile 'org.lucasr.twowayview:twowayview:0.1.4'
-    //Circle imageview for profile pictures
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    //Ratingbar Material
     compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
-    //Helper Library for introduction screens
     compile 'com.matthew-tamlin:sliding-intro-screen:3.2.0'
+    testCompile 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'
