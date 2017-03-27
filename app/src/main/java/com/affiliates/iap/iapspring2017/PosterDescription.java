@@ -12,11 +12,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,6 +38,7 @@ import com.affiliates.iap.iapspring2017.services.DataService;
 import com.affiliates.iap.iapspring2017.tabs.PostersFragment;
 
 import org.lucasr.twowayview.TwoWayView;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -78,6 +82,20 @@ public class PosterDescription extends BaseActivity {
 
         mVoteTV = (TextView) findViewById(R.id.textView9);
         mPoster = (ImageView) findViewById(R.id.poster_link);
+
+        TextView seeMore = (TextView) findViewById(R.id.seeMoreButton);
+        seeMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView seeMore = (TextView) v;
+                if(seeMore.getText().toString().toLowerCase().contains("more")){
+                   seeMore(seeMore);
+                }
+                else {
+                   seeLess(seeMore);
+                }
+            }
+        });
 
         mPoster.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,14 +214,27 @@ public class PosterDescription extends BaseActivity {
         TextView title = (TextView) findViewById(R.id.poster_desc_title);
         mAbstract = (TextView) findViewById(R.id.poster_desc_abstract);
         mAbstract.setText(mPosterData.get_abstract());
+        seeLess(seeMore);
 
         title.setText(mPosterData.getProjectName());
+
     }
 
     @Override
     public void onStop() {
         System.out.println("khfkuf");
         super.onStop();
+    }
+
+    public void seeMore(TextView seeMore){
+        mAbstract.setText(mPosterData.get_abstract());
+        seeMore.setText("See less");
+    }
+
+    public void seeLess(TextView seeMore){
+        if(mPosterData.get_abstract().length()>300)
+            mAbstract.setText(mPosterData.get_abstract().substring(0,300));
+        seeMore.setText("See more");
     }
 
     @Override
