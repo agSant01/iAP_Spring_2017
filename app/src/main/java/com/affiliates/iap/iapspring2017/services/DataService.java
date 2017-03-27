@@ -8,12 +8,9 @@
 
 package com.affiliates.iap.iapspring2017.services;
 
-import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
-import android.telecom.Call;
 import android.util.Log;
 
-import com.affiliates.iap.iapspring2017.CompanyList;
 import com.affiliates.iap.iapspring2017.Models.Advisor;
 import com.affiliates.iap.iapspring2017.Models.CompanyUser;
 import com.affiliates.iap.iapspring2017.Models.CompanyVote;
@@ -45,10 +42,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 public class DataService {
    private static final String TAG = "DataService";
@@ -102,6 +95,29 @@ public class DataService {
       return mainRef().child("SubmitedProjects");
    }
 
+   public void registerUser(final String name, final String email, String id, final String accountType, final String userType, final Callback callback){
+     final Map<String, Object> voted = new HashMap<>();
+      voted.put("BestPresentation", false);
+      voted.put("BestPoster", false);
+
+      usersRef().child(id).updateChildren(new HashMap<String, Object>(){{
+         put("AccountType", accountType);
+         put("Email", email);
+         put("Name", name);
+         put("Sex", "NA");
+         put("Voted", voted);
+
+         if(accountType.contentEquals("UPRMAccount"))
+            put("UserType", userType);
+
+      }}).addOnCompleteListener(new OnCompleteListener<Void>() {
+         @Override
+         public void onComplete(@NonNull Task<Void> task) {
+            if(task.isSuccessful()) callback.success(null);
+            else callback.failure(task.getException().getMessage());
+         }
+      });
+   }
    public void getUserData(String id, final Callback<User> callback) throws InvalidAccountTypeExeption{
       final String ID = id;
       usersRef().child(id).addValueEventListener(new ValueEventListener() {
@@ -158,6 +174,8 @@ public class DataService {
                       }});
       }
    }
+
+
 
    public void submitGeneralVote(String projecID, int voteType, final Callback callback) throws VoteErrorException{
 

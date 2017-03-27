@@ -30,9 +30,9 @@ public class UPRMAccount extends User implements UserDelegate {
    }
 
    private UPRMAccount(Void n, JSONObject data, AccountType accountType, String id) throws JSONException{
-      super(data.getString("Email"), data.getString("Name"), id, data.getString("Sex"), accountType);
+      super(data.getString("Email"), data.getString("Name"), id, data.optString("Sex"), accountType);
       this.userType = UPRMAccountType.getAccType(data.getString("UserType"));
-      this.voted = new Voted(data.getJSONObject("Voted"));
+      this.voted = new Voted(data.optJSONObject("Voted"));
    }
 
    private static Void checkType(AccountType accountType)
@@ -103,8 +103,8 @@ public class UPRMAccount extends User implements UserDelegate {
       private boolean bestPresentation = false;
 
       public Voted (JSONObject data) throws JSONException{
-         this.bestPoster = data.getBoolean("BestPoster");
-         this.bestPresentation = data.getBoolean("BestPresentation");
+         this.bestPoster = data.optBoolean("BestPoster");
+         this.bestPresentation = data.optBoolean("BestPresentation");
       }
    }
 }
