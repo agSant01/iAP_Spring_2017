@@ -16,7 +16,7 @@
 
     </style>
 
-    <style name="AppTheme.NoActionBar" parent="AppTheme.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
         <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -30,7 +30,7 @@
         <item name="colorControlNormal">@color/appGreen</item>
         <item name="colorControlHighlight">@color/appGreen</item>
         <item name="android:textColorAlertDialogListItem">@color/appBlack</item>
-        <item name="android:alertDialogTheme">@style/ThemeOverlay.AppCompat.Dark</item>
+        <item name="android:alertDialogTheme">@style/ThemeOverlay.AppCompat.Light</item>
 
     </style>
 
