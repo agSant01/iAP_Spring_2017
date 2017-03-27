@@ -94,11 +94,11 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/textView4"
-                app:layout_constraintHorizontal_bias="0.102"
+                app:layout_constraintHorizontal_bias="0.141"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view"
-                app:layout_constraintVertical_bias="0.086"
+                app:layout_constraintVertical_bias="0.116"
                 app:srcCompat="@drawable/ic_poster_green" />
 
             <View
@@ -121,8 +121,8 @@
 
             <ImageView
                 android:id="@+id/poster_vote"
-                android:layout_width="154dp"
-                android:layout_height="120dp"
+                android:layout_width="147dp"
+                android:layout_height="118dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
@@ -135,8 +135,8 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view"
                 app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/ic_evaluate_green" />
-
+                android:src="@drawable/ic_evaluate_green" />
+`
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
@@ -227,7 +227,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/poster_team_members"
                 style="@style/TwoWayView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="139dp"
 
                 android:layout_marginLeft="8dp"
@@ -237,7 +237,9 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view5"
-                tools:context=".MainActivity" />
+                tools:context=".MainActivity"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:id="@+id/advisors"
@@ -296,28 +298,31 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp" />
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="80dp"
-                android:text="Poster"
-                android:textSize="16sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/poster_link"
-                android:layout_marginStart="80dp" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="91dp"
-                android:layout_marginTop="1dp"
-                android:text="Vote"
-                android:textSize="16sp"
+            <Button
+                android:id="@+id/button_evaluate"
+                android:layout_width="112dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/button_oval_shape"
+                android:text="Evaluate"
+                android:textColor="@color/appWhite"
+                app:layout_constraintHorizontal_bias="0.544"
+                app:layout_constraintLeft_toRightOf="@+id/button_poster"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/poster_vote"
-                android:layout_marginEnd="91dp" />
+                android:layout_marginLeft="8dp" />
+
+            <Button
+                android:id="@+id/button_poster"
+                android:layout_width="112dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/button_oval_shape"
+                android:text="Poster"
+                android:textColor="@color/appWhite"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/poster_link"
+                android:layout_marginLeft="57dp" />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
