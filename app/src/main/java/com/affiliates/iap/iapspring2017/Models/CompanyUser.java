@@ -79,7 +79,7 @@ public class CompanyUser extends User implements UserDelegate {
             public void success(Object data) {
                setVoted(projectID);
                ((CompanyVote) vote).removeVoteFromMemory(context);
-               callback.success(null);
+               callback.success(vote);
             }
 
             @Override
@@ -92,8 +92,8 @@ public class CompanyUser extends User implements UserDelegate {
       }
    }
 
-   private void setVoted(final String projectID){
-      this.votes.add(projectID);
+   public void setVoted(final String projectID){
+      votes.add(projectID);
       final DatabaseReference ref = FirebaseDatabase.getInstance()
                                        .getReference().child("Users/" + this.getUserID() + "/Votes");
       ref.updateChildren(new HashMap<String, Object>(){{

@@ -19,21 +19,39 @@ public class Sponsors {
    private String companyLogo;
    private ArrayList<String> companyReps;
    private String companyID;
+   private String website;
 
-   public Sponsors(JSONObject data, String id) throws JSONException {
+   public Sponsors(JSONObject data, String id) {
       companyID = id;
       companyLogo = data.optString("Logo");
       companyReps = getReps(data.optJSONArray("Representatives"));
       companyName = data.optString("CompanyName");
+      website = data.optString("Website");
    }
 
-   private static ArrayList<String> getReps(JSONArray d) throws JSONException {
+   public String getWebsite() {
+      return website;
+   }
+
+   private static ArrayList<String> getReps(JSONArray d) {
       if(d == null) return null;
       ArrayList<String> reps = new ArrayList<String>();
       for (int i = 0; i < d.length(); i++){
-         reps.add(d.getString(i));
+         reps.add(d.optString(i));
       }
+
       return reps;
    }
 
+   public String getCompanyID() {
+      return companyID;
+   }
+
+   public String getCompanyName() {
+      return companyName;
+   }
+
+   public String getCompanyLogo() {
+      return companyLogo;
+   }
 }

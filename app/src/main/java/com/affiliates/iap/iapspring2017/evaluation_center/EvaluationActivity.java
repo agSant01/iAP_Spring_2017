@@ -106,27 +106,25 @@ public class EvaluationActivity extends BaseActivity {
         Intent in = getIntent();
         String posterID = in.getStringExtra("posterID");
         CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
-        Poster poster = Constants.getPosters().get(posterID);
-        mCompanyVote = companyUser.loadVote(posterID,getBaseContext());
+        //mCompanyVote = companyUser.loadVote(posterID,getBaseContext());
     }
 
     @Override
     public void onStop() {
-        System.out.println("khfkuf");
         super.onStop();
+        Log.v(TAG, "STOP");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println("ON RESUME YEAH YEAH");
+        Log.v(TAG, "Resume");
     }
 
     @Override
     public void onDestroy() {
-        System.out.println("BOOM");
         super.onDestroy();
-        finish();
+        Log.v(TAG, "Destroy");
     }
 
     @Override

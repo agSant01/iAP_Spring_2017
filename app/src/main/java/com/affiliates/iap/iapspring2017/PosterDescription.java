@@ -17,6 +17,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,7 +50,7 @@ public class PosterDescription extends BaseActivity {
     private TeamAdvisorsAdapter mAdvisorsAdapter;
     private TwoWayView mStudentScrollView;
     private TwoWayView mAdvisorScrollView;
-    private TextView mVoteTV;
+    private Button mVoteTV;
     private TextView mAbstract;
     private Poster mPosterData;
 
@@ -76,7 +77,7 @@ public class PosterDescription extends BaseActivity {
         String id = getIntent().getStringExtra("posterID");
         mPosterData = Constants.getPosters().get(id);
 
-        mVoteTV = (TextView) findViewById(R.id.textView9);
+        mVoteTV = (Button) findViewById(R.id.button_evaluate);
         mPoster = (ImageView) findViewById(R.id.poster_link);
 
         mPoster.setOnClickListener(new View.OnClickListener() {
@@ -202,8 +203,8 @@ public class PosterDescription extends BaseActivity {
 
     @Override
     public void onStop() {
-        System.out.println("khfkuf");
         super.onStop();
+        Log.v(TAG,"STOP");
     }
 
     @Override
@@ -228,8 +229,7 @@ public class PosterDescription extends BaseActivity {
 
     @Override
     public void onDestroy() {
-        System.out.println("BOOM");
         super.onDestroy();
-        finish();
+        Log.v(TAG, "DESTROY");
     }
 }

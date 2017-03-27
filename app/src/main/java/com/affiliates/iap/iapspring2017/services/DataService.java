@@ -10,14 +10,17 @@ package com.affiliates.iap.iapspring2017.services;
 
 import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
+import android.telecom.Call;
 import android.util.Log;
 
+import com.affiliates.iap.iapspring2017.CompanyList;
 import com.affiliates.iap.iapspring2017.Models.Advisor;
 import com.affiliates.iap.iapspring2017.Models.CompanyUser;
 import com.affiliates.iap.iapspring2017.Models.CompanyVote;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.OverallVote;
 import com.affiliates.iap.iapspring2017.Models.Poster;
+import com.affiliates.iap.iapspring2017.Models.Sponsors;
 import com.affiliates.iap.iapspring2017.Models.UPRMAccount;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
@@ -42,6 +45,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -84,6 +88,10 @@ public class DataService {
 
    private DatabaseReference comapnyEvalSummaryRef(){
       return voteSummaryRef().child("CompanyEval");
+   }
+
+   private DatabaseReference sponsorsRef(){
+      return mainRef().child("Sponsors");
    }
 
    private DatabaseReference scheduleRef(){
@@ -310,5 +318,26 @@ public class DataService {
             }
          });
       }
+   }
+
+   public void getSponsors(final Callback callback){
+      final ArrayList<Sponsors> sponsorsMap = new ArrayList<>();
+      sponsorsRef().addListenerForSingleValueEvent(new ValueEventListener() {
+         @Override
+         public void onDataChange(DataSnapshot dataSnapshot) {
+            JSONObject json = new JSONObject((HashMap<String,Object>)dataSnapshot.getValue());
+            Iterator<String> x = json.keys();
+            for (int i = 0; i < json.length(); i++){
+               String s  = x.next();
+               sponsorsMap.add(new Sponsors(json.optJSONObject(s),s));
+            }
+            callback.success(sponsorsMap);
+         }
+
+         @Override
+         public void onCancelled(DatabaseError databaseError) {
+            callback.failure(databaseError.getMessage());
+         }
+      });
    }
 }

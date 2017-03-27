@@ -55,6 +55,7 @@ public class Summary extends Fragment{
 
     static CompanyVote mCompanyVote;
     static String mPosterID;
+    static CompanyUser companyUser;
 
     private static int pos;
 
@@ -93,9 +94,9 @@ public class Summary extends Fragment{
         Intent in = getActivity().getIntent();
         mPosterID = in.getStringExtra("posterID");
 
-        final CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
+        companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
         final Poster poster = Constants.getPosters().get(mPosterID);
-        mCompanyVote = companyUser.loadVote(mPosterID,getContext());
+        mCompanyVote = companyUser.loadVote(mPosterID, getContext());
 
         mProjectName.setText(poster.getProjectName());
 
@@ -124,17 +125,18 @@ public class Summary extends Fragment{
             @Override
             public void onClick(View v) {
                 saveVote(getContext());
-                ((CompanyUser) Constants.getCurrentLoggedInUser()).vote(mPosterID, mCompanyVote, getContext(), new Callback() {
+                DataService.sharedInstance().submitCompanyEval(mCompanyVote, new Callback() {
                     @Override
                     public void success(Object data) {
                         Log.v(TAG, "Evaluation submissson was good!");
-                        ((CompanyUser) Constants.getCurrentLoggedInUser()).getVotes().add(mPosterID);
+                        companyUser.setVoted(mPosterID);
+                        mCompanyVote.removeVoteFromMemory(getContext());
                         getActivity().finish();
                     }
 
                     @Override
                     public void failure(String message) {
-
+                        Log.v(TAG, message);
                     }
                 });
             }

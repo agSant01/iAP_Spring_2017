@@ -38,7 +38,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
@@ -83,21 +85,19 @@ public class PostersFragment extends Fragment {
             @Override
             public void success(Object data) {
                Log.v(TAG, "Get posters succesfull");
-               HashMap<Integer, Poster> d = (HashMap<Integer, Poster>) data;
-               SortedSet<Integer> l = new TreeSet<Integer>(d.keySet());
-               Iterator<Integer> x = l.iterator();
-               SortedMap<String, Poster> ptr = new TreeMap<String, Poster>();
-               while (x.hasNext()){
-                  int k = x.next();
-                  Log.v(TAG, k+"<_ T" + d.get(k).getProjectName());
-                  ptr.put(d.get(k).getPosterID(), d.get(k));
+               Map<Integer, Poster> d = (HashMap<Integer, Poster>) data;
+               HashMap<String, Poster> ps = new HashMap<String, Poster>();
+               ArrayList<Poster> sort = new ArrayList<Poster>();
+               for(int i = 0; i < d.size(); i++) {
+                  ps.put(d.get(i).getPosterID(), d.get(i));
+                  sort.add(d.get(i));
+                  Log.v(TAG, d.get(i).getProjectName());
                }
-               for(Poster p : ptr.values())
-                  Log.v(TAG, p.getProjectName() + "<_ptr.val");
 
-               Constants.setPosters(ptr);
+               Constants.setPosters(ps);
+               Constants.setSortedPosters(sort);
 
-               mPosterAdapter = new PosterAdapter(getActivity().getBaseContext(), new ArrayList<Poster>(Constants.getPosters().values()));
+               mPosterAdapter = new PosterAdapter(getActivity().getBaseContext(), new ArrayList<Poster>(Constants.getSortedPosters()));
                for(Poster p : Constants.getPosters().values())
                   Log.v(TAG, p.getProjectName() + "<_");
 
@@ -111,7 +111,6 @@ public class PostersFragment extends Fragment {
                      startActivity(in);
                   }
                });
-               //mPB.setVisibility(ProgressBar.INVISIBLE);
                mPB.startAnimation(fadeOutAnimation);
                mPB.setVisibility(ProgressBar.INVISIBLE);
             }

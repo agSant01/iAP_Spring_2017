@@ -31,6 +31,11 @@ public class SplashScreen extends Activity {
 
         final Client client = new Client(getBaseContext());
         final AccountAdministration aa = new AccountAdministration(getBaseContext());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         if(!client.isConnectionAvailable()){
             Intent in = new Intent(SplashScreen.this , NoConnection.class);
             startActivity(in);
@@ -59,11 +64,6 @@ public class SplashScreen extends Activity {
                 startActivity(in);
                 finish();
             }
-        }
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 

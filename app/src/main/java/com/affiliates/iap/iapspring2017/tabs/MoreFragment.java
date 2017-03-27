@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.affiliates.iap.iapspring2017.CompanyList;
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
@@ -51,13 +52,13 @@ public class MoreFragment extends Fragment {
         mStudInt = (TextView) view.findViewById(R.id.more_students_interest);
         mCompanies = (TextView) view.findViewById(R.id.more_companies);
 
-//        mCompanies.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent in = new Intent(getActivity(), CompanyProfile.class );
-//                startActivity(in);
-//            }
-//        });
+        mCompanies.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent in = new Intent(getActivity(), CompanyList.class );
+                startActivity(in);
+            }
+        });
 //
 //        mStudInt.setOnClickListener(new View.OnClickListener() {
 //            @Override
