@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.myUtils.Utils;
 
 public class NameActivity extends AppCompatActivity {
 
@@ -17,17 +17,16 @@ public class NameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_name);
-        final EditText name = (EditText) findViewById(R.id.nameField);
-        Button back = (Button) findViewById(R.id.backButton);
+        final EditText name = (EditText) findViewById(R.id.name_field);
+        TextView back = (TextView) findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NameActivity.this, AccountType.class);
-                startActivity(intent);
+                onBackPressed();
             }
         });
 
-        Button next = (Button) findViewById(R.id.nextButton);
+        TextView next = (TextView) findViewById(R.id.nextButton);
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -37,9 +36,8 @@ public class NameActivity extends AppCompatActivity {
                     intent.putExtra("Name", name.getText().toString());
                     intent.putExtra("AccountType", getIntent().getStringExtra("AccountType"));
                     intent.putExtra("UserType", getIntent().getStringExtra("UserType"));
-
                     startActivity(intent);
-
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                 }
                 else{
                     switch(error) {
@@ -59,8 +57,14 @@ public class NameActivity extends AppCompatActivity {
         if(name.isEmpty()) return 1;
         for(int index=0; index<name.length(); index++){
             if( !Character.isLetter(name.charAt(index)) && name.charAt(index)!=' ') return 2;
-
         }
         return 0;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
+        finish();
     }
 }

@@ -1,14 +1,12 @@
 package com.affiliates.iap.iapspring2017.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Sponsors;
@@ -17,7 +15,6 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
-import java.util.Objects;
 
 public class CompanyListAdapter extends ArrayAdapter<Sponsors> {
     private Context context;
@@ -38,7 +35,7 @@ public class CompanyListAdapter extends ArrayAdapter<Sponsors> {
         String url = getItem(position).getCompanyLogo();
         if (convertView == null ){
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.image_logo, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.cell_compay_logo, parent, false);
             viewHolder.companyLogo = (ImageView) convertView.findViewById(R.id.image_view);
             convertView.setTag(viewHolder);
             Log.v("my test", url);

@@ -118,16 +118,22 @@ public class DataService {
          }
       });
    }
-   public void getUserData(String id, final Callback<User> callback) throws InvalidAccountTypeExeption{
-      final String ID = id;
+   public void getUserData(final String id, final Callback<User> callback) throws InvalidAccountTypeExeption{
+      if(usersRef().child(id).equals(null)){
+         Log.e(TAG, "No user ID Registered" );
+         callback.failure("No user ID Registered");
+         return;
+      }
+
       usersRef().child(id).addValueEventListener(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot){
 
-            Log.v(TAG, " ID: " + ID);
+            Log.v(TAG, " ID: " + id);
             Log.v(TAG, " DATA: " + dataSnapshot.getValue());
-            if (dataSnapshot.getValue() == null) {
-               callback.failure("Invalid Account Type Exeption");
+            if (!dataSnapshot.hasChildren()) {
+               Log.e(TAG, "No user ID Registered" );
+               callback.failure("No user ID Registered");
                return;
             }
             JSONObject json =  new JSONObject((Map) dataSnapshot.getValue());
@@ -140,27 +146,31 @@ public class DataService {
             try {
                switch (User.AccountType.determineAccType(accType)) {
                   case CompanyUser:
-                     callback.success(new CompanyUser(json, User.AccountType.CompanyUser, ID));
-                     break;
+                     callback.success(new CompanyUser(json, User.AccountType.CompanyUser, id));
+                     return;
                   case Advisor:
-                     callback.success(new Advisor(json, User.AccountType.Advisor, ID));
-                     break;
+                     callback.success(new Advisor(json, User.AccountType.Advisor, id));
+                     return;
                   case UPRMAccount:
-                     callback.success(new UPRMAccount(json, User.AccountType.UPRMAccount, ID));
-                     break;
+                     callback.success(new UPRMAccount(json, User.AccountType.UPRMAccount, id));
+                     return;
                   case IAPStudent:
-                     callback.success(new IAPStudent(json, User.AccountType.IAPStudent, ID));
-                     break;
+                     callback.success(new IAPStudent(json, User.AccountType.IAPStudent, id));
+                     return;
                   case NA:
                      callback.failure("DataSevice -> getUserData(): Invalid account type" + accType);
+                     return;
                }
             } catch (JSONException e){
                Log.e(TAG, "DataService -> getUserData() / switch()", e);
                e.printStackTrace();
             }
+            callback.failure("No user ID Registered");
          }
          @Override
-         public void onCancelled(DatabaseError databaseError) {}
+         public void onCancelled(DatabaseError databaseError) {
+            Log.e(TAG, databaseError.toString());
+         }
       });
    }
 

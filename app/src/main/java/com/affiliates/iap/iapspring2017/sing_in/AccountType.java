@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
 
 public class AccountType extends AppCompatActivity {
@@ -24,11 +23,9 @@ public class AccountType extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AccountType.this, NameActivity.class);
                 intent.putExtra("AccountType", "Company");
-                startActivity(intent);
                 intent.putExtra("UserType","NA");
-                overridePendingTransition(R.anim.slide_in,
-                        R.anim.slide_out);
-
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
 
@@ -39,11 +36,8 @@ public class AccountType extends AppCompatActivity {
                 Intent intent = new Intent(AccountType.this, NameActivity.class);
                 intent.putExtra("AccountType", "IAPStudent");
                 intent.putExtra("UserType","NA");
-
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in,
-                        R.anim.slide_out);
-
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
 
@@ -54,9 +48,7 @@ public class AccountType extends AppCompatActivity {
                 Intent intent = new Intent(AccountType.this,UserType.class);
                 intent.putExtra("AccountType","UPRMAccount");
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in,
-                        R.anim.slide_out);
-
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
 
@@ -67,15 +59,16 @@ public class AccountType extends AppCompatActivity {
                 Intent intent = new Intent(AccountType.this, NameActivity.class);
                 intent.putExtra("AccountType","Advisor");
                 intent.putExtra("UserType","NA");
-
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in,
-                        R.anim.slide_out);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
+    }
 
-
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
+        finish();
     }
 }

@@ -22,8 +22,7 @@ public class EnterEmail extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EnterEmail.this, NameActivity.class);
-                startActivity(intent);
+                onBackPressed();
             }
         });
 
@@ -40,15 +39,17 @@ public class EnterEmail extends AppCompatActivity {
                     intent.putExtra("AccountType", getIntent().getStringExtra("AccountType"));
                     intent.putExtra("Name", getIntent().getStringExtra("Name"));
                     intent.putExtra("UserType", getIntent().getStringExtra("UserType"));
-
-
                     startActivity(intent);
-                }
-               else{
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                    finish();
+                } else{
                     switch(error){
-                        case 1: Toast.makeText(getApplicationContext(), "Enter your email", Toast.LENGTH_SHORT).show(); break;
-                        case 2: Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show(); break;
-
+                        case 1:
+                            Toast.makeText(getApplicationContext(), "Enter your email", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 2:
+                            Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
+                            break;
                     }
                 }
 
@@ -60,5 +61,12 @@ public class EnterEmail extends AppCompatActivity {
         if(email.length()==0) return 1;
         if(!email.contains(".") || !email.contains("@")) return 2;
         return 0;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
+        finish();
     }
 }

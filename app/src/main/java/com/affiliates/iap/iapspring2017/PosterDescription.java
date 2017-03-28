@@ -12,10 +12,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,21 +38,22 @@ import com.affiliates.iap.iapspring2017.services.DataService;
 import com.affiliates.iap.iapspring2017.tabs.PostersFragment;
 
 import org.lucasr.twowayview.TwoWayView;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 public class PosterDescription extends BaseActivity {
     private static final String TAG = "PosterDescription";
 
-    private ImageView mPoster;
-    private ImageView mVote;
+    private Button mPoster;
+    private Button mVoteButton;
+    private ImageView mVoteImg;
     private ArrayList<IAPStudent> mTeam;
     private ArrayList<Advisor> mAdvisors;
     private TeamMembersAdapter mStudentAdapter;
     private TeamAdvisorsAdapter mAdvisorsAdapter;
     private TwoWayView mStudentScrollView;
     private TwoWayView mAdvisorScrollView;
-    private Button mVoteTV;
     private TextView mAbstract;
     private Poster mPosterData;
 
@@ -77,8 +80,22 @@ public class PosterDescription extends BaseActivity {
         String id = getIntent().getStringExtra("posterID");
         mPosterData = Constants.getPosters().get(id);
 
-        mVoteTV = (Button) findViewById(R.id.button_evaluate);
-        mPoster = (ImageView) findViewById(R.id.poster_link);
+        mVoteButton = (Button) findViewById(R.id.button_evaluate);
+        mPoster = (Button) findViewById(R.id.button_poster);
+
+        TextView seeMore = (TextView) findViewById(R.id.seeMoreButton);
+        seeMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView seeMore = (TextView) v;
+                if(seeMore.getText().toString().toLowerCase().contains("more")){
+                   seeMore(seeMore);
+                }
+                else {
+                   seeLess(seeMore);
+                }
+            }
+        });
 
         mPoster.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,10 +117,10 @@ public class PosterDescription extends BaseActivity {
 
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
-            mVote = (ImageView) findViewById(R.id.poster_vote);
+            mVoteImg = (ImageView) findViewById(R.id.poster_vote);
             if(!companyUser.hasEvaluated(mPosterData.getPosterID())){
-                mVoteTV.setText("Evaluate");
-                mVote.setOnClickListener(new View.OnClickListener() {
+                mVoteButton.setText("Evaluate");
+                mVoteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent eval = new Intent(getBaseContext(), EvaluationActivity.class);
@@ -112,8 +129,9 @@ public class PosterDescription extends BaseActivity {
                     }
                 });
             } else {
-                mVote.setImageResource(R.drawable.ic_evaluate);
-                mVoteTV.setText("Evaluated");
+                mVoteImg.setImageResource(R.drawable.ic_evaluate);
+                mVoteButton.setText("Evaluated");
+                mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
             }
         } else if (Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.Advisor){
             Advisor advisor = (Advisor) Constants.getCurrentLoggedInUser();
@@ -197,8 +215,10 @@ public class PosterDescription extends BaseActivity {
         TextView title = (TextView) findViewById(R.id.poster_desc_title);
         mAbstract = (TextView) findViewById(R.id.poster_desc_abstract);
         mAbstract.setText(mPosterData.get_abstract());
+        seeLess(seeMore);
 
         title.setText(mPosterData.getProjectName());
+
     }
 
     @Override
@@ -207,21 +227,33 @@ public class PosterDescription extends BaseActivity {
         Log.v(TAG,"STOP");
     }
 
+    public void seeMore(TextView seeMore){
+        mAbstract.setText(mPosterData.get_abstract());
+        seeMore.setText("See less");
+    }
+
+    public void seeLess(TextView seeMore){
+        if(mPosterData.get_abstract().length()>300)
+            mAbstract.setText(mPosterData.get_abstract().substring(0,300));
+        seeMore.setText("See more");
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
-            mVote = (ImageView) findViewById(R.id.poster_vote);
+            mVoteImg = (ImageView) findViewById(R.id.poster_vote);
             if(companyUser.hasEvaluated(mPosterData.getPosterID())){
-                mVoteTV.setText("Evaluate");
-                mVote.setOnClickListener(new View.OnClickListener() {
+                mVoteButton.setText("Evaluate");
+                mVoteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                     }
                 });
-                mVote.setImageResource(R.drawable.ic_evaluate);
-                mVoteTV.setText("Evaluated");
+                mVoteImg.setImageResource(R.drawable.ic_evaluate);
+                mVoteButton.setText("Evaluated");
+                mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
             }
         }
         System.out.println("ON RESUME YEAH YEAH");

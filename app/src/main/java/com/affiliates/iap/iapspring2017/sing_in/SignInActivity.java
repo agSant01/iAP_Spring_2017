@@ -77,7 +77,7 @@ public class SignInActivity extends BaseActivity {
                            hideProgressDialog();
                            startActivity(in);
                            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                           finish();
+                           finishAffinity();
                           }
 
                         @Override
@@ -108,8 +108,11 @@ public class SignInActivity extends BaseActivity {
                   }
                }
             });
-
-
-
+   }
+   @Override
+   public void onBackPressed() {
+      super.onBackPressed();
+      overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
+      finish();
    }
 }

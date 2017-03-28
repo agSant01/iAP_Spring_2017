@@ -45,8 +45,20 @@
             android:name=".sing_in.NameActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".sing_in.LoginOrRegister"
+            android:name=".sing_in.LogInOrRegister"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".profiles.IAPStudentProfile"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".profiles.AdvisorProfile"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
+        </activity>
 
         <activity
             android:name=".evaluation_center.EvaluationActivity"
@@ -68,8 +80,7 @@
             <!--<meta-data android:name="android.app.searchable"-->
                 <!--android:resource="@xml/searchable" />-->
         <!--</activity>-->
-
-=======
+        <activity
             android:name=".sing_in.EnterEmail"
             android:screenOrientation="portrait" />
         <activity
@@ -81,9 +92,11 @@
         <activity
             android:name=".sing_in.EmailConfirmation"
             android:screenOrientation="portrait" />
-        <activity android:name=".sing_in.Password" />
-        <activity android:name=".sing_in.UserType"></activity>
->>>>>>> 05425e0f68968966176e6ece6fc698f22b31e007
+        <activity android:name=".sing_in.Password"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".sing_in.UserType"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

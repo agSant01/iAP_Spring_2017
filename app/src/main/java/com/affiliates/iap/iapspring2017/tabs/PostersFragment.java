@@ -122,7 +122,7 @@ public class PostersFragment extends Fragment {
             }
          });
       } else{
-         mPosterAdapter = new PosterAdapter(getActivity().getBaseContext(),new ArrayList<Poster>(Constants.getPosters().values()));
+         mPosterAdapter = new PosterAdapter(getActivity().getBaseContext(),new ArrayList<Poster>(Constants.getSortedPosters()));
          mListView.setAdapter(mPosterAdapter);
          mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override

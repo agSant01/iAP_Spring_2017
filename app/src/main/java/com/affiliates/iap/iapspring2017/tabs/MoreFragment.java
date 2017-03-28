@@ -8,9 +8,11 @@
 
 package com.affiliates.iap.iapspring2017.tabs;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +23,7 @@ import android.widget.Toast;
 import com.affiliates.iap.iapspring2017.CompanyList;
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
+import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
 import com.google.firebase.auth.FirebaseAuthException;
 
 public class MoreFragment extends Fragment {
@@ -79,16 +81,23 @@ public class MoreFragment extends Fragment {
         mSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                try {
-                    Constants.getCurrentLoggedInUser().logOut(getContext());
-                } catch (FirebaseAuthException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getContext(), "Error login Out", Toast.LENGTH_LONG).show();
-                }
-                Intent in = new Intent(getActivity(), SignInActivity.class);
-                startActivity(in);
-                getActivity().finish();
+                new AlertDialog.Builder(getActivity()).setTitle("Confirmation").setMessage("Do you want to sign out.").setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try {
+                            Constants.getCurrentLoggedInUser().logOut(getContext());
+                        } catch (FirebaseAuthException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getContext(), "Error login Out", Toast.LENGTH_LONG).show();
+                        }
+                        Intent in = new Intent(getActivity(), LogInOrRegister.class);
+                        startActivity(in);
+                        getActivity().finish();
+                    }
+                }).setNegativeButton("no", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                }).show();
             }
         });
 

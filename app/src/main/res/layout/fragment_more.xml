@@ -42,7 +42,7 @@
         android:layout_height="33dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:background="@drawable/button_oval_shape"
+        android:background="@drawable/button_oval_shape_green"
         android:text="Sign Out"
         android:textColor="@color/appWhite"
         android:textSize="16sp"

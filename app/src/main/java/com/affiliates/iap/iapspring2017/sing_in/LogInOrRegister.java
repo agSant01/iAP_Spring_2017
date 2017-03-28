@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.R;
 
-public class LoginOrRegister extends AppCompatActivity {
+public class LogInOrRegister extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,22 +19,19 @@ public class LoginOrRegister extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginOrRegister.this, SignInActivity.class);
+                Intent intent = new Intent(LogInOrRegister.this, SignInActivity.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in,
-                        R.anim.slide_out);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginOrRegister.this, AccountType.class);
+                Intent intent = new Intent(LogInOrRegister.this, AccountType.class);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_in,
-                        R.anim.slide_out);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
-
     }
 }

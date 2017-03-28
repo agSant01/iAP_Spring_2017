@@ -14,7 +14,7 @@
         android:layout_height="33dp"
         android:text="Connect"
         android:textColor="@color/appWhite"
-        android:background="@drawable/button_oval_shape"
+        android:background="@drawable/button_oval_shape_green"
         android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginLeft="8dp"

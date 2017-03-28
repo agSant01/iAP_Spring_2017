@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.Constants;
@@ -32,6 +33,7 @@ public class PosterAdapter  extends ArrayAdapter<Poster> {
         TextView mDptm;
         TextView mCategories;
         TextView mHasEval;
+        ImageView check;
     }
 
     public PosterAdapter(Context context, ArrayList<Poster> posters){
@@ -46,20 +48,25 @@ public class PosterAdapter  extends ArrayAdapter<Poster> {
         if (convertView == null){
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.cell_posters, viewGroup, false);
-            viewHolder.mPosterNum = (TextView) convertView.findViewById(R.id.textView13);
+            viewHolder.check = (ImageView) convertView.findViewById(R.id.check);
+            viewHolder.mPosterNum = (TextView) convertView.findViewById(R.id.poster_number);
             viewHolder.title = (TextView) convertView.findViewById(R.id.list_poster_title);
             viewHolder.mDptm = (TextView) convertView.findViewById(R.id.cell_poster_dept);
             viewHolder.mCategories = (TextView) convertView.findViewById(R.id.cell_poster_keyword);
             viewHolder.mHasEval = (TextView) convertView.findViewById(R.id.textView15);
             if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
-                if( ((CompanyUser)Constants.getCurrentLoggedInUser()).hasEvaluated(poster.getPosterID()))
-                    viewHolder.mHasEval.setBackgroundResource(R.drawable.list_circular_background);
+                if( ((CompanyUser)Constants.getCurrentLoggedInUser()).hasEvaluated(poster.getPosterID())){
+                    viewHolder.mPosterNum.setVisibility(View.INVISIBLE);
+                    viewHolder.mHasEval.setVisibility(View.INVISIBLE);
+                    viewHolder.check.setVisibility(View.VISIBLE);
+                }
             }
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        viewHolder.mPosterNum = (TextView) convertView.findViewById(R.id.textView13);
+        viewHolder.check = (ImageView) convertView.findViewById(R.id.check);
+        viewHolder.mPosterNum = (TextView) convertView.findViewById(R.id.poster_number);
         viewHolder.title = (TextView) convertView.findViewById(R.id.list_poster_title);
         viewHolder.mDptm = (TextView) convertView.findViewById(R.id.cell_poster_dept);
         viewHolder.mCategories = (TextView) convertView.findViewById(R.id.cell_poster_keyword);
@@ -69,8 +76,11 @@ public class PosterAdapter  extends ArrayAdapter<Poster> {
         viewHolder.mPosterNum.setText(poster.getPosterNumber()+"");
         viewHolder.mDptm.setText(poster.getPosterDptm());
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
-            if( ((CompanyUser)Constants.getCurrentLoggedInUser()).hasEvaluated(poster.getPosterID()))
-                viewHolder.mHasEval.setBackgroundResource(R.drawable.list_circular_background);
+            if( ((CompanyUser)Constants.getCurrentLoggedInUser()).hasEvaluated(poster.getPosterID())){
+                viewHolder.mPosterNum.setVisibility(View.INVISIBLE);
+                viewHolder.mHasEval.setVisibility(View.INVISIBLE);
+                viewHolder.check.setVisibility(View.VISIBLE);
+            }
         }
 
         String m = "";

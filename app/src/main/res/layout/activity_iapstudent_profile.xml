@@ -191,7 +191,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView8"
-                app:srcCompat="@drawable/ic_poster_green" />
+                app:srcCompat="@drawable/ic_poster_icon" />
 
             <View
                 android:id="@+id/view3"
@@ -258,7 +258,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="42dp"
 
-                android:background="@drawable/button_oval_shape"
+                android:background="@drawable/button_oval_shape_green"
                 android:text="Resume"
                 android:textColor="@color/appWhite"
                 android:textSize="16sp"
