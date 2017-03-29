@@ -105,8 +105,9 @@ public class IAPStudent extends User implements UserDelegate{
       private boolean bestPresentation = false;
 
       public Voted (JSONObject data) throws JSONException{
-         this.bestPoster = data.getBoolean("BestPoster");
-         this.bestPresentation = data.getBoolean("BestPresentation");
+         if (data == null) return;
+         this.bestPoster = data.optBoolean("BestPoster");
+         this.bestPresentation = data.optBoolean("BestPresentation");
       }
    }
 

@@ -24,8 +24,7 @@ public class Password extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Password.this, EnterEmail.class));
-
+                onBackPressed();
             }
         });
 
@@ -41,16 +40,19 @@ public class Password extends AppCompatActivity {
                     intent.putExtra("AccountType", getIntent().getStringExtra("AccountType"));
                     intent.putExtra("Name", getIntent().getStringExtra("Name"));
                     intent.putExtra("UserType", getIntent().getStringExtra("UserType"));
-
-
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                    finish();
                 }
                 else
                     switch (error){
-                        case 1: Toast.makeText(getApplicationContext(), "Passwords don't match", Toast.LENGTH_SHORT).show(); break;
-                        case 2: Toast.makeText(getApplicationContext(), "Password must have at least 6 characters", Toast.LENGTH_SHORT).show(); break;
+                        case 1:
+                            Toast.makeText(getApplicationContext(), "Passwords don't match", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 2:
+                            Toast.makeText(getApplicationContext(), "Password must have at least 6 characters", Toast.LENGTH_SHORT).show();
+                            break;
                     }
-
             }
         });
     }
@@ -59,5 +61,12 @@ public class Password extends AppCompatActivity {
         if(!pass.contentEquals(confirm)) return 1;
         if(pass.length()<6) return 2;
         return 0;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
+        finish();
     }
 }

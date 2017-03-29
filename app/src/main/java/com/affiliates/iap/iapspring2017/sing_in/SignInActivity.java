@@ -77,7 +77,7 @@ public class SignInActivity extends BaseActivity {
                            hideProgressDialog();
                            startActivity(in);
                            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                           finish();
+                           finishAffinity();
                           }
 
                         @Override
@@ -89,6 +89,8 @@ public class SignInActivity extends BaseActivity {
                               s = "Incorrect Email";
                            } else if (message.contains("badly formatted")){
                               s = "Invalid Email";
+                           } else{
+                              Log.v(TAG, message);
                            }
                            hideProgressDialog();
                            Log.e(TAG, message);
@@ -106,8 +108,11 @@ public class SignInActivity extends BaseActivity {
                   }
                }
             });
-
-
-
+   }
+   @Override
+   public void onBackPressed() {
+      super.onBackPressed();
+      overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
+      finish();
    }
 }

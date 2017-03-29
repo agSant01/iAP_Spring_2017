@@ -45,15 +45,15 @@ import java.util.ArrayList;
 public class PosterDescription extends BaseActivity {
     private static final String TAG = "PosterDescription";
 
-    private ImageView mPoster;
-    private ImageView mVote;
+    private Button mPoster;
+    private Button mVoteButton;
+    private ImageView mVoteImg;
     private ArrayList<IAPStudent> mTeam;
     private ArrayList<Advisor> mAdvisors;
     private TeamMembersAdapter mStudentAdapter;
     private TeamAdvisorsAdapter mAdvisorsAdapter;
     private TwoWayView mStudentScrollView;
     private TwoWayView mAdvisorScrollView;
-    private TextView mVoteTV;
     private TextView mAbstract;
     private Poster mPosterData;
 
@@ -80,8 +80,8 @@ public class PosterDescription extends BaseActivity {
         String id = getIntent().getStringExtra("posterID");
         mPosterData = Constants.getPosters().get(id);
 
-        mVoteTV = (TextView) findViewById(R.id.textView9);
-        mPoster = (ImageView) findViewById(R.id.poster_link);
+        mVoteButton = (Button) findViewById(R.id.button_evaluate);
+        mPoster = (Button) findViewById(R.id.button_poster);
 
         TextView seeMore = (TextView) findViewById(R.id.seeMoreButton);
         seeMore.setOnClickListener(new View.OnClickListener() {
@@ -117,10 +117,10 @@ public class PosterDescription extends BaseActivity {
 
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
-            mVote = (ImageView) findViewById(R.id.poster_vote);
+            mVoteImg = (ImageView) findViewById(R.id.poster_vote);
             if(!companyUser.hasEvaluated(mPosterData.getPosterID())){
-                mVoteTV.setText("Evaluate");
-                mVote.setOnClickListener(new View.OnClickListener() {
+                mVoteButton.setText("Evaluate");
+                mVoteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent eval = new Intent(getBaseContext(), EvaluationActivity.class);
@@ -129,8 +129,9 @@ public class PosterDescription extends BaseActivity {
                     }
                 });
             } else {
-                mVote.setImageResource(R.drawable.ic_evaluate);
-                mVoteTV.setText("Evaluated");
+                mVoteImg.setImageResource(R.drawable.ic_evaluate);
+                mVoteButton.setText("Evaluated");
+                mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
             }
         } else if (Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.Advisor){
             Advisor advisor = (Advisor) Constants.getCurrentLoggedInUser();
@@ -222,8 +223,8 @@ public class PosterDescription extends BaseActivity {
 
     @Override
     public void onStop() {
-        System.out.println("khfkuf");
         super.onStop();
+        Log.v(TAG,"STOP");
     }
 
     public void seeMore(TextView seeMore){
@@ -242,16 +243,17 @@ public class PosterDescription extends BaseActivity {
         super.onResume();
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
-            mVote = (ImageView) findViewById(R.id.poster_vote);
+            mVoteImg = (ImageView) findViewById(R.id.poster_vote);
             if(companyUser.hasEvaluated(mPosterData.getPosterID())){
-                mVoteTV.setText("Evaluate");
-                mVote.setOnClickListener(new View.OnClickListener() {
+                mVoteButton.setText("Evaluate");
+                mVoteButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                     }
                 });
-                mVote.setImageResource(R.drawable.ic_evaluate);
-                mVoteTV.setText("Evaluated");
+                mVoteImg.setImageResource(R.drawable.ic_evaluate);
+                mVoteButton.setText("Evaluated");
+                mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
             }
         }
         System.out.println("ON RESUME YEAH YEAH");
@@ -259,8 +261,7 @@ public class PosterDescription extends BaseActivity {
 
     @Override
     public void onDestroy() {
-        System.out.println("BOOM");
         super.onDestroy();
-        finish();
+        Log.v(TAG, "DESTROY");
     }
 }
