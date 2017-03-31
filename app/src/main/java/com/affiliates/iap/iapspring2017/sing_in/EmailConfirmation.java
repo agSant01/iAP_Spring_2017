@@ -48,8 +48,6 @@ public class EmailConfirmation extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(EmailConfirmation.this, SignInActivity.class));
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                finishActivity(getParent().getParent().getTaskId());
-                finishActivity(getParent().getTaskId());
                 finish();
 
             }

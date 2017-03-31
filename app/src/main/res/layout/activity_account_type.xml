@@ -61,7 +61,7 @@
         android:layout_width="150dp"
         android:layout_height="95dp"
         android:gravity="center"
-        android:text="Companny"
+        android:text="Company"
         android:textColor="@color/appGreen"
         android:textSize="18sp"
         app:layout_constraintRight_toLeftOf="@+id/view16"
