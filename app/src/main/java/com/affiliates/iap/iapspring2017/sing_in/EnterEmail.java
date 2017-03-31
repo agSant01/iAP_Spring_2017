@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.R;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class EnterEmail extends AppCompatActivity {
 
     @Override
@@ -45,10 +48,10 @@ public class EnterEmail extends AppCompatActivity {
                 } else{
                     switch(error){
                         case 1:
-                            Toast.makeText(getApplicationContext(), "Enter your email", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Please, enter your email", Toast.LENGTH_SHORT).show();
                             break;
                         case 2:
-                            Toast.makeText(getApplicationContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Sorry, that email is not valid", Toast.LENGTH_SHORT).show();
                             break;
                     }
                 }
@@ -58,8 +61,16 @@ public class EnterEmail extends AppCompatActivity {
     }
 
     private int checkEmail(String email){
+
         if(email.length()==0) return 1;
-        if(!email.contains(".") || !email.contains("@")) return 2;
+
+        String regex = "^(.+)@(.+).(.+)$";
+        Pattern p = Pattern.compile(regex);
+        Matcher matcher = p.matcher((CharSequence) email);
+
+        if(!email.contains(".") || !email.contains("@") || email.length()<5 || !matcher.matches())
+            return 2;
+
         return 0;
     }
 
