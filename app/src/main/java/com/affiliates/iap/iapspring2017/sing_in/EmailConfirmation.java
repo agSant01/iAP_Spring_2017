@@ -40,7 +40,6 @@ public class EmailConfirmation extends AppCompatActivity {
                 name = getIntent().getStringExtra("Name"),
                 accType = getIntent().getStringExtra("AccountType"),
                 userType = getIntent().getStringExtra("UserType");
-
         registerUser(name, email, pass, accType, userType);
 
         done.setOnClickListener(new View.OnClickListener() {
@@ -48,8 +47,6 @@ public class EmailConfirmation extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(EmailConfirmation.this, SignInActivity.class));
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                finishActivity(getParent().getParent().getTaskId());
-                finishActivity(getParent().getTaskId());
                 finish();
 
             }
@@ -64,7 +61,6 @@ public class EmailConfirmation extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "Done", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     user.sendEmailVerification();
                     admin.saveUserID(user.getUid());
@@ -81,9 +77,16 @@ public class EmailConfirmation extends AppCompatActivity {
                     });
                 }
                 else
-                    Toast.makeText(getApplicationContext(), "Something went wrong. Try again", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Something went wrong. Please, try again", Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
             }
         });
+    }
+
+    public void onBackPressed(){
+        Intent in = new Intent(EmailConfirmation.this, LogInOrRegister.class);
+        startActivity(in);
+        overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
+        finish();
     }
 }
