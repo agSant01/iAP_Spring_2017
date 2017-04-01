@@ -38,15 +38,14 @@ public class NameActivity extends AppCompatActivity {
                     intent.putExtra("UserType", getIntent().getStringExtra("UserType"));
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                    finish();
                 }
                 else{
                     switch(error) {
                         case 1:
-                            Toast.makeText(getApplicationContext(), "Please, enter your name", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Enter Name", Toast.LENGTH_SHORT).show();
                             break;
                         case 2:
-                            Toast.makeText(getApplicationContext(), "sorry, that name is not valid", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Invalid Name", Toast.LENGTH_SHORT).show();
                             break;
                     }
                 }

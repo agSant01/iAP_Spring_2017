@@ -24,9 +24,8 @@ public class UserType extends AppCompatActivity {
                 Intent intent = new Intent(UserType.this, NameActivity.class);
                 intent.putExtra("AccountType", getIntent().getStringExtra("AccountType"));
                 intent.putExtra("UserType", "Student");
-                startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-
+                startActivity(intent);
             }
         });
 
@@ -38,9 +37,8 @@ public class UserType extends AppCompatActivity {
                 Intent intent = new Intent(UserType.this, NameActivity.class);
                 intent.putExtra("AccountType", getIntent().getStringExtra("AccountType"));
                 intent.putExtra("UserType", "Proffesor");
-                startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-
+                startActivity(intent);
             }
         });
     }
