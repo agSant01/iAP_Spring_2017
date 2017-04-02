@@ -285,6 +285,7 @@ public class DataService {
          public void onDataChange(DataSnapshot dataSnapshot) {
             JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
             HashMap<Integer, Poster> poster = new HashMap<Integer, Poster>();
+             int last = -1;
             try {
                Iterator<String> x = json.keys();
                Poster p;
@@ -293,12 +294,15 @@ public class DataService {
                   Log.d(TAG, "POSTERID: " + name);
                   JSONObject posterObject = json.getJSONObject(name);
                   p = new Poster(posterObject, name);
-                  poster.put(p.getPosterNumber(), p);
+                   poster.put(p.getPosterNumber(), p);
+                   last = p.getPosterNumber();
+
                }
             } catch (JSONException e) {
                Log.e(TAG, "getPosters(): " + e);
             }
-            callback.success(poster);
+
+             callback.success(poster);
          }
 
          @Override
