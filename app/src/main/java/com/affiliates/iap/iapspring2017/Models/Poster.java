@@ -8,13 +8,13 @@
 
 package com.affiliates.iap.iapspring2017.Models;
 
+
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 public class Poster {

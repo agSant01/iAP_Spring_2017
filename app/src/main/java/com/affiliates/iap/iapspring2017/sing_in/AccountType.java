@@ -26,6 +26,7 @@ public class AccountType extends AppCompatActivity {
                 intent.putExtra("UserType","NA");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                finish();
             }
         });
 
@@ -38,6 +39,8 @@ public class AccountType extends AppCompatActivity {
                 intent.putExtra("UserType","NA");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                finish();
+
             }
         });
 
@@ -49,6 +52,8 @@ public class AccountType extends AppCompatActivity {
                 intent.putExtra("AccountType","UPRMAccount");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                finish();
+
             }
         });
 
@@ -61,6 +66,8 @@ public class AccountType extends AppCompatActivity {
                 intent.putExtra("UserType","NA");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                finish();
+
             }
         });
     }
