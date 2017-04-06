@@ -84,9 +84,6 @@
             android:name=".sing_in.EnterEmail"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ProfileActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".sing_in.AccountType"
             android:screenOrientation="portrait" />
         <activity

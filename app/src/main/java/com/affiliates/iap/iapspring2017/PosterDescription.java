@@ -190,6 +190,7 @@ public class PosterDescription extends BaseActivity {
                 in.putExtra("photoURL", s.getPhotoURL());
                 in.putExtra("bio", s.getObjective());
                 in.putExtra("resume", s.getResumeURL());
+                in.putExtra("id",s.getUserID());
                 startActivity(in);
             }
         });

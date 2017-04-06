@@ -9,11 +9,14 @@
 package com.affiliates.iap.iapspring2017.services;
 
 import android.support.annotation.NonNull;
+import android.telecom.Call;
 import android.util.Log;
 
+import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Advisor;
 import com.affiliates.iap.iapspring2017.Models.CompanyUser;
 import com.affiliates.iap.iapspring2017.Models.CompanyVote;
+import com.affiliates.iap.iapspring2017.Models.Event;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.OverallVote;
 import com.affiliates.iap.iapspring2017.Models.Poster;
@@ -367,5 +370,61 @@ public class DataService {
             callback.failure(databaseError.getMessage());
          }
       });
+   }
+
+   public void getEvent(final Callback callback){
+      final ArrayList<Event> events = new ArrayList<>();
+      scheduleRef().addListenerForSingleValueEvent(new ValueEventListener() {
+         @Override
+         public void onDataChange(DataSnapshot dataSnapshot) {
+            JSONObject json = new JSONObject((HashMap<String,Object>)dataSnapshot.getValue());
+            Iterator<String> it = json.keys();
+            Event e;
+            for(int i = 0; i < json.length(); i++){
+               JSONObject event = json.optJSONObject(it.next());
+               if (event != null)
+                  events.add(new Event(event));
+            }
+            callback.success(events);
+         }
+
+         @Override
+         public void onCancelled(DatabaseError databaseError) {
+            callback.failure(databaseError.getMessage());
+         }
+      });
+   }
+
+   public void getInterestedStudents(final Callback callback){
+      usersRef().child(Constants.getCurrentLoggedInUser().getUserID()).child("InterestedStudents").addListenerForSingleValueEvent(new ValueEventListener() {
+         @Override
+         public void onDataChange(DataSnapshot dataSnapshot) {
+            JSONObject json = new JSONObject((HashMap<String,Object>)dataSnapshot.getValue());
+            Iterator<String> it = json.keys();
+            ArrayList<String> interest = new ArrayList<String>();
+            while (it.hasNext()) {
+               String s = it.next();
+               Log.v(TAG, s);
+               interest.add(s);
+            }
+
+            callback.success(interest);
+         }
+
+         @Override
+         public void onCancelled(DatabaseError databaseError) {
+            callback.failure(databaseError.getMessage());
+         }
+      });
+   }
+
+   public void setInterestedStudent(final String id){
+      usersRef().child(Constants.getCurrentLoggedInUser().getUserID())
+              .child("InterestedStudents").updateChildren(new HashMap<String, Object>() {{ put(id, true);}});
+   }
+
+   public void removeInterestedStudent(final String id){
+      usersRef().child(Constants.getCurrentLoggedInUser().getUserID())
+              .child("InterestedStudents").child(id).removeValue();
    }
 }

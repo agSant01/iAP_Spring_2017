@@ -9,9 +9,9 @@
 package com.affiliates.iap.iapspring2017;
 
 import android.graphics.drawable.Drawable;
-import android.support.v4.app.Fragment;
 
-import com.affiliates.iap.iapspring2017.Models.CompanyVote;
+import com.affiliates.iap.iapspring2017.Models.Event;
+import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.Models.Sponsors;
 import com.affiliates.iap.iapspring2017.Models.User;
@@ -19,21 +19,13 @@ import com.affiliates.iap.iapspring2017.Models.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class Constants {
    private static User currentLoggedInUser;
    private static HashMap<String, Poster> posters;
    private static ArrayList<Poster> sortedPosters;
-
-   public static ArrayList<Poster> getSortedPosters() {
-      return sortedPosters;
-   }
-
-   public static void setSortedPosters(ArrayList<Poster> sortedPosters) {
-      Constants.sortedPosters = sortedPosters;
-   }
-
+   private static ArrayList<String> interestedStudents;
+   private static ArrayList<Event> events;
    private static ArrayList<Sponsors> sponsor;
    private static Map<String, Drawable> sponsorLogos = new HashMap<>();
 
@@ -64,4 +56,29 @@ public class Constants {
    public static void setCurrentLogedInUser(User curr) {
       currentLoggedInUser = curr;
    }
+
+   public static ArrayList<String> getInterestedStudents() {
+      return interestedStudents;
+   }
+
+   public static void setInterestedStudents(ArrayList<String> interestedStudents) {
+      Constants.interestedStudents = interestedStudents;
+   }
+
+   public static void setSortedPosters(ArrayList<Poster> sortedPosters) {
+      Constants.sortedPosters = sortedPosters;
+   }
+
+   public static ArrayList<Event> getEvents() {
+      return events;
+   }
+
+   public static void setEvents(ArrayList<Event> events) {
+      Constants.events = events;
+   }
+
+   public static ArrayList<Poster> getSortedPosters() {
+      return sortedPosters;
+   }
+
 }
