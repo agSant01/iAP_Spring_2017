@@ -30,6 +30,7 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,18 +73,24 @@ public class PostersFragment extends Fragment {
             @Override
             public void success(Object data) {
                Log.v(TAG, "Get posters succesfull");
+
                Map<Integer, Poster> d = (HashMap<Integer, Poster>) data;
                HashMap<String, Poster> ps = new HashMap<String, Poster>();
                ArrayList<Poster> sort = new ArrayList<Poster>();
-               for(int i = 0; i < d.size(); i++) {
+
+
+               Constants.setPosters(ps);
+               //Sort keys and iterate through the array of sorted keys, insted of iterating through the hashmap
+               Object[] keys = d.keySet().toArray();
+               Arrays.sort(keys);
+               Constants.setSortedPosters(sort);
+
+               for(Object in: keys) {
+                  int i = (int) in;
                   ps.put(d.get(i).getPosterID(), d.get(i));
                   sort.add(d.get(i));
                   Log.v(TAG, d.get(i).getProjectName());
                }
-
-               Constants.setPosters(ps);
-               Constants.setSortedPosters(sort);
-
                mPosterAdapter = new PosterAdapter(getActivity().getBaseContext(), new ArrayList<Poster>(Constants.getSortedPosters()));
                for(Poster p : Constants.getPosters().values())
                   Log.v(TAG, p.getProjectName() + "<_");
