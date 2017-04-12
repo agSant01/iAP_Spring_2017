@@ -1,3 +1,11 @@
+//
+//  SplashScreen.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 3/07/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017;
 
 import android.app.Activity;
@@ -30,9 +38,10 @@ public class SplashScreen extends Activity {
                 if(!client.isConnectionAvailable()){
                     Intent in = new Intent(SplashScreen.this , NoConnection.class);
                     startActivity(in);
+                    finish();
                 } else {
                     String id = aa.getUserID();
-                    if(id != null && id != ""){
+                    if(id != null && !id.equals("")){
                         Log.v(TAG, "UserID from Memory succesfull");
                         DataService.sharedInstance().getUserData(id, new Callback<User>() {
                             @Override

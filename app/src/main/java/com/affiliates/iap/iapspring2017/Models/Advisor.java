@@ -24,13 +24,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Advisor extends User implements UserDelegate {
-   private ArrayList<String> classes;
-   private String department;
-   private String photoURL;
    private ArrayList<String> projects;
    private String researchIntent;
-   private Voted voted;
+   private String department;
+   private String photoURL;
    private String webPage;
+   private Voted voted;
 
    public Advisor(JSONObject data, AccountType accountType, String id)
       throws InvalidAccountTypeExeption, JSONException{
@@ -39,12 +38,11 @@ public class Advisor extends User implements UserDelegate {
 
    private Advisor(Void d, JSONObject data, AccountType accountType, String id) throws JSONException{
       super(data.optString("Email"), data.optString("Name"), id,data.optString("Sex"), accountType);
-      this.classes = parseData(data.optJSONObject("Classes"));
       this.projects = parseData(data.optJSONObject("Projects"));
-      this.department = data.optString("Department");
-      this.photoURL = data.optString("PhotoURL");
       this.researchIntent = data.optString("ResearchIntent");
       this.voted = new Voted(data.optJSONObject("Voted"));
+      this.department = data.optString("Department");
+      this.photoURL = data.optString("PhotoURL");
       this.webPage = data.optString("webpage");
    }
 
@@ -77,7 +75,7 @@ public class Advisor extends User implements UserDelegate {
    @Override
    public void vote(String projectID, Vote vote, Context context, final Callback callback) throws VoteErrorException {
       if(vote instanceof OverallVote){
-         DataService.sharedInstance().submitGeneralVote(projectID, ((OverallVote) vote).getNumberFromType(), new Callback<Vote>() {
+         DataService.sharedInstance().submitGeneralVote( projectID, ((OverallVote) vote).getNumberFromType(), new Callback<Vote>() {
             @Override
             public void success(Vote vote) {
                setVoted((OverallVote) vote);
@@ -106,17 +104,21 @@ public class Advisor extends User implements UserDelegate {
    }
 
    private class Voted{
-      private boolean bestPoster = false;
       private boolean bestPresentation = false;
+      private boolean bestPoster = false;
 
       public Voted (JSONObject data) throws JSONException{
-         this.bestPoster = data.getBoolean("BestPoster");
          this.bestPresentation = data.getBoolean("BestPresentation");
+         this.bestPoster = data.getBoolean("BestPoster");
       }
    }
 
-   public ArrayList<String> getClasses() {
-      return classes;
+   public String getResearchIntent() {
+      return researchIntent;
+   }
+
+   public ArrayList<String> getProjects() {
+      return projects;
    }
 
    public String getDepartment() {
@@ -127,19 +129,11 @@ public class Advisor extends User implements UserDelegate {
       return photoURL;
    }
 
-   public ArrayList<String> getProjects() {
-      return projects;
-   }
-
-   public String getResearchIntent() {
-      return researchIntent;
+   public String getWebPage() {
+      return webPage;
    }
 
    public Voted getVoted() {
       return voted;
-   }
-
-   public String getWebPage() {
-      return webPage;
    }
 }

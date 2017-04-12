@@ -28,44 +28,24 @@ import com.google.firebase.database.FirebaseDatabase;
 public class User {
    private static final String TAG = "User";
 
-   private String email;
-   private String name;
+   private AccountType accountType;
    private String userID;
    private String gender;
-   private AccountType accountType;
-
-   public String getEmail() {
-      return email;
-   }
-
-   public String getName() {
-      return name;
-   }
-
-   public String getUserID() {
-      return userID;
-   }
-
-   public String getGender() {
-      return gender;
-   }
-
-   public AccountType getAccountType() {
-      return accountType;
-   }
+   private String email;
+   private String name;
 
    User(String email, String name, String userID,String gender, AccountType accType){
-      this.email = email;
-      this.name = name;
-      this.userID = userID;
       if (accType == AccountType.NA){
          throw new InvalidAccountTypeExeption("User(): Invalid account type" + accType);
       }
       this.accountType = accType;
+      this.userID = userID;
       this.gender = gender;
+      this.email = email;
+      this.name = name;
    }
 
-   public static void login(final Context context, String email, String password, final Callback<User> callback) {
+   public static void login(String email, String password, final Callback<User> callback) {
       FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).
          addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -110,11 +90,8 @@ public class User {
          orderByChild("userID").equalTo("AccountType");
    }
 
-   /**
-    *
-    */
    public enum AccountType{
-      CompanyUser, IAPStudent, Advisor,UPRMAccount, NA;
+      CompanyUser, IAPStudent, Advisor, Guest, NA;
       public static AccountType determineAccType(String typeString){
          switch (typeString){
             case "Company":
@@ -123,12 +100,31 @@ public class User {
                return AccountType.IAPStudent;
             case "Advisor":
                return AccountType.Advisor;
-            case "UPRMAccount":
-               return AccountType.UPRMAccount;
+            case "Guest":
+               return AccountType.Guest;
             default:
                return AccountType.NA;
          }
-
       }
+   }
+
+   public AccountType getAccountType() {
+      return accountType;
+   }
+
+   public String getUserID() {
+      return userID;
+   }
+
+   public String getGender() {
+      return gender;
+   }
+
+   public String getEmail() {
+      return email;
+   }
+
+   public String getName() {
+      return name;
    }
 }

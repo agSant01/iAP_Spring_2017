@@ -24,35 +24,34 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TeamAdvisorsAdapter extends ArrayAdapter<Advisor> {
-    private Context context;
-
     public TeamAdvisorsAdapter(Context context, int resourceId, List<Advisor> items) {
         super(context, resourceId, items);
-        this.context = context;
     }
 
     private class ViewHolder {
-        CircleImageView image;
+        CircleImageView mImage;
+        TextView mTextView;
+        ViewHolder(View view){
+            mImage = (CircleImageView) view.findViewById(R.id.profile_image);
+            mTextView = (TextView) view.findViewById(R.id.ol);
+        }
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-        TeamAdvisorsAdapter.ViewHolder holder = null;
+        Advisor advisor = getItem(position);
+        ViewHolder holder;
 
-        Advisor rowItem = getItem(position);
+        if (convertView != null){
+            holder = (ViewHolder) convertView.getTag();
+        } else {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.poster_team_member, parent, false);
+            holder = new ViewHolder(convertView);
+            convertView.setTag(holder);
+        }
 
-        LayoutInflater mInflater = (LayoutInflater) context
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        convertView = mInflater.inflate(R.layout.poster_team_member, null);
-        holder = new TeamAdvisorsAdapter.ViewHolder();
-        holder.image = (CircleImageView) convertView.findViewById(R.id.profile_image);
-
-        Picasso.with(context).load(rowItem.getPhotoURL()).placeholder(R.drawable.ic_gender)
-                .error(R.drawable.ic_gender).into(holder.image);
-
-        convertView.setTag(holder);
-        TextView tv = (TextView) convertView.findViewById(R.id.ol);
-        tv.setText(rowItem.getName());
+        Picasso.with(getContext()).load(advisor.getPhotoURL()).placeholder(R.drawable.ic_gender)
+                .error(R.drawable.ic_gender).into(holder.mImage);
+        holder.mTextView.setText(advisor.getName());
         return convertView;
     }
 }

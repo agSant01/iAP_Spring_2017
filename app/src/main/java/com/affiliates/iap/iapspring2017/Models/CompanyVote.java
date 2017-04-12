@@ -17,36 +17,48 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CompanyVote extends Vote implements Serializable {
-   private int posterTotal;
-   private int presentationTotal;
-   private Technical technicalScore;
-   private Results resultsScore;
    private Presentation presentationScore;
    private Methodology methodologyScore;
+   private Technical technicalScore;
+   private Results resultsScore;
+
+   private int presentationTotal;
+   private int posterTotal;
 
    public CompanyVote(String projectID) {
       super(projectID);
-      this.posterTotal = 0;
-      this.presentationTotal = 0;
-      this.technicalScore = new Technical();
-      this.resultsScore = new Results();
+
       this.presentationScore = new Presentation();
       this.methodologyScore = new Methodology();
+      this.technicalScore = new Technical();
+      this.resultsScore = new Results();
+
+      this.presentationTotal = 0;
+      this.posterTotal = 0;
    }
 
    private void updateTotal(){
       this.posterTotal = technicalScore.poster +
-                     resultsScore.poster +
                      presentationScore.poster +
-                     methodologyScore.poster;
+                     methodologyScore.poster +
+                     resultsScore.poster;
       this.presentationTotal = presentationScore.presentation +
+                           methodologyScore.presentation +
                            technicalScore.presentation +
-                           resultsScore.presentation +
-                           methodologyScore.presentation;
+                           resultsScore.presentation;
    }
 
    public HashMap<String, Object> makeJSON(){
       this.updateTotal();
+
+      final Map<String,Object> method = new HashMap<String, Object>(){{
+         put("PresentationEval", methodologyScore.presentation);
+         put("PosterEval", methodologyScore.poster);
+      }};
+      final Map<String,Object> pres = new HashMap<String, Object>(){{
+         put("PresentationEval", presentationScore.presentation);
+         put("PosterEval", presentationScore.poster);
+      }};
       final Map<String,Object> tech = new HashMap<String, Object>(){{
          put("PresentationEval", technicalScore.presentation);
          put("PosterEval", technicalScore.poster);
@@ -55,15 +67,6 @@ public class CompanyVote extends Vote implements Serializable {
          put("PresentationEval", resultsScore.presentation);
          put("PosterEval", resultsScore.poster);
       }};
-      final Map<String,Object> pres = new HashMap<String, Object>(){{
-         put("PresentationEval", presentationScore.presentation);
-         put("PosterEval", presentationScore.poster);
-      }};
-      final Map<String,Object> method = new HashMap<String, Object>(){{
-         put("PresentationEval", methodologyScore.presentation);
-         put("PosterEval", methodologyScore.poster);
-      }};
-
       return new HashMap<String, Object>(){{
          put("PosterTotal", posterTotal);
          put("PresentationTotal", presentationTotal);
@@ -95,15 +98,13 @@ public class CompanyVote extends Vote implements Serializable {
       public int poster = 0;
    }
 
-
-   public int getPosterTotal() {
-      return posterTotal;
+   public Presentation getPresentationScore() {
+      return presentationScore;
    }
 
-   public int getPresentationTotal() {
-      return presentationTotal;
+   public Methodology getMethodologyScore() {
+      return methodologyScore;
    }
-
 
    public Technical getTechnicalScore() {
       return technicalScore;
@@ -113,31 +114,31 @@ public class CompanyVote extends Vote implements Serializable {
       return resultsScore;
    }
 
-   public Presentation getPresentationScore() {
-      return presentationScore;
+   public int getPresentationTotal() {
+      return presentationTotal;
    }
 
-   public Methodology getMethodologyScore() {
-      return methodologyScore;
-   }
-
-   public void setPosterTotal(int posterTotal) {
-      this.posterTotal = posterTotal;
+   public int getPosterTotal() {
+      return posterTotal;
    }
 
    public void setPresentationTotal(int presentationTotal) {
       this.presentationTotal = presentationTotal;
    }
 
+   public void setPosterTotal(int posterTotal) {
+      this.posterTotal = posterTotal;
+   }
+
    public boolean validate(){
-      return (presentationScore.poster != 0)
-               && (presentationScore.presentation != 0)
-               && (technicalScore.poster != 0)
-               && (technicalScore.presentation != 0)
-               && (resultsScore.poster != 0)
-               && (resultsScore.presentation != 0)
-               && (methodologyScore.poster != 0)
-               && (methodologyScore.presentation != 0);
+      return (presentationScore.presentation != 0)
+              && (methodologyScore.presentation != 0)
+              && (technicalScore.presentation != 0)
+              && (resultsScore.presentation != 0)
+              && (presentationScore.poster != 0)
+              && (methodologyScore.poster != 0)
+              && (technicalScore.poster != 0)
+              && (resultsScore.poster != 0);
    }
 
    public void updateVote(Context context){
@@ -147,10 +148,7 @@ public class CompanyVote extends Vote implements Serializable {
          objectInputStream.writeObject(this);
          objectInputStream.close();
          fileOutputStream.close();
-      }catch (Exception e){
-
-      }
-
+      }catch (Exception e){ }
    }
 
    public void removeVoteFromMemory(Context context){

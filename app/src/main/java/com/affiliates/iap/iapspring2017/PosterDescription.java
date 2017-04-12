@@ -12,15 +12,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.Models.Advisor;
@@ -35,64 +34,64 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.profiles.AdvisorProfile;
 import com.affiliates.iap.iapspring2017.profiles.IAPStudentProfile;
 import com.affiliates.iap.iapspring2017.services.DataService;
-import com.affiliates.iap.iapspring2017.tabs.PostersFragment;
 
 import org.lucasr.twowayview.TwoWayView;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 public class PosterDescription extends BaseActivity {
     private static final String TAG = "PosterDescription";
 
-    private Button mPoster;
-    private Button mVoteButton;
-    private ImageView mVoteImg;
-    private ArrayList<IAPStudent> mTeam;
-    private ArrayList<Advisor> mAdvisors;
-    private TeamMembersAdapter mStudentAdapter;
     private TeamAdvisorsAdapter mAdvisorsAdapter;
+    private TeamMembersAdapter mStudentAdapter;
+
     private TwoWayView mStudentScrollView;
     private TwoWayView mAdvisorScrollView;
+
+    private ArrayList<Advisor> mAdvisors;
+    private ArrayList<IAPStudent> mTeam;
+
+    private ProgressBar mAdvisorProg;
+    private ProgressBar mTeamProg;
+
     private TextView mAbstract;
+    private TextView mSeeMore;
+    private TextView mTitle;
+
+    private Button mVoteButton;
+    private Button mPoster;
+
     private Poster mPosterData;
+    private ImageView mVoteImg;
+    private Toolbar mToolbar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_poster_description);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_poster_desc);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-        toolbar.setNavigationIcon(R.drawable.ic_back_arrow);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        bind();
+        setToolBar();
 
         String id = getIntent().getStringExtra("posterID");
         mPosterData = Constants.getPosters().get(id);
+        mAdvisors = new ArrayList<>();
+        mTeam = new ArrayList<>();
 
-        mVoteButton = (Button) findViewById(R.id.button_evaluate);
-        mPoster = (Button) findViewById(R.id.button_poster);
+        showProgressBar(mAdvisorProg);
+        showProgressBar(mTeamProg);
 
-        TextView seeMore = (TextView) findViewById(R.id.seeMoreButton);
-        seeMore.setOnClickListener(new View.OnClickListener() {
+        mTitle.setText(mPosterData.getProjectName());
+        seeLess();
+
+        mSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TextView seeMore = (TextView) v;
                 if(seeMore.getText().toString().toLowerCase().contains("more")){
-                   seeMore(seeMore);
-                }
-                else {
-                   seeLess(seeMore);
+                    seeMore();
+                } else {
+                    seeLess();
                 }
             }
         });
@@ -104,7 +103,7 @@ public class PosterDescription extends BaseActivity {
                 String url = mPosterData.getPosterURL();
                 if(!url.contains("https://firebasestorage.googleapis.com")){
                     new AlertDialog.Builder(v.getContext())
-                            .setMessage("PosterEval not Available")
+                            .setMessage("Poster not Available")
                             .setPositiveButton("OK",  new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {}                // do nothing
                             }).show();
@@ -117,37 +116,21 @@ public class PosterDescription extends BaseActivity {
 
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
-            mVoteImg = (ImageView) findViewById(R.id.poster_vote);
-            if(!companyUser.hasEvaluated(mPosterData.getPosterID())){
-                mVoteButton.setText("Evaluate");
-                mVoteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent eval = new Intent(getBaseContext(), EvaluationActivity.class);
-                        eval.putExtra("posterID", mPosterData.getPosterID());
-                        startActivity(eval);
-                    }
-                });
-            } else {
-                mVoteImg.setImageResource(R.drawable.ic_evaluate);
-                mVoteButton.setText("Evaluated");
-                mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
-            }
+            setCompanyEvaluation(companyUser);
         } else if (Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.Advisor){
             Advisor advisor = (Advisor) Constants.getCurrentLoggedInUser();
 
         } else if (Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.IAPStudent){
             IAPStudent iapStudent = (IAPStudent) Constants.getCurrentLoggedInUser();
+
         }
 
-
-        mStudentScrollView = (TwoWayView) findViewById(R.id.poster_team_members);
-        mTeam = new ArrayList<>();
         DataService.sharedInstance().getPosterTeamMembers(mPosterData, new Callback() {
             @Override
             public void success(final Object data) {
                 mTeam = (ArrayList<IAPStudent>) data;
                 mStudentAdapter.addAll(mTeam);
+                hideProgressBar(mTeamProg);
             }
 
             @Override
@@ -156,13 +139,12 @@ public class PosterDescription extends BaseActivity {
             }
         });
 
-        mAdvisorScrollView = (TwoWayView) findViewById(R.id.poster_team_advisors);
-        mAdvisors = new ArrayList<>();
         DataService.sharedInstance().getPosterAdvisorMembers(mPosterData, new Callback() {
             @Override
             public void success(Object data) {
                 mAdvisors = (ArrayList<Advisor>) data;
                 mAdvisorsAdapter.addAll(mAdvisors);
+                hideProgressBar(mAdvisorProg);
             }
 
             @Override
@@ -171,22 +153,23 @@ public class PosterDescription extends BaseActivity {
             }
         });
 
-        mStudentAdapter = new TeamMembersAdapter(PosterDescription.this, R.layout.poster_team_member, mTeam);
-        mStudentScrollView.setAdapter(mStudentAdapter);
 
         mAdvisorsAdapter = new TeamAdvisorsAdapter(PosterDescription.this, R.layout.poster_team_member, mAdvisors);
+        mStudentAdapter = new TeamMembersAdapter(PosterDescription.this, R.layout.poster_team_member, mTeam);
+
         mAdvisorScrollView.setAdapter(mAdvisorsAdapter);
+        mStudentScrollView.setAdapter(mStudentAdapter);
 
         mStudentScrollView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 IAPStudent s = (IAPStudent) mStudentScrollView.getItemAtPosition(position);
                 Intent in = new Intent(PosterDescription.this, IAPStudentProfile.class);
+                in.putStringArrayListExtra("projects", s.getProjectNames());
                 in.putExtra("name", s.getName());
                 in.putExtra("email", s.getEmail());
                 in.putExtra("dpt", s.getDepartment());
                 in.putExtra("gradDate", s.getGradDate());
-                in.putExtra("projectName", mPosterData.getProjectName());
                 in.putExtra("photoURL", s.getPhotoURL());
                 in.putExtra("bio", s.getObjective());
                 in.putExtra("resume", s.getResumeURL());
@@ -206,37 +189,77 @@ public class PosterDescription extends BaseActivity {
                 in.putExtra("website", a.getWebPage());
                 in.putExtra("photoURL", a.getPhotoURL());
                 in.putExtra("research", a.getResearchIntent());
-                in.putStringArrayListExtra("classes", a.getClasses());
                 in.putStringArrayListExtra("projects", a.getProjects());
                 startActivity(in);
             }
         });
+    }
 
-
-        TextView title = (TextView) findViewById(R.id.poster_desc_title);
+    private void bind(){
+        mAdvisorScrollView = (TwoWayView) findViewById(R.id.poster_team_advisors);
+        mStudentScrollView = (TwoWayView) findViewById(R.id.poster_team_members);
+        mAdvisorProg = (ProgressBar) findViewById(R.id.advisor_progress);
         mAbstract = (TextView) findViewById(R.id.poster_desc_abstract);
+        mTeamProg = (ProgressBar) findViewById(R.id.member_progress);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_poster_desc);
+        mVoteButton = (Button) findViewById(R.id.button_evaluate);
+        mTitle = (TextView) findViewById(R.id.poster_desc_title);
+        mSeeMore = (TextView) findViewById(R.id.seeMoreButton);
+        mVoteImg = (ImageView) findViewById(R.id.poster_vote);
+        mPoster = (Button) findViewById(R.id.button_poster);
+    }
+
+    private void setToolBar(){
+        setSupportActionBar(mToolbar);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+
+    private  void setCompanyEvaluation(CompanyUser user){
+        if(!user.hasEvaluated(mPosterData.getPosterID())){
+            mVoteButton.setText("Evaluate");
+            mVoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent eval = new Intent(getBaseContext(), EvaluationActivity.class);
+                    eval.putExtra("posterID", mPosterData.getPosterID());
+                    startActivity(eval);
+                }
+            });
+        } else {
+            mVoteImg.setImageResource(R.drawable.ic_evaluate);
+            mVoteButton.setText("Evaluated");
+            mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
+        }
+    }
+
+    private void seeMore(){
+        if(mPosterData.get_abstract().length() <= 300 ){
+            mSeeMore.setVisibility(View.INVISIBLE);
+        }
         mAbstract.setText(mPosterData.get_abstract());
-        seeLess(seeMore);
-
-        title.setText(mPosterData.getProjectName());
-
+        mSeeMore.setText("See less");
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.v(TAG,"STOP");
-    }
-
-    public void seeMore(TextView seeMore){
-        mAbstract.setText(mPosterData.get_abstract());
-        seeMore.setText("See less");
-    }
-
-    public void seeLess(TextView seeMore){
+    private void seeLess(){
+        if(mPosterData.get_abstract().length() <= 300 ){
+            mSeeMore.setVisibility(View.INVISIBLE);
+            seeMore();
+            return;
+        }
         if(mPosterData.get_abstract().length()>300)
-            mAbstract.setText(mPosterData.get_abstract().substring(0,300));
-        seeMore.setText("See more");
+            mAbstract.setText(mPosterData.get_abstract().substring(0,300) + "...");
+        mSeeMore.setText("See more");
     }
 
     @Override
@@ -259,6 +282,13 @@ public class PosterDescription extends BaseActivity {
         }
         System.out.println("ON RESUME YEAH YEAH");
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.v(TAG,"STOP");
+    }
+
 
     @Override
     public void onDestroy() {

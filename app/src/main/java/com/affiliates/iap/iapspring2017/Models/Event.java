@@ -8,25 +8,19 @@
 
 package com.affiliates.iap.iapspring2017.Models;
 
-import android.support.design.widget.TabLayout;
-import android.util.Log;
-
-import org.json.JSONObject;
-
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import org.json.JSONObject;
+import android.util.Log;
 import java.util.Date;
 
-import rx.observables.SyncOnSubscribe;
-
 public class Event {
-   private Date startDate;
-   private Date endDate;
+   private final SimpleDateFormat format;
+   private String eventDescription;
    private String eventName;
    private String eventType;
-   private String eventDescription;
-
-   private final SimpleDateFormat format;
+   private Date startDate;
+   private Date endDate;
 
    public Event(JSONObject data) {
       format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -41,12 +35,12 @@ public class Event {
       this.eventName = data.optString("EventName");
    }
 
-   public Date getStartDate() {
-      return startDate;
+   public String getEventDescription() {
+      return eventDescription;
    }
 
-   public Date getEndDate() {
-      return endDate;
+   public SimpleDateFormat getFormat() {
+      return format;
    }
 
    public String getEventName() {
@@ -57,13 +51,14 @@ public class Event {
       return eventType;
    }
 
-   public String getEventDescription() {
-      return eventDescription;
+   public Date getStartDate() {
+      return startDate;
    }
 
-   public SimpleDateFormat getFormat() {
-      return format;
+   public Date getEndDate() {
+      return endDate;
    }
+
 
    public String getStartTime(){
       String s = format.format(startDate);

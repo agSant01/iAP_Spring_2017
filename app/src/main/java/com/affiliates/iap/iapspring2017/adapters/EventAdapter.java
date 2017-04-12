@@ -25,6 +25,10 @@ public class EventAdapter extends ArrayAdapter<Event> {
     private static class ViewHolder{
         TextView mTitle;
         TextView mTime;
+        ViewHolder(View view){
+            mTitle = (TextView) view.findViewById(R.id.list_event_title);
+            mTime = (TextView) view.findViewById(R.id.time);
+        }
     }
 
     public EventAdapter(Context context, ArrayList<Event> events){
@@ -33,14 +37,11 @@ public class EventAdapter extends ArrayAdapter<Event> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup){
-
         ViewHolder viewHolder;
         Event event = getItem(position);
         if (convertView == null){
-            viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.cell_event, viewGroup, false);
-            viewHolder.mTitle = (TextView) convertView.findViewById(R.id.list_event_title);
-            viewHolder.mTime = (TextView) convertView.findViewById(R.id.time);
+            viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -52,5 +53,4 @@ public class EventAdapter extends ArrayAdapter<Event> {
 
         return convertView;
     }
-
 }

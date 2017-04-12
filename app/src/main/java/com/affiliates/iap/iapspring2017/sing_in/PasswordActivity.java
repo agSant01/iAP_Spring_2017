@@ -1,42 +1,46 @@
 package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.R;
 
-public class Password extends AppCompatActivity {
+public class PasswordActivity extends BaseActivity {
+    private static final String TAG = "PasswordActivity";
+
+    private EditText mPassword;
+    private EditText mConfirm;
+    private Button mBack;
+    private Button mNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
+
+        bind();
         final String email = getIntent().getStringExtra("Email");
-        Button back, next;
-        final EditText password = (EditText) findViewById(R.id.passwordField),
-                confirm = (EditText) findViewById(R.id.confirmPasswordField);
-        back = (Button) findViewById(R.id.backButton);
-        back.setOnClickListener(new View.OnClickListener() {
+
+        mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
 
-        next = (Button) findViewById(R.id.nextButton);
-       next.setOnClickListener(new View.OnClickListener() {
+        mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int error = checkPassword(password.getText().toString(), confirm.getText().toString());
-                if(error==0) {
-                    Intent intent = new Intent(Password.this, EmailConfirmation.class);
+                int error = validatePassword(mPassword.getText().toString(), mConfirm.getText().toString());
+                if( error == 0  ) {
+                    Intent intent = new Intent(PasswordActivity.this, EmailConfirmation.class);
                     intent.putExtra("Email", email);
-                    intent.putExtra("Pass", password.getText().toString());
+                    intent.putExtra("Pass", mPassword.getText().toString());
                     intent.putExtra("AccountType", getIntent().getStringExtra("AccountType"));
                     intent.putExtra("Name", getIntent().getStringExtra("Name"));
                     intent.putExtra("UserType", getIntent().getStringExtra("UserType"));
@@ -44,20 +48,23 @@ public class Password extends AppCompatActivity {
                     overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                     finish();
                 }
-                else
-                    switch (error){
-                        case 1:
-                            Toast.makeText(getApplicationContext(), "Passwords don't match, please try again", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 2:
-                            Toast.makeText(getApplicationContext(), "Sorry, password must have at least 6 characters", Toast.LENGTH_SHORT).show();
-                            break;
-                    }
+                else if( error == 1 ) {
+                    Toast.makeText(getApplicationContext(), "Passwords don't match, please try again", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Sorry, password must have at least 6 characters", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    public int checkPassword(String pass, String confirm){
+    private void bind(){
+        mPassword = (EditText) findViewById(R.id.edit_password);
+        mConfirm = (EditText) findViewById(R.id.edit_confirm_password);
+        mBack = (Button) findViewById(R.id.backButton);
+        mNext = (Button) findViewById(R.id.nextButton);
+    }
+
+    public int validatePassword(String pass, String confirm){
         if(!pass.contentEquals(confirm)) return 1;
         if(pass.length()<6) return 2;
         return 0;

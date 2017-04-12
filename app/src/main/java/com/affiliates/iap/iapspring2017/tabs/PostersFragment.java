@@ -138,9 +138,9 @@ public class PostersFragment extends Fragment {
    public void onResume() {
       super.onResume();
       Log.v(TAG, "passed by");
-      if(mPosterAdapter != null){
-         mPosterAdapter.notifyDataSetChanged();
-         mListView.setAdapter(mPosterAdapter);
-      }
+//      if(mPosterAdapter != null){
+//         mPosterAdapter.notifyDataSetChanged();
+//         mListView.setAdapter(mPosterAdapter);
+//      }
    }
 }

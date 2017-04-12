@@ -36,16 +36,15 @@ import com.google.firebase.auth.FirebaseAuthException;
 public class MoreFragment extends Fragment {
     private static final String TAG = "MoreFragment";
 
-    private Button mSignOut;
     private LinearLayout mLinearLayout;
     private TextView mCompanies;
     private TextView mStudInt;
     private TextView mAbout;
+    private Button mSignOut;
 
     public static MoreFragment newInstance(){
         return new MoreFragment();
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,13 +81,13 @@ public class MoreFragment extends Fragment {
             mLinearLayout.addView(mStudInt, 1);
             mLinearLayout.addView(v, 1);
 
-//            mStudInt.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent in = new Intent(getActivity(), StudentsOfInterest.class );
-//                    startActivity(in);
-//                }
-//            });
+            mStudInt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent in = new Intent(getActivity(), StudentsOfInterest.class );
+                    startActivity(in);
+                }
+            });
         }
 
         mCompanies.setOnClickListener(new View.OnClickListener() {

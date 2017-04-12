@@ -24,7 +24,8 @@ public class Constants {
    private static User currentLoggedInUser;
    private static HashMap<String, Poster> posters;
    private static ArrayList<Poster> sortedPosters;
-   private static ArrayList<String> interestedStudents;
+   private static ArrayList<IAPStudent> likedStudents;
+   private static ArrayList<IAPStudent> unlikedStudents;
    private static ArrayList<Event> events;
    private static ArrayList<Sponsors> sponsor;
    private static Map<String, Drawable> sponsorLogos = new HashMap<>();
@@ -57,16 +58,16 @@ public class Constants {
       currentLoggedInUser = curr;
    }
 
-   public static ArrayList<String> getInterestedStudents() {
-      return interestedStudents;
+   public static ArrayList<IAPStudent> getLikedStudents() {
+      return likedStudents;
    }
 
-   public static void setInterestedStudents(ArrayList<String> interestedStudents) {
-      Constants.interestedStudents = interestedStudents;
+   public static void setLikedStudents(ArrayList<IAPStudent> i) {
+      likedStudents = i;
    }
 
-   public static void setSortedPosters(ArrayList<Poster> sortedPosters) {
-      Constants.sortedPosters = sortedPosters;
+   public static void setSortedPosters(ArrayList<Poster> sorted) {
+      sortedPosters = sorted;
    }
 
    public static ArrayList<Event> getEvents() {
@@ -81,4 +82,11 @@ public class Constants {
       return sortedPosters;
    }
 
+   public static ArrayList<IAPStudent> getUnlikedStudents() {
+      return unlikedStudents;
+   }
+
+   public static void setUnlikedStudents(ArrayList<IAPStudent> unlikedStudents) {
+      Constants.unlikedStudents = unlikedStudents;
+   }
 }

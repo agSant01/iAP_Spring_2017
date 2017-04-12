@@ -25,52 +25,51 @@ import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 
 public class SignInActivity extends BaseActivity {
+   private static final String TAG = "SignIn";
 
-   // View
-   private EditText mEmailField;
+   private AccountAdministration mAdmin;
    private EditText mPasswordField;
+   private EditText mEmailField;
+   private Client mClient;
    private Button mSubmit;
 
-   private static final String TAG = "SignIn";
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      final AccountAdministration accAdmin = new AccountAdministration(getBaseContext());
-      final Client client = new Client(getBaseContext());
-      //Set view
-      //Set view elements
-      //set buttons
       setContentView(R.layout.activity_sign_in);
-      mEmailField = (EditText) findViewById(R.id.email_box);
-      mPasswordField = (EditText) findViewById(R.id.password_box);
 
-      mSubmit = (Button) findViewById(R.id.sign_in_button);
+      this.bind();
+
+      mAdmin = new AccountAdministration(getBaseContext());
+      mClient = new Client(getBaseContext());
+
       mSubmit.setOnClickListener(
             new View.OnClickListener()  {
                @Override
                public void onClick(View view) {
                   String email = mEmailField.getText().toString();
                   String password = mPasswordField.getText().toString();
-                  if (email.length() > 0 && password.length() > 0 ){
+                  if(!mClient.isConnectionAvailable()){
+                     try {
+                        Thread.sleep(100);
+                     } catch (InterruptedException e) {
+                        e.printStackTrace();
+                     }
+                     hideProgressDialog();
+                     Toast.makeText(getBaseContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
+                  }else if (email.length() > 0 && password.length() > 0 ){
                      System.out.println( "DATA: " + email +"   " + password);
                      showProgressDialog();
-                     if(!client.isConnectionAvailable()){
-                        try {
-                           Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                           e.printStackTrace();
-                        }
-                        hideProgressDialog();
-                        Toast.makeText(getBaseContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
-                     }
 
-                     User.login(getBaseContext(), email, password, new Callback<User>(){
+                     User.login(email, password, new Callback<User>(){
                         @Override
                         public void success(User user) {
                            Constants.setCurrentLogedInUser(user);
-                           accAdmin.saveUserID(user.getUserID());
+                           mAdmin.saveUserID(user.getUserID());
                            System.out.println("DATA -> " + Constants.getCurrentLoggedInUser().getName());
                            Intent in = new Intent(SignInActivity.this, MainActivity.class);
 
@@ -78,13 +77,13 @@ public class SignInActivity extends BaseActivity {
                            startActivity(in);
                            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                            finishAffinity();
-                          }
+                        }
 
                         @Override
                         public void failure(String message) {
                            String s = "";
                            if(message.contains("password is invalid")){
-                              s = "Incorrect Password";
+                              s = "Incorrect PasswordActivity";
                            } else if (message.contains("There is no user record corresponding to this identifier.")){
                               s = "Incorrect Email";
                            } else if (message.contains("badly formatted")){
@@ -98,17 +97,23 @@ public class SignInActivity extends BaseActivity {
                         }
                      });
                   }else if (email.length() == 0 && password.length() == 0) {
-                     Toast.makeText(getBaseContext(), "Enter Information", Toast.LENGTH_SHORT).show();
+                     Toast.makeText(getBaseContext(), "Please, enter credentials", Toast.LENGTH_SHORT).show();
                   }
                   else if (email.length() == 0){
                      Toast.makeText(getBaseContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
                   } else if(password.length() == 0){
-                     Toast.makeText(getBaseContext(), "Invalid Password", Toast.LENGTH_SHORT).show();
-                     System.out.println("IVSN");
+                     Toast.makeText(getBaseContext(), "Invalid PasswordActivity", Toast.LENGTH_SHORT).show();
                   }
                }
             });
    }
+
+   private void bind(){
+      mPasswordField = (EditText) findViewById(R.id.password_box);
+      mEmailField = (EditText) findViewById(R.id.email_box);
+      mSubmit = (Button) findViewById(R.id.sign_in_button);
+   }
+
    @Override
    public void onBackPressed() {
       super.onBackPressed();

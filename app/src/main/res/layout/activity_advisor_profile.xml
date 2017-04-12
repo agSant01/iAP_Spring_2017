@@ -227,51 +227,6 @@
                 app:layout_constraintVertical_bias="0.0" />
 
 
-            <View
-                android:id="@+id/view7"
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_marginEnd="45dp"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="45dp"
-                android:layout_marginStart="45dp"
-
-                android:layout_marginTop="9dp"
-                android:background="@android:color/darker_gray"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="30dp"
-                android:text="Classes"
-                android:textColor="@color/appGreen"
-                android:textSize="18sp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_advisor_research" />
-
-            <LinearLayout
-                android:id="@+id/classes_list"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginTop="27dp"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView11"></LinearLayout>
-
             <TextView
                 android:id="@+id/textView12"
                 android:layout_width="wrap_content"
@@ -280,13 +235,17 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="38dp"
                 android:text="Projects"
                 android:textColor="@color/appGreen"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/classes_list" />
+                app:layout_constraintTop_toBottomOf="@+id/profile_advisor_research"
+                app:layout_constraintHorizontal_bias="0.501"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/project_list"
+                app:layout_constraintVertical_bias="0.0" />
 
 
             <View

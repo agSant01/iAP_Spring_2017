@@ -18,28 +18,28 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Poster {
-   private String _abstract;
+   private ArrayList<String> categories;
+   private ArrayList<String> sponsors;
    private ArrayList<String> advisors;
    private ArrayList<String> team;
-   private String posterURL;
-   private String posterID;
-   private ArrayList<String> categories;
    private String projectName;
-   private ArrayList<String> sponsors;
-   private int posterNumber;
    private String posterDptm;
+   private String _abstract;
+   private String posterURL;
+   private int posterNumber;
+   private String posterID;
 
    public Poster(JSONObject data, String id) throws InvalidAccountTypeExeption, JSONException{
-      this.posterID = id;
-      this._abstract = data.optString("Abstract");
+      this.categories = parseData(data.optJSONObject("Categories"));
+      this.sponsors = parseData(data.optJSONObject("Sponsors"));
       this.advisors = parseData(data.optJSONObject("Advisors"));
       this.team = parseData(data.optJSONObject("TeamMembers"));
-      this.posterURL = data.optString("PosterImg");
-      this.categories = parseData(data.optJSONObject("Categories"));
       this.projectName = data.optString("ProjectName");
-      this.sponsors = parseData(data.optJSONObject("Sponsors"));
-      this.posterNumber = data.optInt("number");
       this.posterDptm = data.optString("Department");
+      this.posterURL = data.optString("PosterImg");
+      this._abstract = data.optString("Abstract");
+      this.posterNumber = data.optInt("number");
+      this.posterID = id;
    }
 
    private static ArrayList<String> parseData(JSONObject data) throws JSONException{
@@ -53,36 +53,20 @@ public class Poster {
       return ids;
    }
 
-   public String get_abstract() {
-      return _abstract;
+   public ArrayList<String> getCategories() {
+      return categories;
+   }
+
+   public ArrayList<String> getSponsors() {
+      return sponsors;
    }
 
    public ArrayList<String> getAdvisors() {
       return advisors;
    }
 
-   public ArrayList<String> getTeam() {
-      return team;
-   }
-
-   public String getPosterURL() {
-      return posterURL;
-   }
-
-   public String getPosterID() {
-      return posterID;
-   }
-
-   public ArrayList<String> getCategories() {
-      return categories;
-   }
-
    public String getProjectName() {
       return projectName;
-   }
-
-   public ArrayList<String> getSponsors() {
-      return sponsors;
    }
 
    public int getPosterNumber() {
@@ -91,5 +75,21 @@ public class Poster {
 
    public String getPosterDptm() {
       return posterDptm;
+   }
+
+   public ArrayList<String> getTeam() {
+      return team;
+   }
+
+   public String get_abstract() {
+      return _abstract;
+   }
+
+   public String getPosterURL() {
+      return posterURL;
+   }
+
+   public String getPosterID() {
+      return posterID;
    }
 }

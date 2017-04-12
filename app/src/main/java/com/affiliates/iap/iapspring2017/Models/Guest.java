@@ -1,5 +1,5 @@
 //
-//  UPRMAccount.java
+//  Guest.java
 //  IAP
 //
 //  Created by Gabriel S. Santiago on 2/19/17.
@@ -19,17 +19,17 @@ import com.affiliates.iap.iapspring2017.services.DataService;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class UPRMAccount extends User implements UserDelegate {
+public class Guest extends User implements UserDelegate {
    private UPRMAccountType userType;
    private Voted voted;
 
 
-   public UPRMAccount(JSONObject data, AccountType accountType, String id)
+   public Guest(JSONObject data, AccountType accountType, String id)
       throws InvalidAccountTypeExeption, JSONException {
       this(checkType(accountType), data, accountType, id );
    }
 
-   private UPRMAccount(Void n, JSONObject data, AccountType accountType, String id) throws JSONException{
+   private Guest(Void n, JSONObject data, AccountType accountType, String id) throws JSONException{
       super(data.getString("Email"), data.getString("Name"), id, data.optString("Sex"), accountType);
       this.userType = UPRMAccountType.getAccType(data.getString("UserType"));
       this.voted = new Voted(data.optJSONObject("Voted"));
@@ -37,8 +37,8 @@ public class UPRMAccount extends User implements UserDelegate {
 
    private static Void checkType(AccountType accountType)
       throws InvalidAccountTypeExeption, JSONException{
-      if (accountType != AccountType.UPRMAccount)
-         throw new InvalidAccountTypeExeption("UPRMAccount(): Invalid account type; " + accountType);
+      if (accountType != AccountType.Guest)
+         throw new InvalidAccountTypeExeption("Guest(): Invalid account type; " + accountType);
       return null;
    }
 
@@ -99,12 +99,12 @@ public class UPRMAccount extends User implements UserDelegate {
    }
 
    private class Voted{
-      private boolean bestPoster = false;
       private boolean bestPresentation = false;
+      private boolean bestPoster = false;
 
       public Voted (JSONObject data) throws JSONException{
-         this.bestPoster = data.optBoolean("BestPoster");
          this.bestPresentation = data.optBoolean("BestPresentation");
+         this.bestPoster = data.optBoolean("BestPoster");
       }
    }
 }
