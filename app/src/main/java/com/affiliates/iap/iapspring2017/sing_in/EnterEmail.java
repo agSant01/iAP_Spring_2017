@@ -1,7 +1,6 @@
 package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,69 +8,104 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.affiliates.iap.iapspring2017.BaseActivity;
+import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.interfaces.Callback;
+import com.affiliates.iap.iapspring2017.services.DataService;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+public class EnterEmail extends BaseActivity {
+    private static final String TAG = "EnterEmail";
 
-public class EnterEmail extends AppCompatActivity {
+    private EditText mEmail;
+    private Button mBack;
+    private Button mNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_enter_email);
-        final EditText email = (EditText) findViewById(R.id.emailField);
-        Button back = (Button) findViewById(R.id.backButton);
-        back.setOnClickListener(new View.OnClickListener() {
+        setContentView(R.layout.activity_email);
+        bind();
+
+        mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+                finish();
             }
         });
 
-        Button next = (Button) findViewById(R.id.nextButton);
-        next.setOnClickListener(new View.OnClickListener() {
+        mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("It's here");
-                int error = checkEmail(email.getText().toString());
-                Log.v("EnterEmail", ""+error);
-                if(error==0){
-                    Intent intent = new Intent(EnterEmail.this,Password.class);
-                    intent.putExtra("Email", email.getText().toString());
-                    intent.putExtra("AccountType", getIntent().getStringExtra("AccountType"));
-                    intent.putExtra("Name", getIntent().getStringExtra("Name"));
-                    intent.putExtra("UserType", getIntent().getStringExtra("UserType"));
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                    finish();
-                } else{
-                    switch(error){
-                        case 1:
-                            Toast.makeText(getApplicationContext(), "Please, enter your email", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 2:
-                            Toast.makeText(getApplicationContext(), "Sorry, that email is not valid", Toast.LENGTH_SHORT).show();
-                            break;
-                    }
+                String email = mEmail.getText().toString();
+                final String type = getIntent().getStringExtra("AccountType");
+
+                if( !(email.contains("@") && ( email.contains(".com") || email.contains(".edu")) && email.length() > 5)) {
+                    Toast.makeText(getApplicationContext(), "Sorry, invalid email", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (email.length() == 0){
+                    Toast.makeText(getApplicationContext(), "Please, enter your email", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
+                final Intent in = new Intent(EnterEmail.this, PasswordActivity.class);
+                in.putExtra("email", email);
+                in.putExtra("accType", type);
+                if(type.equals(User.AccountType.Guest.toString())){
+                    startActivity(in);
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                }else{
+                    final String key = emailToKey(email);
+                    DataService.sharedInstance().validateUser(type, key, new Callback<Boolean>() {
+                        @Override
+                        public void success(Boolean data) {
+                            if(data){
+                                in.putExtra("key", key);
+                                if(type.equals("IAPStudent"))
+                                    in.putExtra("name", keyToName(key));
+                                startActivity(in);
+                                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Sorry, email is not registered", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void failure(String message) {
+                            Log.e(TAG, message);
+                        }
+                    });
+                }
             }
         });
     }
 
-    private int checkEmail(String email){
+    private void bind(){
+        mEmail = (EditText) findViewById(R.id.edit_email);
+        mBack = (Button) findViewById(R.id.backButton);
+        mNext = (Button) findViewById(R.id.nextButton);
+    }
 
-        if(email.length()==0) return 1;
+    private String emailToKey(String email){
+        int i, split = email.indexOf("@");
+        email = email.substring(0, split);
+        String[] k = email.split("[.]+");
+        String str = "";
 
-        String regex = "^(.+)@(.+).(.+)$";
-        Pattern p = Pattern.compile(regex);
-        Matcher matcher = p.matcher((CharSequence) email);
+        for(i = 0; i < k.length-1; i++)
+            str += k[i] + "_";
+        return str + k[i];
+    }
 
-        if(!email.contains(".") || !email.contains("@") || email.length()<5 || !matcher.matches())
-            return 2;
-
-        return 0;
+    private String keyToName(String key){
+        String ntr = "";
+        int split = key.indexOf("_");
+        ntr += Character.toUpperCase(key.charAt(0));
+        ntr += key.substring(1,split) + " ";
+        ntr += Character.toUpperCase(key.charAt(split+1));
+        ntr += key.substring(split+2);
+        return ntr.replaceAll("[1234567890]+", "");
     }
 
     @Override

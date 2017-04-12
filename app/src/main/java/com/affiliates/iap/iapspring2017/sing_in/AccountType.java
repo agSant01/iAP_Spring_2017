@@ -1,75 +1,76 @@
 package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.R;
 
-public class AccountType extends AppCompatActivity {
+public class AccountType extends BaseActivity {
+    private static final String TAG = "AccountType";
+
+    private TextView mIAPStudent;
+    private TextView mAdvisor;
+    private TextView mCompany;
+    private TextView mGuest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_type);
+        bind();
 
-        TextView company, iapStudent, studProf, advisor;
+        final Intent intent = new Intent(AccountType.this, EnterEmail.class);
 
-        company = (TextView) findViewById(R.id.companyButton);
-        company.setOnClickListener(new View.OnClickListener() {
+         mCompany.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AccountType.this, NameActivity.class);
-                intent.putExtra("AccountType", "Company");
-                intent.putExtra("UserType","NA");
+                Log.v(TAG, "CompanyRep");
+                intent.putExtra("AccountType", "CompanyRep");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                finish();
             }
         });
 
-        iapStudent = (TextView) findViewById(R.id.iapStudentButton);
-        iapStudent.setOnClickListener(new View.OnClickListener() {
+        mIAPStudent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AccountType.this, NameActivity.class);
+                Log.v(TAG, "IAPStudent");
                 intent.putExtra("AccountType", "IAPStudent");
-                intent.putExtra("UserType","NA");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                finish();
-
             }
         });
 
-        studProf = (TextView) findViewById(R.id.studentProfessorButton);
-        studProf.setOnClickListener(new View.OnClickListener() {
+        mGuest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AccountType.this,UserType.class);
-                intent.putExtra("AccountType","UPRMAccount");
+                Log.v(TAG, "Guest");
+                intent.putExtra("AccountType","Guest");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                finish();
-
             }
         });
 
-        advisor = (TextView) findViewById(R.id.advisorButton);
-        advisor.setOnClickListener(new View.OnClickListener() {
+       mAdvisor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AccountType.this, NameActivity.class);
-                intent.putExtra("AccountType","Advisor");
-                intent.putExtra("UserType","NA");
+                Log.v(TAG, "Advisors");
+                intent.putExtra("AccountType","Advisors");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                finish();
-
             }
         });
+    }
+
+    private void bind(){
+        mGuest = (TextView) findViewById(R.id.studentProfessorButton);
+        mIAPStudent = (TextView) findViewById(R.id.iapStudentButton);
+        mCompany = (TextView) findViewById(R.id.companyButton);
+        mAdvisor = (TextView) findViewById(R.id.advisorButton);
     }
 
     @Override

@@ -31,57 +31,51 @@ import com.matthewtamlin.sliding_intro_screen_library.indicators.DotIndicator;
 public class EvaluationActivity extends BaseActivity {
     private static final String TAG = "EvaluationActivity";
 
-    private TextView mTitle;
-    EvalManager mSectionsPagerAdapter;
     private DotIndicator mDotIndicator;
-
-    PosterEval mPosterEval;
-    PresentationEval mPresentationEval;
-    Summary mSummary;
-    CompanyVote mCompanyVote;
-
-    /**
-     * {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
+    private TabLayout mTabLayout;
+    private Toolbar mToolbar;
+    private TextView mTitle;
+
+    PresentationEval mPresentationEval;
+    EvalManager mSectionsPagerAdapter;
+    PosterEval mPosterEval;
+    Summary mSummary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evaluation_manager);
+        this.bind();
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        toolbar.setNavigationIcon(R.drawable.ic_back_arrow);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
 
-        mTitle = (TextView) findViewById(R.id.toolbar_title);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new EvalManager(getSupportFragmentManager(), EvaluationActivity.this);
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.evaluation_container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        mDotIndicator = (DotIndicator) findViewById(R.id.dots_indicator);
 
         mPosterEval = (PosterEval) mSectionsPagerAdapter.getItem(0);
         mSummary = (Summary) mSectionsPagerAdapter.getItem(1);
         mPresentationEval = (PresentationEval) mSectionsPagerAdapter.getItem(2);
 
-        final TabLayout tabLayout = (TabLayout) findViewById(R.id.evaluation);
-        tabLayout.setupWithViewPager(mViewPager);
+        mTabLayout = (TabLayout) findViewById(R.id.evaluation);
+        mTabLayout.setupWithViewPager(mViewPager);
 
         mViewPager.setCurrentItem(1);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -130,5 +124,12 @@ public class EvaluationActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    private void bind(){
+        mViewPager = (ViewPager) findViewById(R.id.evaluation_container);
+        mDotIndicator = (DotIndicator) findViewById(R.id.dots_indicator);
+        mTitle = (TextView) findViewById(R.id.toolbar_title);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 }

@@ -16,11 +16,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.affiliates.iap.iapspring2017.Constants;
 
 public class EvalManager extends FragmentPagerAdapter{
-    private Context context;
-
     public EvalManager(FragmentManager fm, Context context) {
         super(fm);
-        this.context = context;
     }
 
     @Override

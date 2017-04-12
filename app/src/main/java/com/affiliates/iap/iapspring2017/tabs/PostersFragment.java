@@ -8,10 +8,8 @@
 
 package com.affiliates.iap.iapspring2017.tabs;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,7 +19,6 @@ import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.MainActivity;
@@ -34,18 +31,8 @@ import com.affiliates.iap.iapspring2017.services.DataService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class PostersFragment extends Fragment {
    private static final String TAG = "PostersFragment";
@@ -70,7 +57,7 @@ public class PostersFragment extends Fragment {
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                          Bundle savedInstance) {
 
-      mRootView = inflater.inflate(R.layout.fragment_posters, container, false);
+      mRootView = inflater.inflate(R.layout.list_view, container, false);
       mListView = (ListView) mRootView.findViewById(R.id.poster_listview);
       mPB = (ProgressBar) mRootView.findViewById(R.id.progressBar);
       mPB.setVisibility(ProgressBar.VISIBLE);
@@ -151,9 +138,9 @@ public class PostersFragment extends Fragment {
    public void onResume() {
       super.onResume();
       Log.v(TAG, "passed by");
-      if(mPosterAdapter != null){
-         mPosterAdapter.notifyDataSetChanged();
-         mListView.setAdapter(mPosterAdapter);
-      }
+//      if(mPosterAdapter != null){
+//         mPosterAdapter.notifyDataSetChanged();
+//         mListView.setAdapter(mPosterAdapter);
+//      }
    }
 }

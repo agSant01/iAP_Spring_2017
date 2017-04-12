@@ -15,25 +15,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class Sponsors {
+   private ArrayList<String> companyReps;
    private String companyName;
    private String companyLogo;
-   private ArrayList<String> companyReps;
    private String companyID;
    private String website;
 
    public Sponsors(JSONObject data, String id) {
-      companyID = id;
-      companyLogo = data.optString("Logo");
       companyReps = getReps(data.optJSONArray("Representatives"));
       companyName = data.optString("CompanyName");
+      companyLogo = data.optString("Logo");
       website = data.optString("Website");
+      companyID = id;
    }
-
-   public String getWebsite() {
-      return website;
-   }
-
-   private static ArrayList<String> getReps(JSONArray d) {
+  private static ArrayList<String> getReps(JSONArray d) {
       if(d == null) return null;
       ArrayList<String> reps = new ArrayList<String>();
       for (int i = 0; i < d.length(); i++){
@@ -43,15 +38,19 @@ public class Sponsors {
       return reps;
    }
 
-   public String getCompanyID() {
-      return companyID;
-   }
-
    public String getCompanyName() {
       return companyName;
    }
 
    public String getCompanyLogo() {
       return companyLogo;
+   }
+
+   public String getCompanyID() {
+      return companyID;
+   }
+
+   public String getWebsite() {
+      return website;
    }
 }

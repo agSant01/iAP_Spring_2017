@@ -11,14 +11,16 @@ package com.affiliates.iap.iapspring2017.services;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Advisor;
 import com.affiliates.iap.iapspring2017.Models.CompanyUser;
 import com.affiliates.iap.iapspring2017.Models.CompanyVote;
+import com.affiliates.iap.iapspring2017.Models.Event;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.OverallVote;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.Models.Sponsors;
-import com.affiliates.iap.iapspring2017.Models.UPRMAccount;
+import com.affiliates.iap.iapspring2017.Models.Guest;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
@@ -83,6 +85,8 @@ public class DataService {
       return voteSummaryRef().child("CompanyEval");
    }
 
+   private DatabaseReference validUsersRef(){ return mainRef().child("ValidUsers"); }
+
    private DatabaseReference sponsorsRef(){
       return mainRef().child("Sponsors");
    }
@@ -95,21 +99,20 @@ public class DataService {
       return mainRef().child("SubmitedProjects");
    }
 
-   public void registerUser(final String name, final String email, String id, final String accountType, final String userType, final Callback callback){
-     final Map<String, Object> voted = new HashMap<>();
+   public void registerUser(final String email, String id, final String accountType,final Callback callback){
+      final Map<String, Object> voted = new HashMap<>();
       voted.put("BestPresentation", false);
       voted.put("BestPoster", false);
 
       usersRef().child(id).updateChildren(new HashMap<String, Object>(){{
          put("AccountType", accountType);
+         put("Company", "");
          put("Email", email);
-         put("Name", name);
+         put("Name", "NA");
+         put("PhotoURL", "NA");
          put("Sex", "NA");
-         put("Voted", voted);
-
-         if(accountType.contentEquals("UPRMAccount"))
-            put("UserType", userType);
-
+         if(!accountType.contains("Company"))
+            put("Voted", voted);
       }}).addOnCompleteListener(new OnCompleteListener<Void>() {
          @Override
          public void onComplete(@NonNull Task<Void> task) {
@@ -118,14 +121,33 @@ public class DataService {
          }
       });
    }
-   public void getUserData(final String id, final Callback<User> callback) throws InvalidAccountTypeExeption{
-      if(usersRef().child(id).equals(null)){
+
+   public void validateUser(String type, String key, final Callback<Boolean> callback){
+      validUsersRef().child(type).child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+         @Override
+         public void onDataChange(DataSnapshot dataSnapshot) {
+            if (dataSnapshot.exists()){
+               callback.success(true);
+            }else {
+               callback.success(false);
+            }
+         }
+
+         @Override
+         public void onCancelled(DatabaseError databaseError) {
+            callback.failure(databaseError.getMessage());
+         }
+      });
+   }
+
+   public void getUserData(final String id, final Callback callback) throws InvalidAccountTypeExeption{
+      if(usersRef().child(id)==null){
          Log.e(TAG, "No user ID Registered" );
          callback.failure("No user ID Registered");
          return;
       }
 
-      usersRef().child(id).addValueEventListener(new ValueEventListener() {
+      usersRef().child(id).addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot){
 
@@ -151,8 +173,8 @@ public class DataService {
                   case Advisor:
                      callback.success(new Advisor(json, User.AccountType.Advisor, id));
                      return;
-                  case UPRMAccount:
-                     callback.success(new UPRMAccount(json, User.AccountType.UPRMAccount, id));
+                  case Guest:
+                     callback.success(new Guest(json, User.AccountType.Guest, id));
                      return;
                   case IAPStudent:
                      callback.success(new IAPStudent(json, User.AccountType.IAPStudent, id));
@@ -184,8 +206,6 @@ public class DataService {
                       }});
       }
    }
-
-
 
    public void submitGeneralVote(String projecID, int voteType, final Callback callback) throws VoteErrorException{
 
@@ -312,6 +332,10 @@ public class DataService {
 
    public void getPosterTeamMembers(final Poster poster, final Callback callback){
       final ArrayList<IAPStudent> team = new ArrayList<IAPStudent>();
+      if(poster.getTeam() == null){
+         callback.failure("No members registered in the research: " + poster.getProjectName());
+         return;
+      }
       for (int i = 0; i < poster.getTeam().size(); i++){
          getUserData(poster.getTeam().get(i), new Callback<User>() {
             @Override
@@ -333,6 +357,10 @@ public class DataService {
 
    public void getPosterAdvisorMembers(final Poster poster, final Callback callback){
       final ArrayList<Advisor> advisors = new ArrayList<Advisor>();
+      if(poster.getAdvisors() == null){
+         callback.failure("No advisors registered in the research: " + poster.getProjectName());
+         return;
+      }
       for (String id : poster.getAdvisors()){
          getUserData(id, new Callback<User>() {
             @Override
@@ -371,5 +399,85 @@ public class DataService {
             callback.failure(databaseError.getMessage());
          }
       });
+   }
+
+   public void getEvent(final Callback callback){
+      final ArrayList<Event> events = new ArrayList<>();
+      scheduleRef().addListenerForSingleValueEvent(new ValueEventListener() {
+         @Override
+         public void onDataChange(DataSnapshot dataSnapshot) {
+            JSONObject json = new JSONObject((HashMap<String,Object>)dataSnapshot.getValue());
+            Iterator<String> it = json.keys();
+            Event e;
+            for(int i = 0; i < json.length(); i++){
+               JSONObject event = json.optJSONObject(it.next());
+               if (event != null)
+                  events.add(new Event(event));
+            }
+            callback.success(events);
+         }
+
+         @Override
+         public void onCancelled(DatabaseError databaseError) {
+            callback.failure(databaseError.getMessage());
+         }
+      });
+   }
+
+   public void getInterestedStudents(final Callback callback){
+      usersRef().child(Constants.getCurrentLoggedInUser().getUserID()).child("InterestedStudents").addListenerForSingleValueEvent(new ValueEventListener() {
+         @Override
+         public void onDataChange(DataSnapshot dataSnapshot) {
+            final ArrayList<IAPStudent> liked = new ArrayList<IAPStudent>();
+            final ArrayList<IAPStudent> unLiked = new ArrayList<IAPStudent>();
+            if (dataSnapshot.getValue() == null){
+               Constants.setUnlikedStudents(unLiked);
+               Constants.setLikedStudents(liked);
+               callback.success(true);
+               return;
+            }
+            final JSONObject json = new JSONObject((HashMap<String,Object>) dataSnapshot.getValue());
+            Iterator<String> it = json.keys();
+            while (it.hasNext()) {
+               final String id = it.next();
+               Log.v(TAG, id);
+               getUserData(id, new Callback<User>() {
+                  @Override
+                  public void success(User data) {
+                     if(json.optString(id).equals("like")) {
+                         Log.v(TAG, "like");
+                         liked.add((IAPStudent) data);
+                     }else if (json.optString(id).equals("unlike")) {
+                         Log.v(TAG, "unlike");
+                         unLiked.add((IAPStudent) data);
+                     }
+                  }
+
+                  @Override
+                  public void failure(String message) {
+                     Log.e(TAG, message);
+                  }
+               });
+            }
+            Constants.setUnlikedStudents(unLiked);
+            Constants.setLikedStudents(liked);
+            callback.success(true);
+         }
+
+         @Override
+         public void onCancelled(DatabaseError databaseError) {
+            callback.failure(databaseError.getMessage());
+         }
+      });
+   }
+
+   public void likeStudent(final String id){
+      usersRef().child(Constants.getCurrentLoggedInUser().getUserID())
+              .child("InterestedStudents").updateChildren(new HashMap<String, Object>() {{ put(id, "like");}});
+   }
+
+   public void unlikeStudent(final String id){
+      usersRef().child(Constants.getCurrentLoggedInUser().getUserID())
+              .child("InterestedStudents").updateChildren(new HashMap<String, Object>() {{ put(id, "unlike");}});
    }
 }

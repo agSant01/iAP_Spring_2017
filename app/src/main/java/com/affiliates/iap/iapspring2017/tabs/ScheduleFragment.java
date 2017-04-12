@@ -10,13 +10,30 @@ package com.affiliates.iap.iapspring2017.tabs;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.widget.ListView;
+import android.widget.ProgressBar;
 
+import com.affiliates.iap.iapspring2017.Constants;
+import com.affiliates.iap.iapspring2017.Models.Event;
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.adapters.EventAdapter;
+import com.affiliates.iap.iapspring2017.interfaces.Callback;
+import com.affiliates.iap.iapspring2017.services.DataService;
+
+import java.util.ArrayList;
 
 public class ScheduleFragment extends Fragment {
+    private static final String TAG = "ScheduleFragment";
+    private EventAdapter mEventAdapter;
+    private ListView mListView;
+    private View mRootView;
+    private ProgressBar mPB;
+
 
     public static ScheduleFragment newInstance(){
         return new ScheduleFragment();
@@ -28,10 +45,46 @@ public class ScheduleFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstance) {
-        View view = inflater.inflate(R.layout.fragment_more, container, false);
+        mRootView = inflater.inflate(R.layout.list_view, container, false);
 
-        return view;
+        mListView = (ListView) mRootView.findViewById(R.id.poster_listview);
+        mPB = (ProgressBar) mRootView.findViewById(R.id.progressBar);
+        mPB.setVisibility(ProgressBar.VISIBLE);
+        mPB.setVerticalFadingEdgeEnabled(true);
+        final AlphaAnimation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);//fade from 1 to 0 alpha
+        fadeOutAnimation.setDuration(1000);
+        fadeOutAnimation.setFillAfter(true);//to keep it at 0 when animation ends
+
+        if (Constants.getEvents() == null){
+            DataService.sharedInstance().getEvent(new Callback() {
+                @Override
+                public void success(Object data) {
+                    Log.v(TAG, "Get events succesfull");
+                    Constants.setEvents((ArrayList<Event>) data);
+                    mEventAdapter = new EventAdapter(getContext(),Constants.getEvents());
+
+                    mListView.setAdapter(mEventAdapter);
+
+                    mPB.startAnimation(fadeOutAnimation);
+                    mPB.setVisibility(ProgressBar.INVISIBLE);
+                }
+
+                @Override
+                public void failure(String message) {
+
+                }
+            });
+        } else {
+            mEventAdapter = new EventAdapter(getContext(),Constants.getEvents());
+
+            mListView.setAdapter(mEventAdapter);
+
+            mPB.startAnimation(fadeOutAnimation);
+            mPB.setVisibility(ProgressBar.INVISIBLE);
+        }
+
+        return mRootView;
     }
 }

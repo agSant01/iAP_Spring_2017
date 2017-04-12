@@ -16,8 +16,8 @@ import static com.affiliates.iap.iapspring2017.Models.OverallVote.VoteType.BestP
 import static com.affiliates.iap.iapspring2017.Models.OverallVote.VoteType.BestPresentation;
 
 public class OverallVote extends Vote {
-   private String voteID;
    private VoteType voteType;
+   private String voteID;
 
    public OverallVote(String voteID, String projecID, int voteType){
       super(projecID);

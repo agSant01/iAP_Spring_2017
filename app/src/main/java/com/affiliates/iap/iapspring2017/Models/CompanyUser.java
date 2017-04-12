@@ -11,27 +11,21 @@ package com.affiliates.iap.iapspring2017.Models;
 import android.content.Context;
 import android.util.Log;
 
+import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,7 +34,8 @@ public class CompanyUser extends User implements UserDelegate {
    private ArrayList<String> votes;
    private String companName;
 
-   public CompanyUser(JSONObject data, AccountType accountType, String id) throws InvalidAccountTypeExeption, JSONException {
+   public CompanyUser(JSONObject data, AccountType accountType, String id)
+           throws InvalidAccountTypeExeption, JSONException {
       this(checkType(accountType), data, accountType, id );
    }
 
@@ -127,6 +122,24 @@ public class CompanyUser extends User implements UserDelegate {
          return new CompanyVote(projectID);
       return vote;
    }
+
+   public boolean isLiked(String id){
+      if(Constants.getLikedStudents() == null) return false;
+      for(int i = 0; i < Constants.getLikedStudents().size(); i++){
+         if(Constants.getLikedStudents().get(i).getUserID().equals(id))
+            return true;
+      }
+      return false;
+   }
+
+    public boolean isUnliked(String id){
+        if(Constants.getUnlikedStudents() == null) return false;
+        for(int i = 0; i < Constants.getUnlikedStudents().size(); i++){
+            if(Constants.getUnlikedStudents().get(i).getUserID().equals(id))
+                return true;
+        }
+        return false;
+    }
 
    public ArrayList<String> getVotes() {
       return votes;

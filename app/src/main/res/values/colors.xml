@@ -8,4 +8,5 @@
     <color name="appDevilRed">#E05263</color>
     <color name="appRed">#D33E43</color>
     <color name="appCyan">#7AA095</color>
+    <color name="darkGrey">@android:color/darker_gray</color>
 </resources>
