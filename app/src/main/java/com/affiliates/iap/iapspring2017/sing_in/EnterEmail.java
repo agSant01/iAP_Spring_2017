@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
@@ -18,8 +19,7 @@ public class EnterEmail extends BaseActivity {
     private static final String TAG = "EnterEmail";
 
     private EditText mEmail;
-    private Button mBack;
-    private Button mNext;
+    private TextView mBack, mNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +50,8 @@ public class EnterEmail extends BaseActivity {
                 }
 
                 final Intent in = new Intent(EnterEmail.this, PasswordActivity.class);
-                in.putExtra("email", email);
-                in.putExtra("accType", type);
+                in.putExtra("Email", email);
+                in.putExtra("AccountType", type);
                 if(type.equals(User.AccountType.Guest.toString())){
                     startActivity(in);
                     overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
@@ -83,8 +83,8 @@ public class EnterEmail extends BaseActivity {
 
     private void bind(){
         mEmail = (EditText) findViewById(R.id.edit_email);
-        mBack = (Button) findViewById(R.id.backButton);
-        mNext = (Button) findViewById(R.id.nextButton);
+        mBack = (TextView) findViewById(R.id.backButton);
+        mNext = (TextView) findViewById(R.id.nextButton);
     }
 
     private String emailToKey(String email){
