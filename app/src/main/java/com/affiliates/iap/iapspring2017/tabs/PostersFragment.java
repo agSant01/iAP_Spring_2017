@@ -8,6 +8,7 @@
 
 package com.affiliates.iap.iapspring2017.tabs;
 
+import android.animation.LayoutTransition;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,10 +37,10 @@ import java.util.Map;
 
 public class PostersFragment extends Fragment {
    private static final String TAG = "PostersFragment";
-   private PosterAdapter mPosterAdapter;
-   private ListView mListView;
-   private View mRootView;
-   private ProgressBar mPB;
+   static PosterAdapter mPosterAdapter;
+   static ListView mListView;
+   static ProgressBar mPB;
+   static View mRootView;
 
    private static int position;
 
@@ -67,7 +68,6 @@ public class PostersFragment extends Fragment {
       fadeOutAnimation.setFillAfter(true);//to keep it at 0 when animation ends
 
       // run a background job and once complete
-
       if(Constants.getPosters() == null){
          DataService.sharedInstance().getPosters(new Callback() {
             @Override
@@ -77,7 +77,6 @@ public class PostersFragment extends Fragment {
                Map<Integer, Poster> d = (HashMap<Integer, Poster>) data;
                HashMap<String, Poster> ps = new HashMap<String, Poster>();
                ArrayList<Poster> sort = new ArrayList<Poster>();
-
 
                Constants.setPosters(ps);
                //Sort keys and iterate through the array of sorted keys, insted of iterating through the hashmap
@@ -95,6 +94,7 @@ public class PostersFragment extends Fragment {
                for(Poster p : Constants.getPosters().values())
                   Log.v(TAG, p.getProjectName() + "<_");
 
+               mListView.setLayoutTransition(new LayoutTransition());
                mListView.setAdapter(mPosterAdapter);
                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                   @Override
@@ -105,8 +105,8 @@ public class PostersFragment extends Fragment {
                      startActivity(in);
                   }
                });
-               mPB.startAnimation(fadeOutAnimation);
                mPB.setVisibility(ProgressBar.INVISIBLE);
+               mPB.startAnimation(fadeOutAnimation);
             }
 
             @Override
@@ -116,8 +116,9 @@ public class PostersFragment extends Fragment {
             }
          });
       } else{
-         mPosterAdapter = new PosterAdapter(getActivity().getBaseContext(),new ArrayList<Poster>(Constants.getSortedPosters()));
+         mPosterAdapter = new PosterAdapter(getActivity().getBaseContext(),new ArrayList<>(Constants.getSortedPosters()));
          mListView.setAdapter(mPosterAdapter);
+         mListView.setLayoutTransition(null);
          mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -127,20 +128,23 @@ public class PostersFragment extends Fragment {
                startActivity(in);
             }
          });
-         mPB.startAnimation(fadeOutAnimation);
          mPB.setVisibility(ProgressBar.INVISIBLE);
+         mPB.startAnimation(fadeOutAnimation);
       }
-
       return mRootView;
+   }
+
+   public static void setSearchableAdapter(ArrayList<Poster> posters){
+       mPosterAdapter.clear();
+       mPosterAdapter.addAll(posters);
    }
 
    @Override
    public void onResume() {
       super.onResume();
       Log.v(TAG, "passed by");
-//      if(mPosterAdapter != null){
-//         mPosterAdapter.notifyDataSetChanged();
-//         mListView.setAdapter(mPosterAdapter);
-//      }
+      if(mPosterAdapter != null){
+         mPosterAdapter.notifyDataSetChanged();
+      }
    }
 }

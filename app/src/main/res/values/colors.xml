@@ -9,4 +9,5 @@
     <color name="appRed">#D33E43</color>
     <color name="appCyan">#7AA095</color>
     <color name="darkGrey">@android:color/darker_gray</color>
+    <color name="transparent">@android:color/transparent</color>
 </resources>

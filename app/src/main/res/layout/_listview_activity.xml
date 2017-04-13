@@ -45,7 +45,8 @@
             android:smoothScrollbar="true"
             android:transformPivotY="10dp"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="8dp"></ListView>
+            tools:layout_editor_absoluteX="8dp">
+        </ListView>
 
         <ProgressBar
             android:id="@+id/progressBar"

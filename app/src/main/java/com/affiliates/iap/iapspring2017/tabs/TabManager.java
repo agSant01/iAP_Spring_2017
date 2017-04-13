@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.R;
 
 /**
@@ -50,7 +49,6 @@ public class TabManager extends FragmentPagerAdapter {
 
    @Override
    public int getCount() {
-      // Show 3 total pages.
-      return 3;
+      return PAGE_COUNT;
    }
 }
