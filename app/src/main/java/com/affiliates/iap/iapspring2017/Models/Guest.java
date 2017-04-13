@@ -31,7 +31,6 @@ public class Guest extends User implements UserDelegate {
 
    private Guest(Void n, JSONObject data, AccountType accountType, String id) throws JSONException{
       super(data.getString("Email"), data.getString("Name"), id, data.optString("Sex"), accountType);
-      this.userType = UPRMAccountType.getAccType(data.getString("UserType"));
       this.voted = new Voted(data.optJSONObject("Voted"));
    }
 
