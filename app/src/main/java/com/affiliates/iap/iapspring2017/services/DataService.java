@@ -8,6 +8,7 @@
 
 package com.affiliates.iap.iapspring2017.services;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -20,8 +21,9 @@ import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.OverallVote;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.Models.Sponsors;
-import com.affiliates.iap.iapspring2017.Models.Guest;
+import com.affiliates.iap.iapspring2017.Models.UPRMAccount;
 import com.affiliates.iap.iapspring2017.Models.User;
+import com.affiliates.iap.iapspring2017.Models.Vote;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
@@ -29,6 +31,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,14 +42,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
 
 public class DataService {
    private static final String TAG = "DataService";
@@ -81,7 +96,7 @@ public class DataService {
       return voteSummaryRef().child("GeneralVote");
    }
 
-   private DatabaseReference comapnyEvalSummaryRef(){
+   private DatabaseReference companyEvalSummaryRef(){
       return voteSummaryRef().child("CompanyEval");
    }
 
@@ -99,11 +114,15 @@ public class DataService {
       return mainRef().child("SubmitedProjects");
    }
 
-   public void registerUser(final String email, String id, final String accountType,final Callback callback){
-      final Map<String, Object> voted = new HashMap<>();
-      voted.put("BestPresentation", false);
-      voted.put("BestPoster", false);
+   private DatabaseReference usersOfInterestRef(){
+      return mainRef().child("UsersOfInterest");
+   }
 
+   public void registerUser(final String email, String id, final String accountType, final String company, final Callback callback){
+      final Map<String, Object> voted = new HashMap<String, Object>(){{
+         put("BestPresentation", false);
+         put("BestPoster", false);
+      }};
       usersRef().child(id).updateChildren(new HashMap<String, Object>(){{
          put("AccountType", accountType);
          put("Company", "");
@@ -111,8 +130,15 @@ public class DataService {
          put("Name", "NA");
          put("PhotoURL", "NA");
          put("Sex", "NA");
+         if(accountType.contains("IAPStudent") || accountType.contains("Adviaor"))
+            put("Department", "NA");
+
+         if(accountType.contains("Company"))
+            put("Company", company);
+
          if(!accountType.contains("Company"))
             put("Voted", voted);
+
       }}).addOnCompleteListener(new OnCompleteListener<Void>() {
          @Override
          public void onComplete(@NonNull Task<Void> task) {
@@ -140,7 +166,7 @@ public class DataService {
       });
    }
 
-   public void getUserData(final String id, final Callback callback) throws InvalidAccountTypeExeption{
+   public void getUserData(final String id, final Callback<User> callback) throws InvalidAccountTypeExeption{
       if(usersRef().child(id)==null){
          Log.e(TAG, "No user ID Registered" );
          callback.failure("No user ID Registered");
@@ -150,18 +176,13 @@ public class DataService {
       usersRef().child(id).addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot){
-
-            Log.v(TAG, " ID: " + id);
-            Log.v(TAG, " DATA: " + dataSnapshot.getValue());
             if (!dataSnapshot.hasChildren()) {
                Log.e(TAG, "No user ID Registered" );
                callback.failure("No user ID Registered");
                return;
             }
             JSONObject json =  new JSONObject((Map) dataSnapshot.getValue());
-
             String accType;
-            User user;
 
             accType = json.optString("AccountType");
 
@@ -173,8 +194,8 @@ public class DataService {
                   case Advisor:
                      callback.success(new Advisor(json, User.AccountType.Advisor, id));
                      return;
-                  case Guest:
-                     callback.success(new Guest(json, User.AccountType.Guest, id));
+                  case UPRMAccount:
+                     callback.success(new UPRMAccount(json, User.AccountType.UPRMAccount, id));
                      return;
                   case IAPStudent:
                      callback.success(new IAPStudent(json, User.AccountType.IAPStudent, id));
@@ -207,8 +228,7 @@ public class DataService {
       }
    }
 
-   public void submitGeneralVote(String projecID, int voteType, final Callback callback) throws VoteErrorException{
-
+   public void submitGeneralVote(String projecID, int voteType, final Callback<Vote> callback) throws VoteErrorException{
       if(voteType != 0 && voteType != 1)
          callback.failure("Vote type value can only be 1 or 0.");
 
@@ -231,7 +251,7 @@ public class DataService {
    }
 
    private void runGeneralVoteTransaction(OverallVote vote){
-      final DatabaseReference ref = votesRef().child( vote.getStringFromType() + "/" + vote.getProjectID() );
+      final DatabaseReference ref = votesRef().child(vote.getStringFromType() + "/" + vote.getProjectID());
       ref.runTransaction(new Transaction.Handler() {
          @Override
          public Transaction.Result doTransaction(MutableData mutableData) {
@@ -248,8 +268,8 @@ public class DataService {
       });
    }
 
-   public void submitCompanyEval(final CompanyVote vote, final Callback callback) throws VoteErrorException{
-      final DatabaseReference ref = votesRef().child("CompanyEval").push();
+   public void submitCompanyEval(final CompanyVote vote, final Callback<Object> callback) throws VoteErrorException{
+      final DatabaseReference ref = companyVoteRef().push();
       ref.updateChildren(vote.makeJSON())
          .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -267,7 +287,7 @@ public class DataService {
    }
 
    private void runCompanyVoteTransaction(final CompanyVote vote){
-      final DatabaseReference ref = votesRef().child("Summary/CompanyEval/"+(vote.getProjectID()));
+      final DatabaseReference ref = companyEvalSummaryRef().child(vote.getProjectID());
       ref.child("Presentation").runTransaction(new Transaction.Handler() {
          @Override
          public Transaction.Result doTransaction(MutableData mutableData) {
@@ -299,7 +319,7 @@ public class DataService {
       });
    }
 
-   public void getPosters(final Callback callback) {
+   public void getPosters(final Callback<HashMap<Integer, Poster>> callback) {
       postersRef().orderByChild("number").addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot) {
@@ -314,19 +334,19 @@ public class DataService {
                   Log.d(TAG, "POSTERID: " + name);
                   JSONObject posterObject = json.getJSONObject(name);
                   p = new Poster(posterObject, name);
-                   poster.put(p.getPosterNumber(), p);
-                   last = p.getPosterNumber();
-
+                  poster.put(p.getPosterNumber(), p);
+                  last = p.getPosterNumber();
                }
             } catch (JSONException e) {
                Log.e(TAG, "getPosters(): " + e);
             }
-
              callback.success(poster);
          }
 
          @Override
-         public void onCancelled(DatabaseError databaseError) {}
+         public void onCancelled(DatabaseError databaseError) {
+            callback.failure(databaseError.getMessage()) ;
+         }
       });
    }
 
@@ -355,8 +375,8 @@ public class DataService {
       }
    }
 
-   public void getPosterAdvisorMembers(final Poster poster, final Callback callback){
-      final ArrayList<Advisor> advisors = new ArrayList<Advisor>();
+   public void getPosterAdvisorMembers(final Poster poster, final Callback<ArrayList<Advisor>> callback){
+      final ArrayList<Advisor> advisors = new ArrayList<>();
       if(poster.getAdvisors() == null){
          callback.failure("No advisors registered in the research: " + poster.getProjectName());
          return;
@@ -380,7 +400,7 @@ public class DataService {
       }
    }
 
-   public void getSponsors(final Callback callback){
+   public void getSponsors(final Callback<ArrayList<Sponsors>> callback){
       final ArrayList<Sponsors> sponsorsMap = new ArrayList<>();
       sponsorsRef().addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
@@ -401,7 +421,7 @@ public class DataService {
       });
    }
 
-   public void getEvent(final Callback callback){
+   public void getEvent(final Callback<ArrayList<Event>> callback){
       final ArrayList<Event> events = new ArrayList<>();
       scheduleRef().addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
@@ -424,46 +444,48 @@ public class DataService {
       });
    }
 
-   public void getInterestedStudents(final Callback callback){
-      usersRef().child(Constants.getCurrentLoggedInUser().getUserID()).child("InterestedStudents").addListenerForSingleValueEvent(new ValueEventListener() {
+   public void getIAPStudentsOfInterest(final Callback<HashMap<String, ArrayList<IAPStudent>>> callback){
+      usersOfInterestRef().child(Constants.getCurrentLoggedInUser().getUserID())
+              .addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot) {
+            final HashMap<String, ArrayList<IAPStudent>> interest = new HashMap<String, ArrayList<IAPStudent>>();
             final ArrayList<IAPStudent> liked = new ArrayList<IAPStudent>();
             final ArrayList<IAPStudent> unLiked = new ArrayList<IAPStudent>();
-            if (dataSnapshot.getValue() == null){
-               Constants.setUnlikedStudents(unLiked);
-               Constants.setLikedStudents(liked);
-               callback.success(true);
-               return;
-            }
-            final JSONObject json = new JSONObject((HashMap<String,Object>) dataSnapshot.getValue());
-            Iterator<String> it = json.keys();
-            while (it.hasNext()) {
-               final String id = it.next();
-               Log.v(TAG, id);
-               getUserData(id, new Callback<User>() {
-                  @Override
-                  public void success(User data) {
-                     if(json.optString(id).equals("like")) {
-                         Log.v(TAG, "like");
-                         liked.add((IAPStudent) data);
-                     }else if (json.optString(id).equals("unlike")) {
-                         Log.v(TAG, "unlike");
-                         unLiked.add((IAPStudent) data);
+            final ArrayList<IAPStudent> undecided = new ArrayList<IAPStudent>();
+            if (dataSnapshot.getValue() != null){
+               final JSONObject json = new JSONObject((HashMap<String,Object>) dataSnapshot.getValue());
+               final Iterator<String> it = json.keys();
+               while (it.hasNext()) {
+                  final String id = it.next();
+                  Log.v(TAG, id);
+                  getUserData(id, new Callback<User>() {
+                     @Override
+                     public void success(User data) {
+                        if(json.optString(id).equals("Like")) {
+                           Log.v(TAG, "like");
+                           liked.add((IAPStudent) data);
+                        }else if (json.optString(id).equals("Unlike")) {
+                           Log.v(TAG, "unlike");
+                           unLiked.add((IAPStudent) data);
+                        } else if (json.optString(id).equals("Undecided")){
+                           undecided.add((IAPStudent) data);
+                        }
+                        if(json.length() == liked.size()+undecided.size()+unLiked.size()){
+                           interest.put("liked", liked);
+                           interest.put("unliked", unLiked);
+                           interest.put("undecided", undecided);
+                           callback.success(interest);
+                        }
                      }
-                  }
-
-                  @Override
-                  public void failure(String message) {
-                     Log.e(TAG, message);
-                  }
-               });
+                     @Override
+                     public void failure(String message) {
+                        Log.e(TAG, message);
+                     }
+                  });
+               }
             }
-            Constants.setUnlikedStudents(unLiked);
-            Constants.setLikedStudents(liked);
-            callback.success(true);
          }
-
          @Override
          public void onCancelled(DatabaseError databaseError) {
             callback.failure(databaseError.getMessage());
@@ -471,13 +493,320 @@ public class DataService {
       });
    }
 
-   public void likeStudent(final String id){
-      usersRef().child(Constants.getCurrentLoggedInUser().getUserID())
-              .child("InterestedStudents").updateChildren(new HashMap<String, Object>() {{ put(id, "like");}});
+   public void setInterestForStudent(final String id, final String interest){
+      usersOfInterestRef().child(Constants.getCurrentLoggedInUser().getUserID())
+              .updateChildren(new HashMap<String, Object>() {{ put(id, interest);}});
    }
 
-   public void unlikeStudent(final String id){
-      usersRef().child(Constants.getCurrentLoggedInUser().getUserID())
-              .child("InterestedStudents").updateChildren(new HashMap<String, Object>() {{ put(id, "unlike");}});
+   public void updateUserData(final User user,final Uri uri, final Callback<User> callback){
+       if(uri != null){
+            DataService.sharedInstance().uploadUserResume(user, uri, new Callback<User>() {
+                @Override
+                public void success(User data) {
+                    Log.v(TAG, "uploadUserResume() succesfull");
+                    usersRef().child(Constants.getCurrentLoggedInUser().getUserID())
+                            .updateChildren(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                           if(!task.isSuccessful()){
+                              callback.failure("DataService.class -> updateUserData(): " + task.getException().getMessage());
+                           }
+                           callback.success(user);
+                        }
+                    });
+                }
+                @Override
+                public void failure(String message) {
+
+                }
+            });
+       }else{
+           usersRef().child(Constants.getCurrentLoggedInUser().getUserID())
+                   .updateChildren(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+               @Override
+               public void onComplete(@NonNull Task<Void> task) {
+                   if(!task.isSuccessful()){
+                      callback.failure("DataService.class -> updateUserData(): " + task.getException().getMessage());
+                   }
+                   callback.success(user);
+               }
+           });
+       }
    }
+
+   public void uploadUserImage(final User user, final Uri uri, final Callback<User> callback){
+      Log.v(TAG, "uploadUserImage()");
+      // Create file metadata including the content type
+      StorageMetadata metadata = new StorageMetadata.Builder()
+              .setContentType("image/png")
+              .build();
+
+      //Register observers to listen for when the download is done or if it fails
+      StorageReference s = FirebaseStorage.getInstance().getReference()
+              .child("ProfilePictures").child(user.getUserID()+"_ProfileImage.png");
+      Log.v(TAG, "uploadUserImage()+ storageRef");
+      UploadTask uploadTask = s.putFile(uri,metadata);
+      uploadTask.addOnFailureListener(new OnFailureListener() {
+         @Override
+         public void onFailure(@NonNull Exception exception) {
+            // Handle unsuccessful uploads
+            Log.v(TAG, "uploadUserImage() ->  task failure");
+            callback.failure(exception.getMessage());
+         }
+      }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+         @Override
+         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+            Log.v(TAG, "uploadUserImage() ->  task success");
+            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            Constants.getCurrentLoggedInUser().setPhotoURL(downloadUrl.toString());
+            callback.success(user);
+         }
+      });
+   }
+
+   private void uploadUserResume(final User user, Uri uri,final Callback<User> callback){
+       Log.v(TAG, "uploadUserResume()");
+       // Create file metadata including the content type
+       StorageMetadata metadata = new StorageMetadata.Builder()
+               .setContentType("application/pdf")
+               .build();
+
+       //Register observers to listen for when the download is done or if it fails
+       StorageReference s = FirebaseStorage.getInstance().getReference().child("Resumes")
+               .child(user.getUserID()+"_IAPStudentResume.pdf");
+       Log.v(TAG, "uploadUserImage()+ storageRef");
+       UploadTask uploadTask = s.putFile(uri,metadata);
+       uploadTask.addOnFailureListener(new OnFailureListener() {
+           @Override
+           public void onFailure(@NonNull Exception exception) {
+               // Handle unsuccessful uploads
+               Log.v(TAG, "uploadUserResume() -> task failure");
+               callback.failure(exception.getMessage());
+           }
+       }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+           @Override
+           public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+               // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+               Log.v(TAG, "uploadUserResume() -> task success");
+               Uri downloadUrl = taskSnapshot.getDownloadUrl();
+               ((IAPStudent)Constants.getCurrentLoggedInUser()).setResumeURL(downloadUrl.toString());
+               callback.success(user);
+           }
+       });
+   }
+
+   private void verifyUser(User.AccountType accountType, String email , final Callback<User> callback) {
+      switch (accountType) {
+         case Advisor:
+            validUsersRef().child("Advisors").orderByChild("Email")
+                    .equalTo(email)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                       @Override
+                       public void onDataChange(DataSnapshot dataSnapshot) {
+                          if (dataSnapshot.exists()) {
+                             JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
+                             Advisor advisor = new Advisor(json);
+                             Log.v(TAG, "Advisor Valid");
+                             callback.success(advisor);
+                          } else {
+                             callback.failure("verifyUser(): User not valid Advisor");
+                          }
+                       }
+
+                       @Override
+                       public void onCancelled(DatabaseError databaseError) {
+                          callback.failure(databaseError.getMessage());
+                       }
+                    });
+            break;
+
+         case IAPStudent:
+            validUsersRef().child("IAPStudent").orderByChild("Email")
+                    .equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+               @Override
+               public void onDataChange(DataSnapshot dataSnapshot) {
+                  if (dataSnapshot.exists()) {
+                     JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
+                     IAPStudent student = new IAPStudent(json);
+                     Log.v(TAG, "IAPStudent Valid");
+                     callback.success(student);
+                  } else {
+                     callback.failure("verifyUser(): User not valid IAPStudent");
+                  }
+               }
+
+               @Override
+               public void onCancelled(DatabaseError databaseError) {
+                  callback.failure(databaseError.getMessage());
+               }
+            });
+            break;
+
+         case CompanyUser:
+            validUsersRef().child("CompanyRep").orderByChild("Email")
+                    .equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+               @Override
+               public void onDataChange(DataSnapshot dataSnapshot) {
+                  if (dataSnapshot.exists()) {
+                     JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
+                     CompanyUser companyUser = new CompanyUser(json);
+                     Log.v(TAG, "Company User Valid");
+                     callback.success(companyUser);
+                  } else {
+                     callback.failure("verifyUser(): User not valid CompanyUser");
+                  }
+               }
+
+               @Override
+               public void onCancelled(DatabaseError databaseError) {
+                  callback.failure(databaseError.getMessage());
+               }
+            });
+            break;
+
+         default:
+            UPRMAccount uprmAccount = new UPRMAccount(email);
+            callback.success(uprmAccount);
+            Log.v(TAG, "UPRM User Created");
+            break;
+      }
+   }
+
+   private void createNewUser(final User user, String password, final FirebaseAnalytics fbAnalytics, final Callback<String> callback){
+      FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+         @Override
+         public void onComplete(@NonNull final Task<AuthResult> task) {
+            if(!task.isSuccessful()){
+               Log.v(TAG, task.getException().getMessage());
+               callback.failure(task.getException().getLocalizedMessage());
+               return;
+            }
+            final FirebaseUser firebaseUser = task.getResult().getUser();
+            user.setID(firebaseUser.getUid());
+            updateUserData(user, null, new Callback<User>() {
+               @Override
+               public void success(User data) {
+                  fbAnalytics.setUserProperty("Sex", user.getGender());
+                  fbAnalytics.setUserProperty("AccountType", user.getAccountType().toString());
+                  firebaseUser.sendEmailVerification().addOnFailureListener(new OnFailureListener() {
+                     @Override
+                     public void onFailure(@NonNull Exception e) {
+                        callback.failure(e.getMessage());
+                     }
+                  });
+
+                  if(user.getAccountType().equals(User.AccountType.Advisor)){
+                     addAdvisorToProjects((Advisor) user, new Callback<String>() {
+                           @Override
+                           public void success(String data) {
+                              Log.v(TAG, data);
+                              callback.success("Advisor account created successfully");
+                           }
+
+                           @Override
+                           public void failure(String message) {
+                              Log.e(TAG, message);
+                           }
+                        });
+                  } else if (user.getAccountType().equals(User.AccountType.CompanyUser)){
+                     addCompanyRepToSponsor((CompanyUser) user, new Callback<String>() {
+                        @Override
+                        public void success(String data) {
+                           Log.v(TAG, data);
+                           callback.success("CompanyUser account created successfully");
+                        }
+
+                        @Override
+                        public void failure(String message) {
+                           Log.e(TAG, message);
+                        }
+                     });
+                  } else if (user.getAccountType().equals(User.AccountType.IAPStudent)) {
+                     addIAPStudentToProjects((IAPStudent) user, new Callback<String>() {
+                        @Override
+                        public void success(String data) {
+                           Log.v(TAG, data);
+                           callback.success("IAPStudent account created successfully");
+                        }
+
+                        @Override
+                        public void failure(String message) {
+                           Log.e(TAG, message);
+                        }
+                     });
+                  } else {
+                     callback.success("UPRMAccount created successfully");
+                  }
+
+
+
+               }
+
+               @Override
+               public void failure(String message) {
+
+               }
+            });
+
+         }
+      });
+   }
+
+   private void addAdvisorToProjects(final Advisor advisor, final Callback<String> callback){
+      final Queue<String> dispatch = new ArrayDeque<>();
+      for(String project : advisor.getProjects()){
+         dispatch.add(project);
+         postersRef().child(project).child("Advisors").updateChildren(new HashMap<String, Object>(){{
+                    put(advisor.getUserID(), true);
+                 }}).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+               if (!task.isSuccessful())
+                  callback.failure("addAdvisorToProjects(): " +task.getException().getMessage());
+               dispatch.poll();
+               if(dispatch.isEmpty())
+                  callback.success("Advisor added to all projects successful");
+            }
+         });
+      }
+   }
+
+   private void addIAPStudentToProjects(final IAPStudent student, final Callback<String> callback){
+      final Queue<String> dispatch = new ArrayDeque<>();
+      Set<String> projectIDs = student.getProyectMap().keySet();
+      for(final String project : projectIDs){
+         dispatch.add(project);
+         postersRef().child(project).child("TeamMembers").updateChildren(new HashMap<String, Object>(){{
+            put(project, student.getProyectMap().get(project));
+         }}).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+               if (!task.isSuccessful()) {
+                  callback.failure("addIAPStudentToProjects(): " + task.getException().getMessage());
+               }
+               dispatch.poll();
+               if(dispatch.isEmpty())
+                  callback.success("Student added to all projects successful");
+            }
+         });
+      }
+   }
+
+   private void addCompanyRepToSponsor(final CompanyUser represntative, final Callback<String> callback){
+      sponsorsRef().child(represntative.getCompanyName()).child("Representatives")
+              .updateChildren(new HashMap<String, Object>() {{
+                 put(represntative.getUserID(), true);
+              }}).addOnCompleteListener(new OnCompleteListener<Void>() {
+         @Override
+         public void onComplete(@NonNull Task<Void> task) {
+            if(task.isSuccessful()){
+               callback.success("Representative added to sponsor successful");
+            } else {
+               callback.failure("addCompanyRepToSponsor(): " + task.getException().getMessage());
+            }
+         }
+      });
+   }
+
 }

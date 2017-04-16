@@ -14,7 +14,9 @@ import android.util.Log;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
+import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
+import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -25,24 +27,39 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class User {
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
+public class User implements UserDelegate{
    private static final String TAG = "User";
 
    private AccountType accountType;
+   private String photoURL;
    private String userID;
    private String gender;
    private String email;
    private String name;
 
-   User(String email, String name, String userID,String gender, AccountType accType){
+   User(String email, String name, String userID,String gender, AccountType accType, String photoURL){
       if (accType == AccountType.NA){
          throw new InvalidAccountTypeExeption("User(): Invalid account type" + accType);
       }
       this.accountType = accType;
+      this.photoURL = photoURL;
       this.userID = userID;
       this.gender = gender;
       this.email = email;
       this.name = name;
+   }
+
+   User(String email, AccountType accountType){
+      this.accountType = accountType;
+      this.photoURL = "";
+      this.userID = "";
+      this.gender = "";
+      this.email = email;
+      this.name = "";
    }
 
    public static void login(String email, String password, final Callback<User> callback) {
@@ -69,15 +86,6 @@ public class User {
          });
    }
 
-   public void resetPassword(String email){
-      FirebaseAuth.getInstance().sendPasswordResetEmail(email).addOnFailureListener(new OnFailureListener() {
-         @Override
-         public void onFailure(@NonNull Exception e) {
-            System.err.println("User.class -> resetPassword(): " + e.toString());
-         }
-      });
-   }
-
    public void logOut(Context context) throws FirebaseAuthException{
       FirebaseAuth.getInstance().signOut();
       AccountAdministration aa = new AccountAdministration(context);
@@ -85,13 +93,16 @@ public class User {
       Constants.setCurrentLogedInUser(null);
    }
 
-   public void getUserData(String userID){
-      FirebaseDatabase.getInstance().getReference().child("User").
-         orderByChild("userID").equalTo("AccountType");
+   @Override
+   public void vote(String projectID, Vote vote, Context context, Callback callback) throws VoteErrorException {}
+
+   @Override
+   public HashMap<String, Object> toMap() {
+      return null;
    }
 
    public enum AccountType{
-      CompanyUser, IAPStudent, Advisor, Guest, NA;
+      CompanyUser, IAPStudent, Advisor, UPRMAccount, NA;
       public static AccountType determineAccType(String typeString){
          switch (typeString){
             case "Company":
@@ -100,8 +111,8 @@ public class User {
                return AccountType.IAPStudent;
             case "Advisor":
                return AccountType.Advisor;
-            case "Guest":
-               return AccountType.Guest;
+            case "UPRMAccount":
+               return AccountType.UPRMAccount;
             default:
                return AccountType.NA;
          }
@@ -126,5 +137,25 @@ public class User {
 
    public String getName() {
       return name;
+   }
+
+   public String getPhotoURL() {
+      return photoURL;
+   }
+
+   public void setName(String name) {
+      this.name = name;
+   }
+
+   public void setPhotoURL(String photoURL) {
+      this.photoURL = photoURL;
+   }
+
+   public void setEmail(String email) {
+      this.email = email;
+   }
+
+   public void setID(String id) {
+      this.userID = id;
    }
 }

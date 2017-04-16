@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.affiliates.iap.iapspring2017"
-        minSdkVersion 18
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
@@ -25,7 +25,6 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     compile 'com.android.support:appcompat-v7:25.2.0'
     compile 'com.android.support:design:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -54,6 +53,15 @@ dependencies {
 
     // Helper library for binding resources to views controllers through annotations
     compile 'com.jakewharton:butterknife:8.5.1'
+
+    // Helper library for the search bar
+    compile 'com.miguelcatalan:materialsearchview:1.4.0'
+
+    // Helper library
+    compile 'com.jaredrummler:material-spinner:1.1.0'
+    compile 'com.wdullaer:materialdatetimepicker:3.1.3'
+    compile 'com.github.clans:fab:1.6.4'
+
     testCompile 'junit:junit:4.12'
 }
 

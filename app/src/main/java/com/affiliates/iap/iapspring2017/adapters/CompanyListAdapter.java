@@ -33,7 +33,7 @@ public class CompanyListAdapter extends ArrayAdapter<Sponsors> {
     private static class ViewHolder{
         ImageView companyLogo;
 
-        ViewHolder(View view){
+        ViewHolder(View view) {
             companyLogo = (ImageView) view.findViewById(R.id.image_view);
         }
     }
@@ -51,7 +51,7 @@ public class CompanyListAdapter extends ArrayAdapter<Sponsors> {
         }
 
         if(!Constants.getSponsorLogos().containsKey(getItem(position).getCompanyID())){
-            Picasso.with(getContext()).load(url).placeholder(R.drawable.ic_logo).into(viewHolder.companyLogo, new Callback() {
+            Picasso.with(getContext()).load(url).placeholder(R.drawable.ic_loading_company).into(viewHolder.companyLogo, new Callback() {
                 @Override
                 public void onSuccess() {
                     Constants.getSponsorLogos().put(getItem(position)

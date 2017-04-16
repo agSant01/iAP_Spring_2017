@@ -1,4 +1,12 @@
-package com.affiliates.iap.iapspring2017;
+//
+//  CompanyListActivity.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 3/07/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
+package com.affiliates.iap.iapspring2017.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,14 +19,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.affiliates.iap.iapspring2017.BaseActivity;
+import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Sponsors;
+import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.adapters.CompanyListAdapter;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;
 
 import java.util.ArrayList;
 
-public class CompanyList extends BaseActivity{
+public class CompanyListActivity extends BaseActivity {
     private static final String TAG = "ComapanyList";
 
     private CompanyListAdapter mCompanyListAdapter;

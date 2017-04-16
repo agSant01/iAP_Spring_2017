@@ -12,7 +12,6 @@ package com.affiliates.iap.iapspring2017.evaluation_center;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -22,9 +21,6 @@ import android.widget.TextView;
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.CompanyUser;
-import com.affiliates.iap.iapspring2017.Models.CompanyVote;
-import com.affiliates.iap.iapspring2017.Models.Poster;
-import com.affiliates.iap.iapspring2017.PosterDescription;
 import com.affiliates.iap.iapspring2017.R;
 import com.matthewtamlin.sliding_intro_screen_library.indicators.DotIndicator;
 

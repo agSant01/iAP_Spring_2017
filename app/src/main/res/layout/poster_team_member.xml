@@ -13,7 +13,7 @@
         android:id="@+id/profile_image"
         android:layout_width="120dp"
         android:layout_height="100dp"
-        android:src="@drawable/ic_gender"
+        android:src="@drawable/ic_gender_0"
         app:civ_border_width="2dp"
         app:civ_border_color="@color/appGreen"
         android:layout_gravity="center_horizontal"/>

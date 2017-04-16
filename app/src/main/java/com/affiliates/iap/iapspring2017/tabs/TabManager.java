@@ -20,15 +20,9 @@ import com.affiliates.iap.iapspring2017.R;
  * one of the sections/tabs/pages.
  */
 public class TabManager extends FragmentPagerAdapter {
-
-
-   // Icons of the tabs
-   private int tabIcons[] = { R.drawable.ic_schedule,
-           R.drawable.ic_poster,
-           R.drawable.ic_more };
    private Context context;
 
-   private final int PAGE_COUNT = tabIcons.length;
+   private final int PAGE_COUNT = 3;
 
    public TabManager(FragmentManager fm, Context context) {
       super(fm);

@@ -25,6 +25,8 @@ public class BaseActivity extends AppCompatActivity {
          mProgressDialog = new ProgressDialog(this);
          mProgressDialog.setMessage(msg);
          mProgressDialog.setIndeterminate(true);
+         mProgressDialog.setCanceledOnTouchOutside(false);
+         mProgressDialog.setCancelable(false);
       }
       mProgressDialog.show();
    }
@@ -34,6 +36,8 @@ public class BaseActivity extends AppCompatActivity {
          mProgressDialog = new ProgressDialog(this);
          mProgressDialog.setMessage("Loading");
          mProgressDialog.setIndeterminate(true);
+         mProgressDialog.setCanceledOnTouchOutside(false);
+         mProgressDialog.setCancelable(false);
       }
       mProgressDialog.show();
    }

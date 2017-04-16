@@ -32,17 +32,23 @@ import java.util.Iterator;
 
 public class CompanyUser extends User implements UserDelegate {
    private ArrayList<String> votes;
-   private String companName;
+   private String companyName;
 
    public CompanyUser(JSONObject data, AccountType accountType, String id)
            throws InvalidAccountTypeExeption, JSONException {
       this(checkType(accountType), data, accountType, id );
    }
 
+   public CompanyUser(JSONObject data){
+      super(data.optString("Email"), AccountType.CompanyUser);
+      votes = new ArrayList<String>();
+      companyName = data.optString("Company");
+   }
+
    private CompanyUser(Void d, JSONObject data, AccountType accountType, String id) throws JSONException{
-      super(data.optString("Email"), data.optString("Name"), id,data.optString("Sex"), accountType);
+      super(data.optString("Email"), data.optString("Name"), id,data.optString("Sex"), accountType, data.optString("PhotoURL"));
       this.votes = getVotesFromJSON(data.optJSONObject("Votes"));
-      this.companName = data.optString("Company");
+      this.companyName = data.optString("Company");
    }
 
    private static Void checkType(AccountType accountType) throws InvalidAccountTypeExeption, JSONException{
@@ -87,6 +93,18 @@ public class CompanyUser extends User implements UserDelegate {
       }
    }
 
+   @Override
+   public HashMap<String, Object> toMap() {
+      return new HashMap<String, Object>(){{
+         put("AccountType", "Company");
+         put("Name", getName());
+         put("Email", getEmail());
+         put("PhotoURL", getPhotoURL());
+         put("Sex", getGender());
+         put("Votes", exportVote());
+      }};
+   }
+
    public void setVoted(final String projectID){
       votes.add(projectID);
       final DatabaseReference ref = FirebaseDatabase.getInstance()
@@ -100,8 +118,6 @@ public class CompanyUser extends User implements UserDelegate {
       if (hasEvaluated(projectID)){
          return null;
       }
-      CompanyVote vote = null;
-
       try {
          FileInputStream fi = context.openFileInput(projectID);
          BufferedInputStream bis = new BufferedInputStream(fi);
@@ -118,9 +134,7 @@ public class CompanyUser extends User implements UserDelegate {
          e.printStackTrace();
          Log.e("CompanyUser.class", "loadVote() + e");
       }
-      if(vote==null)
-         return new CompanyVote(projectID);
-      return vote;
+      return new CompanyVote(projectID);
    }
 
    public boolean isLiked(String id){
@@ -132,16 +146,36 @@ public class CompanyUser extends User implements UserDelegate {
       return false;
    }
 
-    public boolean isUnliked(String id){
-        if(Constants.getUnlikedStudents() == null) return false;
-        for(int i = 0; i < Constants.getUnlikedStudents().size(); i++){
-            if(Constants.getUnlikedStudents().get(i).getUserID().equals(id))
-                return true;
-        }
-        return false;
+    public boolean isUnliked(String id) {
+       if (Constants.getUnlikedStudents() == null) return false;
+       for (int i = 0; i < Constants.getUnlikedStudents().size(); i++) {
+          if (Constants.getUnlikedStudents().get(i).getUserID().equals(id))
+             return true;
+       }
+       return false;
     }
 
-   public ArrayList<String> getVotes() {
+    public boolean isUndecided(String id) {
+       if (Constants.getUndecidedStudents() == null) return false;
+       for (int i = 0; i < Constants.getUndecidedStudents().size(); i++) {
+          if (Constants.getUnlikedStudents().get(i).getUserID().equals(id))
+             return true;
+       }
+       return false;
+    }
+
+    public HashMap<String, Object> exportVote(){
+       HashMap<String, Object> v = new HashMap<>();
+       for(int i = 0; i < votes.size(); i++)
+          v.put(votes.get(i), "true");
+       return v;
+    }
+
+    public ArrayList<String> getVotes() {
       return votes;
+   }
+
+   public String getCompanyName() {
+      return companyName;
    }
 }

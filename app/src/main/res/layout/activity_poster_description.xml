@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:theme="@style/AppTheme.NoActionBar"
-    tools:context=".PosterDescription">
+    tools:context=".activities.PosterDescriptionActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -92,7 +92,7 @@
                 android:clickable="true"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view"
-                app:srcCompat="@drawable/ic_poster_icon"
+                app:srcCompat="@drawable/ic_poster_icon_green"
                 app:layout_constraintRight_toLeftOf="@+id/view2"
                 android:layout_marginRight="8dp"
                 app:layout_constraintHorizontal_bias="0.681" />
@@ -255,7 +255,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view5"
-                tools:context=".MainActivity" />
+                tools:context=".activities.MainActivity" />
 
             <TextView
                 android:id="@+id/advisors"
@@ -284,7 +284,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/poster_team_members"
-                tools:context=".MainActivity" />
+                tools:context=".activities.MainActivity" />
 
             <Button
                 android:id="@+id/button_evaluate"

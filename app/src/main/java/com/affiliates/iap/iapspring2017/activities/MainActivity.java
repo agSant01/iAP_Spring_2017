@@ -6,7 +6,7 @@
 //  Copyright © 2017 IAP Conference UPRM. All rights reserved.
 //
 
-package com.affiliates.iap.iapspring2017;
+package com.affiliates.iap.iapspring2017.activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,10 +20,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.affiliates.iap.iapspring2017.BaseActivity;
+import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Poster;
+import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.CustomViewPager;
 import com.affiliates.iap.iapspring2017.tabs.PostersFragment;
 import com.affiliates.iap.iapspring2017.tabs.TabManager;
@@ -38,6 +43,7 @@ public class MainActivity extends BaseActivity {
    private MaterialSearchView mSearchView;
    private CustomViewPager mViewPager;      // The {ViewPager} that will host the section contents.
    private TabLayout mTabLayout;
+   private boolean searchMode;
    private String lastQuery;
    private Toolbar mToolbar;
    private TextView mTitle;
@@ -46,10 +52,15 @@ public class MainActivity extends BaseActivity {
    private boolean hide;
 
    // Icons of the tabs
-   private int tabIcons[] = {
-           R.drawable.ic_poster,
-           R.drawable.ic_schedule,
-           R.drawable.ic_more };
+   private int tabIconsUnselected[] = {
+           R.drawable.ic_poster_icon,
+           R.drawable.ic_schedule_icon,
+           R.drawable.ic_more_icon };
+
+   private int tabIconsSelected[] = {
+           R.drawable.ic_poster_icon_green,
+           R.drawable.ic_schedule_icon_green,
+           R.drawable.ic_more_icon_green };
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +70,11 @@ public class MainActivity extends BaseActivity {
 
       setSupportActionBar(mToolbar);
       getSupportActionBar().setDisplayShowTitleEnabled(false);
+      mSectionsPagerAdapter = new TabManager(getSupportFragmentManager(), MainActivity.this);
 
       // Set up the ViewPager with the sections adapter.
       mViewPager.setAdapter(mSectionsPagerAdapter);
-
+      mViewPager.setSoundEffectsEnabled(false);
       setTabLayout();
       setSearchView();
 
@@ -72,6 +84,7 @@ public class MainActivity extends BaseActivity {
 
          @Override
          public void onPageSelected(int position) {
+            if(mItem == null) return;
             if(position == 1 || position == 2)
                mItem.setVisible(false);
             else
@@ -86,7 +99,6 @@ public class MainActivity extends BaseActivity {
    private void bind(){
       // Create the adapter that will return a fragment for each of the three
       // primary sections of the activity.
-      mSectionsPagerAdapter = new TabManager(getSupportFragmentManager(), MainActivity.this);
       mViewPager = (CustomViewPager) findViewById(R.id.viewpager_container);
       mSearchView = (MaterialSearchView) findViewById(R.id.search_view);
       mTitle = (TextView) findViewById(R.id.toolbar_title);
@@ -95,18 +107,24 @@ public class MainActivity extends BaseActivity {
    }
 
    private void setTabLayout(){
+      searchMode = false;
       mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.appGreen));
       mTabLayout.setupWithViewPager(mViewPager);
-      mTabLayout.getTabAt(0).setIcon(tabIcons[0]);
-      mTabLayout.getTabAt(1).setIcon(tabIcons[1]);
-      mTabLayout.getTabAt(2).setIcon(tabIcons[2]);
-
+      mTabLayout.getTabAt(0).setIcon(tabIconsSelected[0]);
+      mTabLayout.getTabAt(1).setIcon(tabIconsUnselected[1]);
+      mTabLayout.getTabAt(2).setIcon(tabIconsUnselected[2]);
+      mTabLayout.setSoundEffectsEnabled(false);
       mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
          @Override
          public void onTabSelected(TabLayout.Tab tab) {
             int pos = tab.getPosition();
+
+            if(!searchMode)
+               tab.setIcon(tabIconsSelected[tab.getPosition()]);
+
             if (pos == 0) {
                mTitle.setText("Posters");
+
             } else if (pos == 1) {
                mTitle.setText("Schedule");
             } else {
@@ -115,7 +133,10 @@ public class MainActivity extends BaseActivity {
          }
 
          @Override
-         public void onTabUnselected(TabLayout.Tab tab) {}
+         public void onTabUnselected(TabLayout.Tab tab) {
+            if(!searchMode)
+               tab.setIcon(tabIconsUnselected[tab.getPosition()]);
+         }
 
          @Override
          public void onTabReselected(TabLayout.Tab tab) {}
@@ -171,7 +192,8 @@ public class MainActivity extends BaseActivity {
    }
 
    private void searchMode(){
-      mTabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.appBlack));
+      searchMode = true;
+      mTabLayout.setSelectedTabIndicatorColor(R.color.appBlack);
       mTabLayout.getTabAt(0).setIcon(null);
       mTabLayout.getTabAt(1).setIcon(null);
       mTabLayout.getTabAt(2).setIcon(null);

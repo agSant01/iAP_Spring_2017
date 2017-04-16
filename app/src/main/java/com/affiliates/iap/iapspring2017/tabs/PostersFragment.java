@@ -22,9 +22,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.affiliates.iap.iapspring2017.Constants;
-import com.affiliates.iap.iapspring2017.MainActivity;
+import com.affiliates.iap.iapspring2017.activities.MainActivity;
 import com.affiliates.iap.iapspring2017.Models.Poster;
-import com.affiliates.iap.iapspring2017.PosterDescription;
+import com.affiliates.iap.iapspring2017.activities.PosterDescriptionActivity;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.adapters.PosterAdapter;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
@@ -38,9 +38,9 @@ import java.util.Map;
 public class PostersFragment extends Fragment {
    private static final String TAG = "PostersFragment";
    static PosterAdapter mPosterAdapter;
-   static ListView mListView;
-   static ProgressBar mPB;
-   static View mRootView;
+   private ListView mListView;
+   private ProgressBar mPB;
+   private View mRootView;
 
    private static int position;
 
@@ -61,12 +61,9 @@ public class PostersFragment extends Fragment {
       mRootView = inflater.inflate(R.layout.list_view, container, false);
       mListView = (ListView) mRootView.findViewById(R.id.poster_listview);
       mPB = (ProgressBar) mRootView.findViewById(R.id.progressBar);
-      mPB.setVisibility(ProgressBar.VISIBLE);
       mPB.setVerticalFadingEdgeEnabled(true);
-      final AlphaAnimation fadeOutAnimation = new AlphaAnimation(1.0f, 0.0f);//fade from 1 to 0 alpha
-      fadeOutAnimation.setDuration(1000);
-      fadeOutAnimation.setFillAfter(true);//to keep it at 0 when animation ends
-
+      ((MainActivity)getActivity()).showProgressBar(mPB);
+      mPosterAdapter = new PosterAdapter(getActivity().getBaseContext(), new ArrayList<Poster>());
       // run a background job and once complete
       if(Constants.getPosters() == null){
          DataService.sharedInstance().getPosters(new Callback() {
@@ -90,8 +87,9 @@ public class PostersFragment extends Fragment {
                   sort.add(d.get(i));
                   Log.v(TAG, d.get(i).getProjectName());
                }
-               mPosterAdapter = new PosterAdapter(getActivity().getBaseContext(), new ArrayList<Poster>(Constants.getSortedPosters()));
-               for(Poster p : Constants.getPosters().values())
+               mPosterAdapter.clear();
+               mPosterAdapter.addAll(sort);
+                for(Poster p : Constants.getPosters().values())
                   Log.v(TAG, p.getProjectName() + "<_");
 
                mListView.setLayoutTransition(new LayoutTransition());
@@ -99,14 +97,14 @@ public class PostersFragment extends Fragment {
                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                   @Override
                   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                     Intent in = new Intent(getActivity().getBaseContext(), PosterDescription.class);
+                     Intent in = new Intent(getActivity().getBaseContext(), PosterDescriptionActivity.class);
                      String ID = mPosterAdapter.getItem(position).getPosterID();
                      in.putExtra("posterID", ID);
                      startActivity(in);
                   }
                });
-               mPB.setVisibility(ProgressBar.INVISIBLE);
-               mPB.startAnimation(fadeOutAnimation);
+
+               ((MainActivity)getActivity()).hideProgressBar(mPB);
             }
 
             @Override
@@ -122,21 +120,23 @@ public class PostersFragment extends Fragment {
          mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               Intent in = new Intent(getActivity().getBaseContext(), PosterDescription.class);
+               Intent in = new Intent(getActivity().getBaseContext(), PosterDescriptionActivity.class);
                String ID = mPosterAdapter.getItem(position).getPosterID();
                in.putExtra("posterID", ID);
                startActivity(in);
             }
          });
-         mPB.setVisibility(ProgressBar.INVISIBLE);
-         mPB.startAnimation(fadeOutAnimation);
+         ((MainActivity)getActivity()).hideProgressBar(mPB);
       }
       return mRootView;
    }
 
    public static void setSearchableAdapter(ArrayList<Poster> posters){
-       mPosterAdapter.clear();
-       mPosterAdapter.addAll(posters);
+      mPosterAdapter.clear();
+      if(posters == null)
+         mPosterAdapter.addAll(new ArrayList<Poster>());
+      else
+         mPosterAdapter.addAll(posters);
    }
 
    @Override

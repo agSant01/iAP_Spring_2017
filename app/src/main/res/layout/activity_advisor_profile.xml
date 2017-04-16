@@ -55,7 +55,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="45dp"
-                android:src="@drawable/ic_gender"
+                android:src="@drawable/ic_gender_0"
                 app:civ_border_color="@color/appGreen"
                 app:civ_border_width="2dp"
                 app:layout_constraintLeft_toLeftOf="parent"

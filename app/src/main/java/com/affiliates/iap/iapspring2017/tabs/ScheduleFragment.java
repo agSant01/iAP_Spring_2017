@@ -31,8 +31,8 @@ public class ScheduleFragment extends Fragment {
     private static final String TAG = "ScheduleFragment";
     private EventAdapter mEventAdapter;
     private ListView mListView;
-    private View mRootView;
     private ProgressBar mPB;
+    private View mRootView;
 
 
     public static ScheduleFragment newInstance(){

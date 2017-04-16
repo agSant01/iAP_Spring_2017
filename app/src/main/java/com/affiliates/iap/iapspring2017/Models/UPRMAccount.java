@@ -1,5 +1,5 @@
 //
-//  Guest.java
+//  UPRMAccount.java
 //  IAP
 //
 //  Created by Gabriel S. Santiago on 2/19/17.
@@ -19,25 +19,30 @@ import com.affiliates.iap.iapspring2017.services.DataService;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Guest extends User implements UserDelegate {
-   private UPRMAccountType userType;
+import java.util.HashMap;
+
+public class UPRMAccount extends User implements UserDelegate {
    private Voted voted;
 
-
-   public Guest(JSONObject data, AccountType accountType, String id)
+   public UPRMAccount(JSONObject data, AccountType accountType, String id)
       throws InvalidAccountTypeExeption, JSONException {
       this(checkType(accountType), data, accountType, id );
    }
 
-   private Guest(Void n, JSONObject data, AccountType accountType, String id) throws JSONException{
-      super(data.getString("Email"), data.getString("Name"), id, data.optString("Sex"), accountType);
+   public UPRMAccount (String email){
+      super(email, AccountType.UPRMAccount);
+      voted = new Voted();
+   }
+
+   private UPRMAccount(Void n, JSONObject data, AccountType accountType, String id) throws JSONException{
+      super(data.getString("Email"), data.getString("Name"), id, data.optString("Sex"), accountType, data.optString("PhotoURL"));
       this.voted = new Voted(data.optJSONObject("Voted"));
    }
 
    private static Void checkType(AccountType accountType)
       throws InvalidAccountTypeExeption, JSONException{
-      if (accountType != AccountType.Guest)
-         throw new InvalidAccountTypeExeption("Guest(): Invalid account type; " + accountType);
+      if (accountType != AccountType.UPRMAccount)
+         throw new InvalidAccountTypeExeption("UPRMAccount(): Invalid account type; " + accountType);
       return null;
    }
 
@@ -71,6 +76,18 @@ public class Guest extends User implements UserDelegate {
       }
    }
 
+   @Override
+   public HashMap<String, Object> toMap() {
+      return new HashMap<String, Object>(){{
+         put("AccountType", "UPRMAccount");
+         put("Name", getName());
+         put("Email", getEmail());
+         put("Sex", getGender());
+         put("PhotoURL", getPhotoURL());
+         put("Voted", exportVoted());
+      }};
+   }
+
    private void setVoted(OverallVote vote){
       switch (vote.getVoteType()){
          case BestPoster:
@@ -101,9 +118,23 @@ public class Guest extends User implements UserDelegate {
       private boolean bestPresentation = false;
       private boolean bestPoster = false;
 
-      public Voted (JSONObject data) throws JSONException{
+      private Voted (JSONObject data) throws JSONException{
+         if(data == null) return;
          this.bestPresentation = data.optBoolean("BestPresentation");
          this.bestPoster = data.optBoolean("BestPoster");
       }
+
+      private Voted(){
+         this.bestPresentation = false;
+         this.bestPoster = false;
+      }
    }
+
+   public HashMap<String, Object> exportVoted(){
+      return new HashMap<String, Object>(){{
+         put("BestPresentation", voted.bestPresentation);
+         put("BestPoster", voted.bestPoster);
+      }};
+   }
+
 }

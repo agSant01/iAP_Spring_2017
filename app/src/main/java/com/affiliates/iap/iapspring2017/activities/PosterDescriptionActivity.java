@@ -1,12 +1,12 @@
 //
-//  PosterDescription.java
+//  PosterDescriptionActivity.java
 //  IAP
 //
 //  Created by Gabriel S. Santiago on 3/07/17.
 //  Copyright © 2017 IAP Conference UPRM. All rights reserved.
 //
 
-package com.affiliates.iap.iapspring2017;
+package com.affiliates.iap.iapspring2017.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,11 +22,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.affiliates.iap.iapspring2017.BaseActivity;
+import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Advisor;
 import com.affiliates.iap.iapspring2017.Models.CompanyUser;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.Models.User;
+import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.adapters.TeamAdvisorsAdapter;
 import com.affiliates.iap.iapspring2017.adapters.TeamMembersAdapter;
 import com.affiliates.iap.iapspring2017.evaluation_center.EvaluationActivity;
@@ -39,7 +42,7 @@ import org.lucasr.twowayview.TwoWayView;
 
 import java.util.ArrayList;
 
-public class PosterDescription extends BaseActivity {
+public class PosterDescriptionActivity extends BaseActivity {
     private static final String TAG = "PosterDescription";
 
     private TeamAdvisorsAdapter mAdvisorsAdapter;
@@ -153,9 +156,8 @@ public class PosterDescription extends BaseActivity {
             }
         });
 
-
-        mAdvisorsAdapter = new TeamAdvisorsAdapter(PosterDescription.this, R.layout.poster_team_member, mAdvisors);
-        mStudentAdapter = new TeamMembersAdapter(PosterDescription.this, R.layout.poster_team_member, mTeam);
+        mAdvisorsAdapter = new TeamAdvisorsAdapter(PosterDescriptionActivity.this, R.layout.poster_team_member, mAdvisors);
+        mStudentAdapter = new TeamMembersAdapter(PosterDescriptionActivity.this, R.layout.poster_team_member, mTeam);
 
         mAdvisorScrollView.setAdapter(mAdvisorsAdapter);
         mStudentScrollView.setAdapter(mStudentAdapter);
@@ -164,7 +166,7 @@ public class PosterDescription extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 IAPStudent s = (IAPStudent) mStudentScrollView.getItemAtPosition(position);
-                Intent in = new Intent(PosterDescription.this, IAPStudentProfile.class);
+                Intent in = new Intent(PosterDescriptionActivity.this, IAPStudentProfile.class);
                 in.putStringArrayListExtra("projects", s.getProjectNames());
                 in.putExtra("name", s.getName());
                 in.putExtra("email", s.getEmail());
@@ -182,7 +184,7 @@ public class PosterDescription extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Advisor a = (Advisor) mAdvisorScrollView.getItemAtPosition(position);
-                Intent in = new Intent(PosterDescription.this, AdvisorProfile.class);
+                Intent in = new Intent(PosterDescriptionActivity.this, AdvisorProfile.class);
                 in.putExtra("name", a.getName());
                 in.putExtra("email", a.getEmail());
                 in.putExtra("dpt", a.getDepartment());

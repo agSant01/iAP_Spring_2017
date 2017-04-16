@@ -10,6 +10,7 @@ package com.affiliates.iap.iapspring2017.Models;
 
 import android.content.Context;
 
+import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
@@ -21,13 +22,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class Advisor extends User implements UserDelegate {
    private ArrayList<String> projects;
    private String researchIntent;
    private String department;
-   private String photoURL;
    private String webPage;
    private Voted voted;
 
@@ -36,13 +37,22 @@ public class Advisor extends User implements UserDelegate {
       this(checkType(accountType), data, accountType, id );
    }
 
+   public Advisor(JSONObject data){
+      super(data.optString("Email"), AccountType.Advisor );
+      this.projects = parseData(data.optJSONObject("Projects"));
+      this.researchIntent = "NA";
+      this.voted = new Voted();
+      this.department = "NA";
+      this.webPage = "NA";
+
+   }
+
    private Advisor(Void d, JSONObject data, AccountType accountType, String id) throws JSONException{
-      super(data.optString("Email"), data.optString("Name"), id,data.optString("Sex"), accountType);
+      super(data.optString("Email"), data.optString("Name"), id,data.optString("Sex"), accountType, data.optString("PhotoURL"));
       this.projects = parseData(data.optJSONObject("Projects"));
       this.researchIntent = data.optString("ResearchIntent");
       this.voted = new Voted(data.optJSONObject("Voted"));
       this.department = data.optString("Department");
-      this.photoURL = data.optString("PhotoURL");
       this.webPage = data.optString("webpage");
    }
 
@@ -53,7 +63,7 @@ public class Advisor extends User implements UserDelegate {
       return null;
    }
 
-   private static ArrayList<String> parseData(JSONObject data) throws JSONException{
+   private static ArrayList<String> parseData(JSONObject data){
       if(data == null) return null;
       ArrayList<String> d = new ArrayList<String>();
       Iterator<String> keys = data.keys();
@@ -91,6 +101,22 @@ public class Advisor extends User implements UserDelegate {
       }
    }
 
+   @Override
+   public HashMap<String, Object> toMap() {
+      return new HashMap<String, Object>(){{
+         put("AccountType", "Advisor");
+         put("Name", getName());
+         put("Email", getEmail());
+         put("PhotoURL", getPhotoURL());
+         put("Sex", getGender());
+         put("Department", department);
+         put("ResearchIntent", researchIntent);
+         put("Webpage", webPage);
+         put("Projects", exportProjects());
+         put("Voted", exportVoted());
+      }};
+   }
+
    private void setVoted(OverallVote vote) {
       switch (vote.getVoteType()){
          case BestPoster:
@@ -107,10 +133,29 @@ public class Advisor extends User implements UserDelegate {
       private boolean bestPresentation = false;
       private boolean bestPoster = false;
 
-      public Voted (JSONObject data) throws JSONException{
+      private Voted (JSONObject data) throws JSONException{
          this.bestPresentation = data.getBoolean("BestPresentation");
          this.bestPoster = data.getBoolean("BestPoster");
       }
+
+      private Voted (){
+         this.bestPresentation = false;
+         this.bestPoster = false;
+      }
+   }
+
+   private HashMap<String, Object> exportProjects(){
+      HashMap<String, Object> p = new HashMap<>();
+      for(int i = 0; i < projects.size(); i++)
+         p.put(projects.get(i), "true");
+      return p;
+   }
+
+   public HashMap<String, Object> exportVoted(){
+      return new HashMap<String, Object>(){{
+         put("BestPresentation", voted.bestPresentation);
+         put("BestPoster", voted.bestPoster);
+      }};
    }
 
    public String getResearchIntent() {
@@ -125,15 +170,23 @@ public class Advisor extends User implements UserDelegate {
       return department;
    }
 
-   public String getPhotoURL() {
-      return photoURL;
-   }
-
    public String getWebPage() {
       return webPage;
    }
 
    public Voted getVoted() {
       return voted;
+   }
+
+   public void setResearchIntent(String researchIntent) {
+      this.researchIntent = researchIntent;
+   }
+
+   public void setDepartment(String department) {
+      this.department = department;
+   }
+
+   public void setWebPage(String webPage) {
+      this.webPage = webPage;
    }
 }

@@ -26,6 +26,7 @@ public class Constants {
    private static ArrayList<Poster> sortedPosters;
    private static ArrayList<IAPStudent> likedStudents;
    private static ArrayList<IAPStudent> unlikedStudents;
+   private static ArrayList<IAPStudent> undecidedStudents;
    private static ArrayList<Event> events;
    private static ArrayList<Sponsors> sponsor;
    private static Map<String, Drawable> sponsorLogos = new HashMap<>();
@@ -60,6 +61,14 @@ public class Constants {
 
    public static ArrayList<IAPStudent> getLikedStudents() {
       return likedStudents;
+   }
+
+   public static ArrayList<IAPStudent> getUndecidedStudents() {
+      return undecidedStudents;
+   }
+
+   public static void setUndecidedStudents(ArrayList<IAPStudent> undecidedStudents) {
+      Constants.undecidedStudents = undecidedStudents;
    }
 
    public static void setLikedStudents(ArrayList<IAPStudent> i) {

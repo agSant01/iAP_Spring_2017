@@ -28,7 +28,6 @@ public class IAPStudent extends User implements UserDelegate{
    private String department;
    private String gradDate;
    private String objective;
-   private String photoURL;
    private String resumeURL;
    private Voted voted;
 
@@ -37,13 +36,22 @@ public class IAPStudent extends User implements UserDelegate{
       this(checkType(accountType), data, accountType, id );
    }
 
+   public IAPStudent(JSONObject data){
+      super(data.optString("Email"), AccountType.IAPStudent);
+      this.voted = new Voted();
+      this.department = "NA";
+      this.resumeURL = "NA";
+      this.objective = "NA";
+      this.gradDate = "NA";
+      getProyectMap(data.optJSONObject("Projects"));
+   }
+
    private IAPStudent(Void d, JSONObject data, AccountType accountType, String id) throws JSONException{
-      super(data.optString("Email"), data.optString("Name"), id, data.optString("Sex"), accountType);
+      super(data.optString("Email"), data.optString("Name"), id, data.optString("Sex"), accountType, data.optString("PhotoURL"));
       this.voted = new Voted(data.optJSONObject("Voted"));
       this.department = data.optString("Department");
       this.resumeURL = data.optString("ResumeLink");
       this.objective = data.optString("Objective");
-      this.photoURL = data.optString("PhotoURL");
       this.gradDate = data.optString("GradDate");
       getProyectMap(data.optJSONObject("Projects"));
    }
@@ -113,19 +121,37 @@ public class IAPStudent extends User implements UserDelegate{
       }
    }
 
+   @Override
+   public HashMap<String, Object> toMap() {
+      return new HashMap<String, Object>(){{
+         put("AccountType", "IAPStudent");
+         put("Name", getName());
+         put("Email", getEmail());
+         put("PhotoURL", getPhotoURL());
+         put("Sex", getGender());
+         put("Department", department);
+         put("ResumeLink", resumeURL);
+         put("Projects", projects);
+         put("Objective", objective);
+         put("GradDate", gradDate);
+         put("Voted", exportVoted());
+      }};
+   }
+
    private class Voted{
       private boolean bestPresentation = false;
       private boolean bestPoster = false;
 
-      public Voted (JSONObject data) throws JSONException{
+      private Voted (JSONObject data) throws JSONException{
          if (data == null) return;
          this.bestPresentation = data.optBoolean("BestPresentation");
          this.bestPoster = data.optBoolean("BestPoster");
       }
-   }
 
-   public HashMap<String, String> getProyectMap() {
-      return projects;
+      private Voted(){
+         this.bestPresentation = false;
+         this.bestPoster = false;
+      }
    }
 
    public ArrayList<String> getProjectNames(){
@@ -134,6 +160,17 @@ public class IAPStudent extends User implements UserDelegate{
          atr.add(s);
       }
       return atr;
+   }
+
+   public HashMap<String, Object> exportVoted(){
+      return new HashMap<String, Object>(){{
+         put("BestPresentation", voted.bestPresentation);
+         put("BestPoster", voted.bestPoster);
+      }};
+   }
+
+   public HashMap<String, String> getProyectMap() {
+      return projects;
    }
 
    public String getDepartment() {
@@ -151,12 +188,24 @@ public class IAPStudent extends User implements UserDelegate{
    public String getGradDate() {
       return gradDate;
    }
-
-   public String getPhotoURL() {
-      return photoURL;
-   }
    
    public Voted getVoted() {
       return voted;
+   }
+
+   public void setDepartment(String department) {
+      this.department = department;
+   }
+
+   public void setGradDate(String gradDate) {
+      this.gradDate = gradDate;
+   }
+
+   public void setObjective(String objective) {
+      this.objective = objective;
+   }
+
+   public void setResumeURL(String resumeURL) {
+      this.resumeURL = resumeURL;
    }
 }

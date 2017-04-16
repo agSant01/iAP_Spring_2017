@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".profiles.IAPStudentProfile"
+    android:fitsSystemWindows="true"
+    android:theme="@style/AppTheme.NoActionBar">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_poster_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Profile Edit"
+                android:textColor="@android:color/white"
+                android:textSize="18sp" />
+        </android.support.v7.widget.Toolbar>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:text="Research Intent"
+            android:textColor="@color/appGrey"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/_department" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_image_activity"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="69dp"
+            android:adjustViewBounds="false"
+            android:filterTouchesWhenObscured="false"
+            android:src="@drawable/ic_gender_0"
+            app:civ_border_color="@color/appGreen"
+            app:civ_border_width="2dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/change_pic"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/oval_background_white"
+
+            android:cropToPadding="false"
+            app:layout_constraintBottom_toBottomOf="@+id/profile_image_activity"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintLeft_toLeftOf="@+id/profile_image_activity"
+            app:layout_constraintRight_toRightOf="@+id/profile_image_activity"
+            app:layout_constraintTop_toTopOf="@+id/profile_image_activity"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/ic_add_circle_outline" />
+
+        <EditText
+            android:id="@+id/_name"
+            android:layout_width="265dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="Name"
+            android:inputType="textPersonName"
+            android:paddingStart="8dp"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/profile_image_activity" />
+
+        <TextView
+            android:id="@+id/editText4"
+            android:layout_width="263dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="13dp"
+            android:ems="10"
+            android:gravity="center_vertical"
+            android:hint="gabriel.santiago16@upr.edu"
+            android:paddingStart="6dp"
+            android:textSize="15sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/_name"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <EditText
+            android:id="@+id/grad_date"
+            android:layout_width="265dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="12dp"
+            android:ems="10"
+            android:hint="Website"
+            android:inputType="text"
+            android:textSize="15sp"
+            android:paddingStart="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editText4"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" />
+
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/_department"
+            android:layout_width="265dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="2dp"
+            android:hint="Department"
+            android:textSize="17sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/grad_date"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView13"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="17dp"
+            app:layout_constraintTop_toBottomOf="@+id/profile_image_activity"
+            app:srcCompat="@drawable/ic_gender_icon"
+            app:layout_constraintRight_toLeftOf="@+id/_name"
+            android:layout_marginRight="0dp" />
+
+        <ImageView
+            android:id="@+id/imageView14"
+            android:layout_width="32dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageView13"
+            app:srcCompat="@drawable/ic_email"
+            app:layout_constraintRight_toLeftOf="@+id/editText4"
+            android:layout_marginRight="0dp" />
+
+        <ImageView
+            android:id="@+id/imageView15"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="3dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageView14"
+            app:srcCompat="@drawable/ic_grad"
+            app:layout_constraintRight_toLeftOf="@+id/grad_date"
+            android:layout_marginRight="0dp" />
+
+        <ImageView
+            android:id="@+id/imageView16"
+            android:layout_width="32dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="13dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageView15"
+            app:srcCompat="@drawable/ic_building"
+            app:layout_constraintRight_toLeftOf="@+id/_department"
+            android:layout_marginRight="0dp" />
+
+        <EditText
+            android:id="@+id/_objective"
+            android:layout_width="316dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/circular"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="Internship, Coop"
+            android:paddingBottom="6dp"
+            android:paddingEnd="6dp"
+            android:paddingStart="6dp"
+            android:paddingTop="6dp"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:minLines="4"
+            android:maxLines="4"
+            app:layout_constraintBottom_toTopOf="@+id/reset_password"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView11"
+            app:layout_constraintVertical_bias="0.060000002"
+            app:layout_constraintHorizontal_bias="0.498" />
+
+        <Button
+            android:id="@+id/reset_password"
+            android:layout_width="260dp"
+            android:layout_height="27dp"
+
+            android:layout_marginBottom="16dp"
+
+            android:layout_marginEnd="8dp"
+
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/button_oval_shape_green"
+            android:text="Reset Password"
+            android:textColor="@color/appGreen"
+            android:backgroundTint="@color/appWhite"
+
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/save_changes"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+        <Button
+            android:id="@+id/save_changes"
+            android:layout_width="260dp"
+            android:layout_height="30dp"
+
+            android:layout_marginBottom="16dp"
+
+            android:layout_marginEnd="8dp"
+
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/button_oval_shape_green"
+            android:text="Save Changes"
+            android:textColor="@color/appWhite"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

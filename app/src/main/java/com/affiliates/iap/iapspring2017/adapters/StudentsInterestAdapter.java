@@ -8,6 +8,7 @@
 
 package com.affiliates.iap.iapspring2017.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
@@ -54,7 +55,7 @@ public class StudentsInterestAdapter extends ArrayAdapter<IAPStudent> {
         }
 
         Picasso.with(getContext()).load(iapStudent.getPhotoURL())
-                .placeholder(R.drawable.ic_gender).error(R.drawable.ic_gender).into(holder.mProfilePic);
+                .placeholder(R.drawable.ic_gender_0).error(R.drawable.ic_gender_0).into(holder.mProfilePic);
         holder.mName.setText(iapStudent.getName());
         holder.mDepartment.setText(iapStudent.getDepartment());
         int i;
@@ -62,6 +63,7 @@ public class StudentsInterestAdapter extends ArrayAdapter<IAPStudent> {
             projects += iapStudent.getProjectNames().get(i) + ", ";
         }
         holder.mProjets.setText(projects + iapStudent.getProjectNames().get(i));
+        Log.v("STUD: ", holder.mProjets.getText().toString());
 
         return convertView;
     }

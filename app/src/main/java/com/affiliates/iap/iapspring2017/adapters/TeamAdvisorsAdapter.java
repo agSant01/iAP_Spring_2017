@@ -49,8 +49,8 @@ public class TeamAdvisorsAdapter extends ArrayAdapter<Advisor> {
             convertView.setTag(holder);
         }
 
-        Picasso.with(getContext()).load(advisor.getPhotoURL()).placeholder(R.drawable.ic_gender)
-                .error(R.drawable.ic_gender).into(holder.mImage);
+        Picasso.with(getContext()).load(advisor.getPhotoURL()).placeholder(R.drawable.ic_gender_0)
+                .error(R.drawable.ic_gender_0).into(holder.mImage);
         holder.mTextView.setText(advisor.getName());
         return convertView;
     }
