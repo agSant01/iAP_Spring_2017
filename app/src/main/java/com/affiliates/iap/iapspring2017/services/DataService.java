@@ -118,54 +118,6 @@ public class DataService {
       return mainRef().child("UsersOfInterest");
    }
 
-   public void registerUser(final String email, String id, final String accountType, final String company, final Callback callback){
-      final Map<String, Object> voted = new HashMap<String, Object>(){{
-         put("BestPresentation", false);
-         put("BestPoster", false);
-      }};
-      usersRef().child(id).updateChildren(new HashMap<String, Object>(){{
-         put("AccountType", accountType);
-         put("Company", "");
-         put("Email", email);
-         put("Name", "NA");
-         put("PhotoURL", "NA");
-         put("Sex", "NA");
-         if(accountType.contains("IAPStudent") || accountType.contains("Adviaor"))
-            put("Department", "NA");
-
-         if(accountType.contains("Company"))
-            put("Company", company);
-
-         if(!accountType.contains("Company"))
-            put("Voted", voted);
-
-      }}).addOnCompleteListener(new OnCompleteListener<Void>() {
-         @Override
-         public void onComplete(@NonNull Task<Void> task) {
-            if(task.isSuccessful()) callback.success(null);
-            else callback.failure(task.getException().getMessage());
-         }
-      });
-   }
-
-   public void validateUser(String type, String key, final Callback<Boolean> callback){
-      validUsersRef().child(type).child(key).addListenerForSingleValueEvent(new ValueEventListener() {
-         @Override
-         public void onDataChange(DataSnapshot dataSnapshot) {
-            if (dataSnapshot.exists()){
-               callback.success(true);
-            }else {
-               callback.success(false);
-            }
-         }
-
-         @Override
-         public void onCancelled(DatabaseError databaseError) {
-            callback.failure(databaseError.getMessage());
-         }
-      });
-   }
-
    public void getUserData(final String id, final Callback<User> callback) throws InvalidAccountTypeExeption{
       if(usersRef().child(id)==null){
          Log.e(TAG, "No user ID Registered" );
