@@ -2,9 +2,7 @@ package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,42 +36,45 @@ public class EnterEmail extends BaseActivity {
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showProgressDialog("Validating Email");
                 String email = mEmail.getText().toString();
                 final String type = getIntent().getStringExtra("AccountType");
-
-                if( !(email.contains("@") && ( email.contains(".com") || email.contains(".edu")) && email.length() > 5)) {
-                    Toast.makeText(getApplicationContext(), "Sorry, invalid email", Toast.LENGTH_SHORT).show();
-                    return;
-                } else if (email.length() == 0){
+                if (email.length() == 0){
+                    hideProgressDialog();
                     Toast.makeText(getApplicationContext(), "Please, enter your email", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if( !(email.contains("@") && ( email.contains(".com") || email.contains(".edu")) && email.length() > 5)) {
+                    hideProgressDialog();
+                    Toast.makeText(getApplicationContext(), "Sorry, Invalid Email", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 final Intent in = new Intent(EnterEmail.this, PasswordActivity.class);
                 in.putExtra("Email", email);
                 in.putExtra("AccountType", type);
+
                 if(type.equals(User.AccountType.UPRMAccount.toString())){
+                    hideProgressDialog();
                     startActivity(in);
                     overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                }else{
-                    final String key = emailToKey(email);
-                    DataService.sharedInstance().validateUser(type, key, new Callback<Boolean>() {
+                } else {
+                    final String key = DataService.parseEmailToKey(email);
+                    DataService.sharedInstance().verifyUser(User.AccountType.valueOf(type), email, new Callback<User>() {
                         @Override
-                        public void success(Boolean data) {
-                            if(data){
-                                in.putExtra("key", key);
-                                if(type.equals("IAPStudent"))
-                                    in.putExtra("name", keyToName(key));
-                                startActivity(in);
-                                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Sorry, email not registered", Toast.LENGTH_SHORT).show();
-                            }
+                        public void success(User data) {
+                            hideProgressDialog();
+                            in.putExtra("key", key);
+                            if(type.equals("IAPStudent"))
+                                in.putExtra("name", DataService.keyToName(key));
+                            startActivity(in);
+                            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                            finish();
                         }
 
                         @Override
                         public void failure(String message) {
-                            Log.e(TAG, message);
+                            hideProgressDialog();
+                            Toast.makeText(getApplicationContext(), "Sorry, email not registered", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -85,27 +86,6 @@ public class EnterEmail extends BaseActivity {
         mEmail = (EditText) findViewById(R.id.edit_email);
         mBack = (TextView) findViewById(R.id.backButton);
         mNext = (TextView) findViewById(R.id.nextButton);
-    }
-
-    private String emailToKey(String email){
-        int i, split = email.indexOf("@");
-        email = email.substring(0, split);
-        String[] k = email.split("[.]+");
-        String str = "";
-
-        for(i = 0; i < k.length-1; i++)
-            str += k[i] + "_";
-        return str + k[i];
-    }
-
-    private String keyToName(String key){
-        String ntr = "";
-        int split = key.indexOf("_");
-        ntr += Character.toUpperCase(key.charAt(0));
-        ntr += key.substring(1,split) + " ";
-        ntr += Character.toUpperCase(key.charAt(split+1));
-        ntr += key.substring(split+2);
-        return ntr.replaceAll("[1234567890]+", "");
     }
 
     @Override

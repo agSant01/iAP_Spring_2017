@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.Constants;
@@ -33,6 +34,7 @@ import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.adapters.TeamAdvisorsAdapter;
 import com.affiliates.iap.iapspring2017.adapters.TeamMembersAdapter;
 import com.affiliates.iap.iapspring2017.evaluation_center.EvaluationActivity;
+import com.affiliates.iap.iapspring2017.evaluation_center.GeneralVoteActivity;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.profiles.AdvisorProfile;
 import com.affiliates.iap.iapspring2017.profiles.IAPStudentProfile;
@@ -92,7 +94,20 @@ public class PosterDescriptionActivity extends BaseActivity {
 
         mTitle.setText(mPosterData.getProjectName());
         seeLess();
+        //update to see if user can vote
+        DataService.sharedInstance().getUserData( Constants.getCurrentLoggedInUser().getUserID(), new Callback() {
+            @Override
+            public void success(Object data) {
+                Constants.setCurrentLogedInUser((User) data);
+                //get the latest status on voted
+                Log.v(TAG, "User updated");
+            }
 
+            @Override
+            public void failure(String message) {
+
+            }
+        });
         mSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,12 +141,8 @@ public class PosterDescriptionActivity extends BaseActivity {
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
             setCompanyEvaluation(companyUser);
-        } else if (Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.Advisor){
-            Advisor advisor = (Advisor) Constants.getCurrentLoggedInUser();
-
-        } else if (Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.IAPStudent){
-            IAPStudent iapStudent = (IAPStudent) Constants.getCurrentLoggedInUser();
-
+        } else {
+            setFavoriteEvaluation(Constants.getCurrentLoggedInUser());
         }
 
         DataService.sharedInstance().getPosterTeamMembers(mPosterData, new Callback() {
@@ -216,6 +227,8 @@ public class PosterDescriptionActivity extends BaseActivity {
         mSeeMore = (TextView) findViewById(R.id.seeMoreButton);
         mVoteImg = (ImageView) findViewById(R.id.poster_vote);
         mPoster = (Button) findViewById(R.id.button_poster);
+
+
     }
 
     private void setToolBar(){
@@ -257,6 +270,32 @@ public class PosterDescriptionActivity extends BaseActivity {
                             .setPositiveButton("OK",  new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {}                // do nothing
                             }).create().show();
+                }
+            });
+        }
+    }
+
+    private  void setFavoriteEvaluation(final com.affiliates.iap.iapspring2017.Models.User user){
+        mVoteButton.setText("Favorite");
+        mVoteImg.setImageResource(R.drawable.ic_thumb_up_filled_green);
+        if(!(user.hasVoted(0) && user.hasVoted(1))){
+        mVoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PosterDescriptionActivity.this, GeneralVoteActivity.class);
+                intent.putExtra("posterID", mPosterData.getPosterID());
+                intent.putExtra("posterName", mPosterData.getProjectName());
+                startActivity(intent);
+            }});
+        }
+        else {
+            mVoteImg.setImageResource(R.drawable.ic_thumb_up_unfilled);
+            mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
+            mVoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v("Mario", "Clicked");
+                    Toast.makeText(getApplicationContext(), "Sorry, you have already spent your votes", Toast.LENGTH_SHORT).show();
                 }
             });
         }

@@ -16,16 +16,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.affiliates.iap.iapspring2017.Constants;
-import com.affiliates.iap.iapspring2017.activities.MainActivity;
 import com.affiliates.iap.iapspring2017.Models.Poster;
-import com.affiliates.iap.iapspring2017.activities.PosterDescriptionActivity;
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.activities.MainActivity;
+import com.affiliates.iap.iapspring2017.activities.PosterDescriptionActivity;
 import com.affiliates.iap.iapspring2017.adapters.PosterAdapter;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;
@@ -33,7 +32,6 @@ import com.affiliates.iap.iapspring2017.services.DataService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 public class PostersFragment extends Fragment {
    private static final String TAG = "PostersFragment";
@@ -66,26 +64,24 @@ public class PostersFragment extends Fragment {
       mPosterAdapter = new PosterAdapter(getActivity().getBaseContext(), new ArrayList<Poster>());
       // run a background job and once complete
       if(Constants.getPosters() == null){
-         DataService.sharedInstance().getPosters(new Callback() {
+         DataService.sharedInstance().getPosters(new Callback<HashMap<Integer, Poster>>() {
             @Override
-            public void success(Object data) {
+            public void success(HashMap<Integer, Poster> data) {
                Log.v(TAG, "Get posters succesfull");
-
-               Map<Integer, Poster> d = (HashMap<Integer, Poster>) data;
                HashMap<String, Poster> ps = new HashMap<String, Poster>();
                ArrayList<Poster> sort = new ArrayList<Poster>();
 
                Constants.setPosters(ps);
                //Sort keys and iterate through the array of sorted keys, insted of iterating through the hashmap
-               Object[] keys = d.keySet().toArray();
+               Object[] keys = data.keySet().toArray();
                Arrays.sort(keys);
                Constants.setSortedPosters(sort);
 
                for(Object in: keys) {
                   int i = (int) in;
-                  ps.put(d.get(i).getPosterID(), d.get(i));
-                  sort.add(d.get(i));
-                  Log.v(TAG, d.get(i).getProjectName());
+                  ps.put(data.get(i).getPosterID(), data.get(i));
+                  sort.add(data.get(i));
+                  Log.v(TAG, data.get(i).getProjectName());
                }
                mPosterAdapter.clear();
                mPosterAdapter.addAll(sort);

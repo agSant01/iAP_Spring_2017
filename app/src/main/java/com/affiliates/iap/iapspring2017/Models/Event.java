@@ -65,9 +65,8 @@ public class Event {
       boolean am = false;
       String str = "";
       for (int i = 11; i < s.length()-3; i++){
-         if(i == 11 && s.charAt(i) == '0') {
+         if(i == 11 && (s.charAt(i) == '0' || s.charAt(i+1) == '1' || s.charAt(i+1) == '0')) {
             am = true;
-            continue;
          }
          str += s.charAt(i);
       }
@@ -86,9 +85,8 @@ public class Event {
       String str = "";
       boolean am = false;
       for (int i = 11; i < s.length()-3; i++){
-         if(i == 11 && s.charAt(i) == '0'){
+         if(i == 11 && (s.charAt(i) == '0' || s.charAt(i+1) == '1' || s.charAt(i+1) == '0')) {
             am = true;
-            continue;
          }
          str += s.charAt(i);
       }

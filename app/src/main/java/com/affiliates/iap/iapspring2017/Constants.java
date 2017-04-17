@@ -15,6 +15,9 @@ import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.Models.Sponsors;
 import com.affiliates.iap.iapspring2017.Models.User;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +33,7 @@ public class Constants {
    private static ArrayList<Event> events;
    private static ArrayList<Sponsors> sponsor;
    private static Map<String, Drawable> sponsorLogos = new HashMap<>();
+   public static JSONObject curentRegisteringUserData;
 
    public static ArrayList<Sponsors> getSponsor() {
       return sponsor;

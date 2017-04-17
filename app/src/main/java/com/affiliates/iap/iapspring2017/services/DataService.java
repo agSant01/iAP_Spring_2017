@@ -54,9 +54,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
@@ -118,54 +116,6 @@ public class DataService {
       return mainRef().child("UsersOfInterest");
    }
 
-   public void registerUser(final String email, String id, final String accountType, final String company, final Callback callback){
-      final Map<String, Object> voted = new HashMap<String, Object>(){{
-         put("BestPresentation", false);
-         put("BestPoster", false);
-      }};
-      usersRef().child(id).updateChildren(new HashMap<String, Object>(){{
-         put("AccountType", accountType);
-         put("Company", "");
-         put("Email", email);
-         put("Name", "NA");
-         put("PhotoURL", "NA");
-         put("Sex", "NA");
-         if(accountType.contains("IAPStudent") || accountType.contains("Adviaor"))
-            put("Department", "NA");
-
-         if(accountType.contains("Company"))
-            put("Company", company);
-
-         if(!accountType.contains("Company"))
-            put("Voted", voted);
-
-      }}).addOnCompleteListener(new OnCompleteListener<Void>() {
-         @Override
-         public void onComplete(@NonNull Task<Void> task) {
-            if(task.isSuccessful()) callback.success(null);
-            else callback.failure(task.getException().getMessage());
-         }
-      });
-   }
-
-   public void validateUser(String type, String key, final Callback<Boolean> callback){
-      validUsersRef().child(type).child(key).addListenerForSingleValueEvent(new ValueEventListener() {
-         @Override
-         public void onDataChange(DataSnapshot dataSnapshot) {
-            if (dataSnapshot.exists()){
-               callback.success(true);
-            }else {
-               callback.success(false);
-            }
-         }
-
-         @Override
-         public void onCancelled(DatabaseError databaseError) {
-            callback.failure(databaseError.getMessage());
-         }
-      });
-   }
-
    public void getUserData(final String id, final Callback<User> callback) throws InvalidAccountTypeExeption{
       if(usersRef().child(id)==null){
          Log.e(TAG, "No user ID Registered" );
@@ -182,9 +132,8 @@ public class DataService {
                return;
             }
             JSONObject json =  new JSONObject((Map) dataSnapshot.getValue());
-            String accType;
-
-            accType = json.optString("AccountType");
+            String accType =json.optString("AccountType");
+            Log.v(TAG, json.toString());
 
             try {
                switch (User.AccountType.determineAccType(accType)) {
@@ -235,11 +184,13 @@ public class DataService {
       final String voteID = generalVoteRef().push().getKey();
       final OverallVote vote = new OverallVote(voteID, projecID, voteType);
 
+
       generalVoteRef().child(vote.getStringFromType()).updateChildren(vote.makeJSON())
          .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-               runGeneralVoteTransaction(vote);
+               Constants.getCurrentLoggedInUser().vote(vote);
+                runGeneralVoteTransaction(vote);
                callback.success(null);
             }})
          .addOnFailureListener(new OnFailureListener() {
@@ -251,19 +202,27 @@ public class DataService {
    }
 
    private void runGeneralVoteTransaction(OverallVote vote){
-      final DatabaseReference ref = votesRef().child(vote.getStringFromType() + "/" + vote.getProjectID());
+      final DatabaseReference ref = generalVoteSummaryRef().child(vote.getStringFromType() + "/" + vote.getProjectID());
       ref.runTransaction(new Transaction.Handler() {
          @Override
          public Transaction.Result doTransaction(MutableData mutableData) {
-            Integer score = (Integer) ((mutableData.getValue() == null) ? 0 : mutableData.getValue());
-            score += 1;
-            mutableData.setValue(score);
+             Object data = mutableData.getValue();
+             try{
+                 Integer score = (Integer) ((data == null) ? 0 : data);
+                 score += 1;
+                 mutableData.setValue(score);
+             }catch(ClassCastException e){
+                Long score = (Long) ((data == null) ? 0 : data);
+                 score += 1;
+                 mutableData.setValue(score);
+             }
             return Transaction.success(mutableData);
          }
          @Override
          public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
             // Transaction completed
             Log.d(TAG, "runGeneralVoteTransaction() -> onComplete: " + databaseError);
+
          }
       });
    }
@@ -521,7 +480,7 @@ public class DataService {
                 }
             });
        }else{
-           usersRef().child(Constants.getCurrentLoggedInUser().getUserID())
+           usersRef().child(user.getUserID())
                    .updateChildren(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
                @Override
                public void onComplete(@NonNull Task<Void> task) {
@@ -596,7 +555,7 @@ public class DataService {
        });
    }
 
-   private void verifyUser(User.AccountType accountType, String email , final Callback<User> callback) {
+   public void verifyUser(User.AccountType accountType, final String email , final Callback<User> callback) {
       switch (accountType) {
          case Advisor:
             validUsersRef().child("Advisors").orderByChild("Email")
@@ -606,7 +565,8 @@ public class DataService {
                        public void onDataChange(DataSnapshot dataSnapshot) {
                           if (dataSnapshot.exists()) {
                              JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
-                             Advisor advisor = new Advisor(json);
+                              Constants.curentRegisteringUserData = json.optJSONObject(parseEmailToKey(email));
+                             Advisor advisor = new Advisor(json.optJSONObject(parseEmailToKey(email)));
                              Log.v(TAG, "Advisor Valid");
                              callback.success(advisor);
                           } else {
@@ -623,12 +583,14 @@ public class DataService {
 
          case IAPStudent:
             validUsersRef().child("IAPStudent").orderByChild("Email")
-                    .equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+                    .equalTo(email)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                @Override
                public void onDataChange(DataSnapshot dataSnapshot) {
                   if (dataSnapshot.exists()) {
                      JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
-                     IAPStudent student = new IAPStudent(json);
+                      Constants.curentRegisteringUserData = json.optJSONObject(parseEmailToKey(email));
+                      IAPStudent student = new IAPStudent(json.optJSONObject(parseEmailToKey(email)));
                      Log.v(TAG, "IAPStudent Valid");
                      callback.success(student);
                   } else {
@@ -645,12 +607,14 @@ public class DataService {
 
          case CompanyUser:
             validUsersRef().child("CompanyRep").orderByChild("Email")
-                    .equalTo(email).addListenerForSingleValueEvent(new ValueEventListener() {
+                    .equalTo(email)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                @Override
                public void onDataChange(DataSnapshot dataSnapshot) {
                   if (dataSnapshot.exists()) {
                      JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
-                     CompanyUser companyUser = new CompanyUser(json);
+                      Constants.curentRegisteringUserData = json.optJSONObject(parseEmailToKey(email));
+                      CompanyUser companyUser = new CompanyUser(json.optJSONObject(parseEmailToKey(email)));
                      Log.v(TAG, "Company User Valid");
                      callback.success(companyUser);
                   } else {
@@ -673,7 +637,7 @@ public class DataService {
       }
    }
 
-   private void createNewUser(final User user, String password, final FirebaseAnalytics fbAnalytics, final Callback<String> callback){
+   public void createNewUser(final User user, String password, final FirebaseAnalytics fbAnalytics, final Callback<String> callback){
       FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
          @Override
          public void onComplete(@NonNull final Task<AuthResult> task) {
@@ -738,17 +702,14 @@ public class DataService {
                   } else {
                      callback.success("UPRMAccount created successfully");
                   }
-
-
-
                }
 
                @Override
                public void failure(String message) {
-
+                  Log.e(TAG, message);
+                  callback.equals(message);
                }
             });
-
          }
       });
    }
@@ -778,7 +739,7 @@ public class DataService {
       for(final String project : projectIDs){
          dispatch.add(project);
          postersRef().child(project).child("TeamMembers").updateChildren(new HashMap<String, Object>(){{
-            put(project, student.getProyectMap().get(project));
+            put(student.getUserID(), true);
          }}).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -808,5 +769,27 @@ public class DataService {
          }
       });
    }
+
+
+    public static String parseEmailToKey(String email){
+        int i, split = email.indexOf("@");
+        email = email.substring(0, split);
+        String[] k = email.split("[.]+");
+        String str = "";
+
+        for(i = 0; i < k.length-1; i++)
+            str += k[i] + "_";
+        return str + k[i];
+    }
+
+    public static String keyToName(String key){
+        String ntr = "";
+        int split = key.indexOf("_");
+        ntr += Character.toUpperCase(key.charAt(0));
+        ntr += key.substring(1,split) + " ";
+        ntr += Character.toUpperCase(key.charAt(split+1));
+        ntr += key.substring(split+2);
+        return ntr.replaceAll("[1234567890]+", "");
+    }
 
 }

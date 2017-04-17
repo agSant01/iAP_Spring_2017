@@ -92,10 +92,11 @@ public class ProfileEditActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAccType = Constants.getCurrentLoggedInUser().getAccountType();
+        Log.v(TAG, mAccType + " " + AccountType.Advisor);
         if(mAccType == AccountType.IAPStudent)
             setContentView(R.layout.activity_iapstudent_profile_edit);
         else if (mAccType == AccountType.Advisor)
-            setContentView(R.layout.activity_advisor_profile);
+            setContentView(R.layout.activity_advisor_profile_edit);
         else if (mAccType == AccountType.CompanyUser)
             setContentView(R.layout.activity_company_profile_edit);
         else
@@ -207,7 +208,7 @@ public class ProfileEditActivity extends BaseActivity {
         } else {
             mDepartment.setItems(deptms);
         }
-        mGradDate.setText(!student.getGradDate().equals("NA") ? student.getGradDate() : "");
+        mGradDate.setText(!student.getGradDate().equals("NA") ? student.getGradDate() : "Jun 20, 2017");
         mObjective.setText(!student.getObjective().equals("NA") ? student.getObjective() : "");
         months = new HashMap<String, Integer>(){{
             put("Jan", 0);
@@ -231,17 +232,10 @@ public class ProfileEditActivity extends BaseActivity {
                 if(hasFocus){
                     String[] grad = student.getGradDate().split("[, ]+");
                     Calendar calendar = Calendar.getInstance();
-                    calendar.set(Integer.parseInt(grad[2]), months.get(grad[0]), Integer.parseInt(grad[1]));
+                    if(grad.length > 1)
+                        calendar.set(Integer.parseInt(grad[2]), months.get(grad[0]), Integer.parseInt(grad[1]));
 
                     DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-
-                        }
-                    },calendar.get(Calendar.YEAR),
-                            calendar.get(Calendar.MONTH),
-                            calendar.get(Calendar.DAY_OF_MONTH));
-                    datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
                         @Override
                         public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
                             for(String s : months.keySet()){
@@ -251,7 +245,9 @@ public class ProfileEditActivity extends BaseActivity {
                                 }
                             }
                         }
-                    });
+                    },calendar.get(Calendar.YEAR),
+                            calendar.get(Calendar.MONTH),
+                            calendar.get(Calendar.DAY_OF_MONTH));
                     datePickerDialog.setVersion(DatePickerDialog.Version.VERSION_1);
                     datePickerDialog.show(getFragmentManager(), "");
                     v.clearFocus();
@@ -262,6 +258,7 @@ public class ProfileEditActivity extends BaseActivity {
 
     private void setAvisor(){
         final Advisor advisor = (Advisor) Constants.getCurrentLoggedInUser();
+        mObjective.setHint("Research Intent");
         if(!advisor.getDepartment().equals("NA")){
             deptms.remove(advisor.getDepartment());
             deptms.add(0, advisor.getDepartment());
@@ -367,8 +364,8 @@ public class ProfileEditActivity extends BaseActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            b.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
-            byte[] array = buffer.array(); //Get the underlying array containing the data.
+            b.copyPixelsToBuffer(buffer); //Move the byte curentRegisteringUserData to the buffer
+            byte[] array = buffer.array(); //Get the underlying array containing the curentRegisteringUserData.
             DataService.sharedInstance().uploadUserImage(user, mImage, new Callback<User>() {
                 @Override
                 public void success(User data) {
@@ -392,6 +389,7 @@ public class ProfileEditActivity extends BaseActivity {
 
                         @Override
                         public void failure(String message) {
+                            hideProgressDialog();
                             String title = "Internal Error";
                             message = "An unspecified internal error ocurred. Your changes have not been saved. Please try again.";
                             new AlertDialog.Builder(getBaseContext()).setTitle(title).setMessage(message)
@@ -491,7 +489,7 @@ public class ProfileEditActivity extends BaseActivity {
         // file (as opposed to a list of contacts or timezones)
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
-        // Filter to show only images, using the image MIME data type.
+        // Filter to show only images, using the image MIME curentRegisteringUserData type.
         // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
         // To search for all documents available via installed storage providers,
         // it would be "*/*".
@@ -509,7 +507,7 @@ public class ProfileEditActivity extends BaseActivity {
         // file (as opposed to a list of contacts or timezones)
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
-        // Filter to show only images, using the image MIME data type.
+        // Filter to show only images, using the image MIME curentRegisteringUserData type.
         // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
         // To search for all documents available via installed storage providers,
         // it would be "*/*".

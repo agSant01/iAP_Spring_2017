@@ -138,6 +138,29 @@ public class IAPStudent extends User implements UserDelegate{
       }};
    }
 
+   @Override
+   public boolean hasVoted(int type) {
+      switch (type){
+         case 0:
+            return voted.bestPoster;
+         case 1:
+            return voted.bestPresentation;
+      }
+      return false;
+   }
+
+   @Override
+   public void vote(OverallVote vote) {
+      if (!hasVoted( vote)) {
+         setVoted(vote);
+         Log.v("Voting", "Voted!");
+
+      }
+      else{
+         Log.v("Voting", "Already Voted!");
+      }
+   }
+
    private class Voted{
       private boolean bestPresentation = false;
       private boolean bestPoster = false;

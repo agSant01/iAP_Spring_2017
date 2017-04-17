@@ -71,14 +71,14 @@ public class MoreFragment extends Fragment {
         this.bind();
         mTester = Constants.getCurrentLoggedInUser().getPhotoURL();
 
-        String url = "";
+        String url = "NA"; //this can't be empty!
         String projects = "";
         switch (Constants.getCurrentLoggedInUser().getAccountType()) {
             case CompanyUser:
-                url = ((CompanyUser)Constants.getCurrentLoggedInUser()).getPhotoURL();
+                url = Constants.getCurrentLoggedInUser().getPhotoURL();
                 break;
             case Advisor:
-                url = ((Advisor)Constants.getCurrentLoggedInUser()).getPhotoURL();
+                url = Constants.getCurrentLoggedInUser().getPhotoURL();
                 break;
 
             case IAPStudent:
