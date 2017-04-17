@@ -118,36 +118,6 @@ public class DataService {
       return mainRef().child("UsersOfInterest");
    }
 
-   public void registerUser(final String email, String id, final String accountType, final String company, final Callback callback){
-      final Map<String, Object> voted = new HashMap<String, Object>(){{
-         put("BestPresentation", false);
-         put("BestPoster", false);
-      }};
-      usersRef().child(id).updateChildren(new HashMap<String, Object>(){{
-         put("AccountType", accountType);
-         put("Company", "");
-         put("Email", email);
-         put("Name", "NA");
-         put("PhotoURL", "NA");
-         put("Sex", "NA");
-         if(accountType.contains("IAPStudent") || accountType.contains("Adviaor"))
-            put("Department", "NA");
-
-         if(accountType.contains("Company"))
-            put("Company", company);
-
-         if(!accountType.contains("Company"))
-            put("Voted", voted);
-
-      }}).addOnCompleteListener(new OnCompleteListener<Void>() {
-         @Override
-         public void onComplete(@NonNull Task<Void> task) {
-            if(task.isSuccessful()) callback.success(null);
-            else callback.failure(task.getException().getMessage());
-         }
-      });
-   }
-
    public void validateUser(String type, String key, final Callback<Boolean> callback){
       validUsersRef().child(type).child(key).addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
@@ -521,7 +491,7 @@ public class DataService {
                 }
             });
        }else{
-           usersRef().child(Constants.getCurrentLoggedInUser().getUserID())
+           usersRef().child(user.getUserID())
                    .updateChildren(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
                @Override
                public void onComplete(@NonNull Task<Void> task) {
@@ -596,7 +566,7 @@ public class DataService {
        });
    }
 
-   private void verifyUser(User.AccountType accountType, String email , final Callback<User> callback) {
+   public void verifyUser(User.AccountType accountType, String email , final Callback<User> callback) {
       switch (accountType) {
          case Advisor:
             validUsersRef().child("Advisors").orderByChild("Email")
@@ -606,6 +576,7 @@ public class DataService {
                        public void onDataChange(DataSnapshot dataSnapshot) {
                           if (dataSnapshot.exists()) {
                              JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
+                              Constants.data = json;
                              Advisor advisor = new Advisor(json);
                              Log.v(TAG, "Advisor Valid");
                              callback.success(advisor);
@@ -628,7 +599,8 @@ public class DataService {
                public void onDataChange(DataSnapshot dataSnapshot) {
                   if (dataSnapshot.exists()) {
                      JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
-                     IAPStudent student = new IAPStudent(json);
+                      Constants.data = json;
+                      IAPStudent student = new IAPStudent(json);
                      Log.v(TAG, "IAPStudent Valid");
                      callback.success(student);
                   } else {
@@ -650,7 +622,8 @@ public class DataService {
                public void onDataChange(DataSnapshot dataSnapshot) {
                   if (dataSnapshot.exists()) {
                      JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
-                     CompanyUser companyUser = new CompanyUser(json);
+                      Constants.data = json;
+                      CompanyUser companyUser = new CompanyUser(json);
                      Log.v(TAG, "Company User Valid");
                      callback.success(companyUser);
                   } else {
@@ -673,11 +646,12 @@ public class DataService {
       }
    }
 
-   private void createNewUser(final User user, String password, final FirebaseAnalytics fbAnalytics, final Callback<String> callback){
+   public void createNewUser(final User user, String password, final FirebaseAnalytics fbAnalytics, final Callback<String> callback){
       FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
          @Override
          public void onComplete(@NonNull final Task<AuthResult> task) {
             if(!task.isSuccessful()){
+                Constants.setCurrentLogedInUser(user);
                Log.v(TAG, task.getException().getMessage());
                callback.failure(task.getException().getLocalizedMessage());
                return;

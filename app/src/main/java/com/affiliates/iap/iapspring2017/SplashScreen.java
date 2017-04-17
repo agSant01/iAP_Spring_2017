@@ -65,6 +65,9 @@ public class SplashScreen extends Activity {
                                     } catch (FirebaseAuthException e) {
                                         e.printStackTrace();
                                     }
+                                    catch(NullPointerException exep){
+                                        Log.v(TAG, "No one has logged in yet!");
+                                    }
                                 Log.v(TAG,"No user signed in.");
                                 Intent in = new Intent(SplashScreen.this, LogInOrRegister.class);
                                 startActivity(in);

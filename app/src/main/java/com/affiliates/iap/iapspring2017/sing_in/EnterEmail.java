@@ -57,23 +57,19 @@ public class EnterEmail extends BaseActivity {
                     overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                 }else{
                     final String key = emailToKey(email);
-                    DataService.sharedInstance().validateUser(type, key, new Callback<Boolean>() {
+                    DataService.sharedInstance().verifyUser(User.AccountType.valueOf(type), email, new Callback<User>() {
                         @Override
-                        public void success(Boolean data) {
-                            if(data){
-                                in.putExtra("key", key);
-                                if(type.equals("IAPStudent"))
-                                    in.putExtra("name", keyToName(key));
-                                startActivity(in);
-                                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                            } else {
-                                Toast.makeText(getApplicationContext(), "Sorry, email not registered", Toast.LENGTH_SHORT).show();
-                            }
+                        public void success(User data) {
+                            in.putExtra("key", key);
+                            if(type.equals("IAPStudent"))
+                                in.putExtra("name", keyToName(key));
+                            startActivity(in);
+                            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                         }
 
                         @Override
                         public void failure(String message) {
-                            Log.e(TAG, message);
+                            Toast.makeText(getApplicationContext(), "Sorry, email not registered", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

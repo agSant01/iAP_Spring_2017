@@ -10,15 +10,27 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
+import com.affiliates.iap.iapspring2017.Constants;
+import com.affiliates.iap.iapspring2017.Models.Advisor;
+import com.affiliates.iap.iapspring2017.Models.CompanyUser;
+import com.affiliates.iap.iapspring2017.Models.IAPStudent;
+import com.affiliates.iap.iapspring2017.Models.UPRMAccount;
+import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.DataService;
+import com.google.android.gms.internal.zzaue;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.json.JSONException;
 
 public class PasswordActivity extends BaseActivity {
     private static boolean done;
@@ -51,7 +63,12 @@ public class PasswordActivity extends BaseActivity {
             public void onClick(View v) {
                 int error = validatePassword(mPassword.getText().toString(), mConfirm.getText().toString());
                 if( error == 0  ) {
-                    registerUser(email, mPassword.getText().toString(), getIntent().getStringExtra("AccountType"), null);
+
+                    try {
+                        registerUser(email, mPassword.getText().toString(), getIntent().getStringExtra("AccountType"), null);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                     Class nextClass;
                     if(PasswordActivity.done) {
                         nextClass = EmailConfirmation.class;
@@ -77,38 +94,44 @@ public class PasswordActivity extends BaseActivity {
         });
     }
 
-    private void registerUser(final String email, final String password, final String accType, final String company){
+    private void registerUser(final String email, final String password, final String accType, final String company) throws JSONException {
         showProgressDialog("Creating Account");
-        mFirebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                    Log.v("Mario", "damn");
-                    FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                    user.sendEmailVerification();
-                    mAdmin.saveUserID(user.getUid());
-                    Log.v("Mario", mAdmin.getUserID());
-                    DataService.sharedInstance().registerUser(email, mAdmin.getUserID(), accType, company, new Callback() {
-                        @Override
-                        public void success(Object data) {
-                            Log.v(TAG, "User registration successful");
-                        }
-
-                        @Override
-                        public void failure(String message) {
-                            Log.v(TAG, message);
-                        }
-                    });
+                PasswordActivity.done = true;
+                User user = null;
+                switch (accType){
+                    case "Company":
+                       user = new CompanyUser(Constants.data, User.AccountType.CompanyUser,null);
+                        break;
+                    case "IAPStudent":
+                        user = new IAPStudent(Constants.data, User.AccountType.IAPStudent, null);
+                        break;
+                    case "Advisor":
+                        user = new Advisor(Constants.data, User.AccountType.Advisor, null);
+                        break;
+                    case "UPRMAccount":
+                        user = new UPRMAccount(email);
+                        break;
+                    default: break;
                 }
-                else {
-                    Toast.makeText(getApplicationContext(), "Something went wrong. Please, try again", Toast.LENGTH_SHORT).show();
-                }
-                hideProgressDialog();
+
+                DataService.sharedInstance().createNewUser(
+                        user,
+                        password, new FirebaseAnalytics(zzaue.zzbM(getBaseContext())), new Callback<String>() {
+                            @Override
+                            public void success(String data) {
+                                Log.v(TAG, "User registration successful");
+                                FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+                            }
+
+                            @Override
+                            public void failure(String message) {
+                                Log.v(TAG, message);
+                                Toast.makeText(getApplicationContext(), "Something went wrong. Please, try again", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                );
+            Constants.setCurrentLogedInUser(user);
             }
-
-        });
-    }
 
     private void bind(){
         mPassword = (EditText) findViewById(R.id.edit_password);
@@ -128,5 +151,17 @@ public class PasswordActivity extends BaseActivity {
         super.onBackPressed();
         overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
         finish();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideProgressDialog();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        hideProgressDialog();
     }
 }
