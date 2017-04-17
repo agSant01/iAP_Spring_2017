@@ -15,11 +15,14 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.Constants;
@@ -27,7 +30,6 @@ import com.affiliates.iap.iapspring2017.Models.CompanyUser;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.squareup.picasso.Picasso;
 
@@ -40,7 +42,7 @@ public class IAPStudentProfile extends BaseActivity {
 
     private CircleImageView mCircleImageView;
     private LinearLayout mLinearLayout;
-    private ImageView mLike, mUnlike;
+    private ImageView mLike, mUnlike, mUndecided;
     private TextView mProyectName;
     private TextView mGradDate;
     private Toolbar mToolbar;
@@ -49,6 +51,7 @@ public class IAPStudentProfile extends BaseActivity {
     private TextView mName;
     private TextView mDept;
     private TextView mBio;
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +62,8 @@ public class IAPStudentProfile extends BaseActivity {
         Intent in = getIntent();
         setToolBar();
 
-        Picasso.with(getBaseContext()).load(in.getStringExtra("photoURL")).placeholder(R.drawable.ic_gender)
-                .error(R.drawable.ic_gender).into(mCircleImageView);
+        Picasso.with(getBaseContext()).load(in.getStringExtra("photoURL")).placeholder(R.drawable.ic_gender_0)
+                .error(R.drawable.ic_gender_0).into(mCircleImageView);
 
         String projects = "";
         ArrayList<String> arr = in.getStringArrayListExtra("projects");
@@ -114,68 +117,115 @@ public class IAPStudentProfile extends BaseActivity {
 
     private void setInterestOptions(){
         final Intent in = getIntent();
-        setLikeAndUnLike();
+        setInterestStatus();
 
-        CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
+        final CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
 
         if( companyUser.isLiked(getIntent().getStringExtra("id")) ){
-            mLike.setBackgroundColor(getResources().getColor(R.color.appGreen));
+            mLike.setImageResource(R.drawable.ic_thumb_up_filled_green);
         } else if (companyUser.isUnliked(getIntent().getStringExtra("id"))){
-            mUnlike.setBackgroundColor(getResources().getColor(R.color.appGreen));
+            mUnlike.setImageResource(R.drawable.ic_thumb_down_filled_green);
+        } else if (companyUser.isUndecided(getIntent().getStringExtra("id"))){
+            mUndecided.setImageResource(R.drawable.ic_thumbs_undecided_filled_green);
         }
 
         mUnlike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                v.setBackgroundColor(getResources().getColor(R.color.appGreen));
-                if(Constants.getLikedStudents() == null)
-                    Constants.setLikedStudents(new ArrayList<IAPStudent>());
-
-                ArrayList<IAPStudent> arr =  Constants.getLikedStudents();
+                if(companyUser.isUnliked(getIntent().getStringExtra("id"))) return;
+                ArrayList<IAPStudent> arr;
+                if(companyUser.isLiked(getIntent().getStringExtra("id"))){
+                    if ( Constants.getLikedStudents() == null )
+                        Constants.setLikedStudents(new ArrayList<IAPStudent>());
+                    arr = Constants.getLikedStudents();
+                    mLike.setImageResource(R.drawable.ic_thumb_up_unfilled);
+                } else {
+                    if ( Constants.getUndecidedStudents() == null)
+                        Constants.setUndecidedStudents(new ArrayList<IAPStudent>());
+                    arr = Constants.getUndecidedStudents();
+                    mUndecided.setImageResource(R.drawable.ic_thumbs_undecided_unfilled);
+                }
                 for (int i = 0; i < arr.size(); i++)
                     if(arr.get(i).getUserID().contains(in.getStringExtra("id"))) {
                         Log.v(TAG,arr.get(i).getUserID());
-                        Constants.getUnlikedStudents().add(Constants.getLikedStudents().remove(i));
+                        Constants.getUnlikedStudents().add(arr.remove(i));
                         break;
                     }
-                DataService.sharedInstance().unlikeStudent(in.getStringExtra("id"));
-                mLike.setImageResource(R.drawable.ic_like);
-                mLike.setBackgroundColor(getResources().getColor(R.color.appWhite));
+                DataService.sharedInstance().setInterestForStudent(in.getStringExtra("id"), "Unlike");
+                mUnlike.setImageResource(R.drawable.ic_thumb_down_filled_green);
+                if(mToast != null)
+                    mToast.cancel();
+                mToast = Toast.makeText(getBaseContext(),"Set as Not Interested",Toast.LENGTH_SHORT);
+                mToast.show();
             }
         });
 
         mLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: ASK CRISTIAN FOR THE COLOR FILLED THUMBS!!!!
-                v.setDrawingCacheBackgroundColor(getResources().getColor(R.color.appGreen));
-                if(Constants.getLikedStudents() == null)
-                    Constants.setLikedStudents(new ArrayList<IAPStudent>());
-
-                DataService.sharedInstance().getUserData(in.getStringExtra("id"), new Callback<IAPStudent>() {
-                    @Override
-                    public void success(IAPStudent data) {
-                        if(!((CompanyUser) Constants.getCurrentLoggedInUser()).isLiked(data.getUserID())) {
-                            Log.v(TAG, "FUCK");
-                            Constants.getLikedStudents().add((IAPStudent) data);
-                            DataService.sharedInstance().likeStudent(in.getStringExtra("id"));
-                        }
+                if(companyUser.isLiked(getIntent().getStringExtra("id"))) return;
+                ArrayList<IAPStudent> arr;
+                if(companyUser.isUnliked(getIntent().getStringExtra("id"))){
+                    if ( Constants.getUnlikedStudents() == null )
+                        Constants.setUnlikedStudents(new ArrayList<IAPStudent>());
+                    arr = Constants.getUnlikedStudents();
+                    mUnlike.setImageResource(R.drawable.ic_thumb_down_unfilled);
+                } else {
+                    if ( Constants.getUndecidedStudents() == null)
+                        Constants.setUndecidedStudents(new ArrayList<IAPStudent>());
+                    arr = Constants.getUndecidedStudents();
+                    mUndecided.setImageResource(R.drawable.ic_thumbs_undecided_unfilled);
+                }
+                for (int i = 0; i < arr.size(); i++)
+                    if(arr.get(i).getUserID().contains(in.getStringExtra("id"))) {
+                        Log.v(TAG,arr.get(i).getUserID());
+                        Constants.getLikedStudents().add(arr.remove(i));
+                        break;
                     }
-
-                    @Override
-                    public void failure(String message) {
-                            Log.e(TAG, message);
-                        }
-                });
-                mUnlike.setImageResource(R.drawable.ic_unlike);
-                mUnlike.setBackgroundColor(getResources().getColor(R.color.appWhite));
+                DataService.sharedInstance().setInterestForStudent(in.getStringExtra("id"), "Like");
+                mLike.setImageResource(R.drawable.ic_thumb_up_filled_green);
+                if(mToast != null)
+                    mToast.cancel();
+                mToast = Toast.makeText(getBaseContext(),"Set as Interested",Toast.LENGTH_SHORT);
+                mToast.show();
             }
         });
 
-
+        mUndecided.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(companyUser.isUndecided(getIntent().getStringExtra("id"))) return;
+                ArrayList<IAPStudent> arr;
+                if(companyUser.isUnliked(getIntent().getStringExtra("id"))){
+                    if ( Constants.getUnlikedStudents() == null )
+                        Constants.setUnlikedStudents(new ArrayList<IAPStudent>());
+                    arr = Constants.getUnlikedStudents();
+                    mUnlike.setImageResource(R.drawable.ic_thumb_down_unfilled);
+                } else {
+                    if ( Constants.getLikedStudents() == null)
+                        Constants.setLikedStudents(new ArrayList<IAPStudent>());
+                    arr = Constants.getLikedStudents();
+                    mLike.setImageResource(R.drawable.ic_thumb_up_unfilled);
+                }
+                for (int i = 0; i < arr.size(); i++)
+                    if(arr.get(i).getUserID().contains(in.getStringExtra("id"))) {
+                        Log.v(TAG,arr.get(i).getUserID());
+                        Constants.getUndecidedStudents().add(arr.remove(i));
+                        break;
+                    }
+                DataService.sharedInstance().setInterestForStudent(in.getStringExtra("id"), "Undecided");
+                mUndecided.setImageResource(R.drawable.ic_thumbs_undecided_filled_green);
+                if(mToast != null)
+                    mToast.cancel();
+                mToast = Toast.makeText(getBaseContext(),"Set as Undecided",Toast.LENGTH_SHORT);
+                mToast.show();
+            }
+        });
         mLinearLayout.addView(mLike);
+        mLinearLayout.addView(mUndecided);
         mLinearLayout.addView(mUnlike);
     }
+
     private void setResume(){
         mResume.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -196,20 +246,35 @@ public class IAPStudentProfile extends BaseActivity {
         });
     }
 
-    private void setLikeAndUnLike(){
+    private void setInterestStatus(){
         mLike = new ImageView(getBaseContext());
         mUnlike = new ImageView(getBaseContext());
+        mUndecided = new ImageView(getBaseContext());
 
-        mLike.setImageResource(R.drawable.ic_like);
-        mUnlike.setImageResource(R.drawable.ic_unlike);
+        mLike.setImageResource(R.drawable.ic_thumb_up_unfilled);
+        mUnlike.setImageResource(R.drawable.ic_thumb_down_unfilled);
+        mUndecided.setImageResource(R.drawable.ic_thumbs_undecided_unfilled);
 
-        mLike.setMinimumHeight(150);
-        mLike.setMinimumWidth(150);
-        mLike.setPadding(0,0,32,0);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.CENTER_VERTICAL;
+        params.setMarginEnd(30);
 
-        mUnlike.setMinimumHeight(150);
-        mUnlike.setMinimumWidth(150);
-        mUnlike.setPadding(32,0,0,0);
+        mLike.setMinimumHeight(135);
+        mLike.setMinimumWidth(140);
+        mLike.setPadding(0,0,16,0);
+        mLike.setLayoutParams(params);
+
+        params.setMarginEnd(0);
+        params.setMarginStart(16);
+        mUnlike.setMinimumHeight(135);
+        mUnlike.setMinimumWidth(135);
+        mUnlike.setPadding(8,0,0,0);
+        mUnlike.setLayoutParams(params);
+
+        mUndecided.setMinimumHeight(190);
+        mUndecided.setMinimumWidth(190);
+        mUndecided.setPadding(10,0,8,0);
     }
     @Override
     public void onStop() {

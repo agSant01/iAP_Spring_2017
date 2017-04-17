@@ -46,8 +46,8 @@ public class AdvisorProfile extends BaseActivity {
         setToolBar();
 
         Intent in = getIntent();
-        Picasso.with(getBaseContext()).load(in.getStringExtra("photoURL")).placeholder(R.drawable.ic_gender)
-                .error(R.drawable.ic_gender).into(mCircleImageView);
+        Picasso.with(getBaseContext()).load(in.getStringExtra("photoURL")).placeholder(R.drawable.ic_gender_0)
+                .error(R.drawable.ic_gender_0).into(mCircleImageView);
 
         mResearchIntent.setText(in.getStringExtra("research"));
         mEmail.setText(in.getStringExtra("email"));

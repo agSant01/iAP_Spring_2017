@@ -48,8 +48,8 @@ public class AccountType extends BaseActivity {
         mGuest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v(TAG, "Guest");
-                intent.putExtra("AccountType","Guest");
+                Log.v(TAG, "UPRMAccount");
+                intent.putExtra("AccountType","UPRMAccount");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }

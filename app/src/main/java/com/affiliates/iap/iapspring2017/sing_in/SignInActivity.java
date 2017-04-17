@@ -10,7 +10,6 @@ package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,14 +18,12 @@ import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.Constants;
-import com.affiliates.iap.iapspring2017.MainActivity;
+import com.affiliates.iap.iapspring2017.activities.MainActivity;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 
 public class SignInActivity extends BaseActivity {
    private static final String TAG = "SignIn";
@@ -83,7 +80,7 @@ public class SignInActivity extends BaseActivity {
                         public void failure(String message) {
                            String s = "";
                            if(message.contains("password is invalid")){
-                              s = "Incorrect PasswordActivity";
+                              s = "Incorrect Password";
                            } else if (message.contains("There is no user record corresponding to this identifier.")){
                               s = "Incorrect Email";
                            } else if (message.contains("badly formatted")){
@@ -102,7 +99,7 @@ public class SignInActivity extends BaseActivity {
                   else if (email.length() == 0){
                      Toast.makeText(getBaseContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
                   } else if(password.length() == 0){
-                     Toast.makeText(getBaseContext(), "Invalid PasswordActivity", Toast.LENGTH_SHORT).show();
+                     Toast.makeText(getBaseContext(), "Invalid Password", Toast.LENGTH_SHORT).show();
                   }
                }
             });
