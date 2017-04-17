@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,12 +36,12 @@ public class GeneralVoteActivity extends AppCompatActivity {
         name = getIntent().getStringExtra("posterName");
         id = getIntent().getStringExtra("posterID");
         title = (TextView) findViewById(R.id.poster_desc_title);
-        title.setText(getIntent().getStringExtra("posterName"));
+        title.setText(name);
         bestPoster = (Button) findViewById(R.id.button_poster);
         bestPoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vote(1);
+                vote(0);
                 Log.v(TAG, "Voted for best Poster");
             }
         });
@@ -48,7 +49,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
         bestPresentation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                vote(0);
+                vote(1);
                 Log.v(TAG, "Voted for best Presentation");
             }
         });
@@ -58,7 +59,6 @@ public class GeneralVoteActivity extends AppCompatActivity {
             public void onClick(View v) {
                 GeneralVoteActivity.super.onBackPressed();
                 finish();
-                overridePendingTransition(R.anim.go_back_in,  R.anim.go_back_out);
 
             }
         });
@@ -87,7 +87,6 @@ public class GeneralVoteActivity extends AppCompatActivity {
                 public void success(Object data) {
                     Log.v(TAG, "Voting completed");
                     GeneralVoteActivity.super.onBackPressed();
-                    overridePendingTransition(R.anim.go_back_in,  R.anim.go_back_out);
                     finish();
 
                 }

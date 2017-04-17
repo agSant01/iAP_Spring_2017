@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.Constants;
@@ -87,7 +88,22 @@ public class PosterDescriptionActivity extends BaseActivity {
 
         mTitle.setText(mPosterData.getProjectName());
         seeLess();
+        //update to see if user can vote
+        DataService.sharedInstance().getUserData( Constants.getCurrentLoggedInUser().getUserID(), new Callback() {
+            @Override
+            public void success(Object data) {
+                Constants.setCurrentLogedInUser((User) data);
+                //get the latest status on voted
+                Log.v(TAG, "User updated");
 
+
+            }
+
+            @Override
+            public void failure(String message) {
+
+            }
+        });
         mSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,6 +222,8 @@ public class PosterDescriptionActivity extends BaseActivity {
         mSeeMore = (TextView) findViewById(R.id.seeMoreButton);
         mVoteImg = (ImageView) findViewById(R.id.poster_vote);
         mPoster = (Button) findViewById(R.id.button_poster);
+
+
     }
 
     private void setToolBar(){
@@ -243,8 +261,9 @@ public class PosterDescriptionActivity extends BaseActivity {
     }
 
     private  void setFavoriteEvaluation(final com.affiliates.iap.iapspring2017.Models.User user){
-        mVoteImg.setImageResource(R.drawable.ic_like);
         mVoteButton.setText("Favorite");
+        mVoteImg.setImageResource(R.drawable.ic_thumb_up_filled_green);
+        if(!(user.hasVoted(0) && user.hasVoted(1))){
         mVoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,8 +273,21 @@ public class PosterDescriptionActivity extends BaseActivity {
                 startActivity(intent);
 
 
-            }
-        });
+
+            }});
+        }
+        else {
+            mVoteImg.setImageResource(R.drawable.ic_thumb_up_unfilled);
+            mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
+            mVoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v("Mario", "Clicked");
+                    Toast.makeText(getApplicationContext(), "Sorry, you have already spent your votes", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
 
     }
 
@@ -311,5 +343,12 @@ public class PosterDescriptionActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
         Log.v(TAG, "DESTROY");
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent in = new Intent(PosterDescriptionActivity.this, MainActivity.class);
+        startActivity(in);
+        overridePendingTransition(0,0);
     }
 }

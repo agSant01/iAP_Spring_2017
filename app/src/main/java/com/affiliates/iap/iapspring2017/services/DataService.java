@@ -223,7 +223,7 @@ public class DataService {
    }
 
    private void runGeneralVoteTransaction(OverallVote vote){
-      final DatabaseReference ref = votesRef().child(vote.getStringFromType() + "/" + vote.getProjectID());
+      final DatabaseReference ref = generalVoteSummaryRef().child(vote.getStringFromType() + "/" + vote.getProjectID());
       ref.runTransaction(new Transaction.Handler() {
          @Override
          public Transaction.Result doTransaction(MutableData mutableData) {

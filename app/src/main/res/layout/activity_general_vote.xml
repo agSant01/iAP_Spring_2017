@@ -80,7 +80,7 @@
                 android:layout_weight="1"
                 android:clickable="true"
                 android:paddingBottom="20dp"
-                app:srcCompat="@drawable/ic_poster_icon" />
+                app:srcCompat="@drawable/ic_poster_icon_green" />
 
             <Space
                 android:layout_width="20dp"
