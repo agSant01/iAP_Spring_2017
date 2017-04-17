@@ -63,6 +63,8 @@ dependencies {
     compile 'com.github.clans:fab:1.6.4'
 
     testCompile 'junit:junit:4.12'
+
+    compile "com.miguelcatalan:materialsearchview:1.4.0"
 }
 
 apply plugin: 'com.google.gms.google-services'
