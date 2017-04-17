@@ -152,7 +152,7 @@ public class ProfileEditActivity extends BaseActivity {
         mSaveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(ProfileEditActivity.this).setTitle("Save Changes")
+                new AlertDialog.Builder(ProfileEditActivity.this).setMessage("Save Changes")
                         .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
