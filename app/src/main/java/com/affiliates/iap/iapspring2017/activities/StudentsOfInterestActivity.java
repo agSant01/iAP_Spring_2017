@@ -9,7 +9,6 @@
 package com.affiliates.iap.iapspring2017.activities;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,7 +17,6 @@ import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
@@ -62,7 +60,7 @@ public class StudentsOfInterestActivity extends BaseActivity {
         setProgressBar();
         showProgressBar(mProgressBar);
 
-        mToolBarText.setText("Students of Interest");
+        mToolBarText.setText("Interested");
         if ( Constants.getLikedStudents() == null ){
             DataService.sharedInstance().getIAPStudentsOfInterest(new Callback<HashMap<String, ArrayList<IAPStudent>>>() {
                 @Override
@@ -181,9 +179,10 @@ public class StudentsOfInterestActivity extends BaseActivity {
             public void onClick(View v) {
                 Log.v(TAG, "PASSED1");
                 mState = "Interested";
+                mToolBarText.setText(mState);
                 setListView(mState);
                 mFloatingActionMenu.close(true);
-                mFloatingActionMenu.getMenuIconView().setImageResource(R.drawable.ic_like_white);
+                mFloatingActionMenu.getMenuIconView().setImageResource(R.drawable.ic_thumb_up_white);
             }
         });
 
@@ -192,9 +191,10 @@ public class StudentsOfInterestActivity extends BaseActivity {
             public void onClick(View v) {
                 Log.v(TAG, "PASSED2");
                 mState = "Undecided";
+                mToolBarText.setText(mState);
                 setListView(mState);
                 mFloatingActionMenu.close(true);
-                mFloatingActionMenu.getMenuIconView().setImageResource(R.drawable.ic_evaluate);
+                mFloatingActionMenu.getMenuIconView().setImageResource(R.drawable.ic_thumbs_undecided_white);
             }
         });
 
@@ -202,7 +202,8 @@ public class StudentsOfInterestActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 mState = "Not Interested";
-                mFloatingActionMenu.getMenuIconView().setImageResource(R.drawable.ic_unlike_white);
+                mToolBarText.setText(mState);
+                mFloatingActionMenu.getMenuIconView().setImageResource(R.drawable.ic_thumb_down_white);
                 setListView(mState);
                 mFloatingActionMenu.close(true);
             }

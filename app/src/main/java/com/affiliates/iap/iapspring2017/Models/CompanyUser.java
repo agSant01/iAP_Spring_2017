@@ -158,7 +158,7 @@ public class CompanyUser extends User implements UserDelegate {
     public boolean isUndecided(String id) {
        if (Constants.getUndecidedStudents() == null) return false;
        for (int i = 0; i < Constants.getUndecidedStudents().size(); i++) {
-          if (Constants.getUnlikedStudents().get(i).getUserID().equals(id))
+          if (Constants.getUndecidedStudents().get(i).getUserID().equals(id))
              return true;
        }
        return false;

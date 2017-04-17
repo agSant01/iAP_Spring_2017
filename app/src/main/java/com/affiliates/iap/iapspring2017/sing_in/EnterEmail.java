@@ -52,7 +52,7 @@ public class EnterEmail extends BaseActivity {
                 final Intent in = new Intent(EnterEmail.this, PasswordActivity.class);
                 in.putExtra("Email", email);
                 in.putExtra("AccountType", type);
-                if(type.equals(User.AccountType.Guest.toString())){
+                if(type.equals(User.AccountType.UPRMAccount.toString())){
                     startActivity(in);
                     overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                 }else{
@@ -67,7 +67,7 @@ public class EnterEmail extends BaseActivity {
                                 startActivity(in);
                                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                             } else {
-                                Toast.makeText(getApplicationContext(), "Sorry, email is not registered", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Sorry, email not registered", Toast.LENGTH_SHORT).show();
                             }
                         }
 

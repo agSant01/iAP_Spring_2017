@@ -51,7 +51,7 @@ public class PasswordActivity extends BaseActivity {
             public void onClick(View v) {
                 int error = validatePassword(mPassword.getText().toString(), mConfirm.getText().toString());
                 if( error == 0  ) {
-                    registerUser(email, mPassword.getText().toString(), getIntent().getStringExtra("AccountType"));
+                    registerUser(email, mPassword.getText().toString(), getIntent().getStringExtra("AccountType"), null);
                     Class nextClass;
                     if(PasswordActivity.done) {
                         nextClass = EmailConfirmation.class;
@@ -77,7 +77,7 @@ public class PasswordActivity extends BaseActivity {
         });
     }
 
-    private void registerUser(final String email, final String password, final String accType){
+    private void registerUser(final String email, final String password, final String accType, final String company){
         showProgressDialog("Creating Account");
         mFirebaseAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
 
@@ -89,7 +89,7 @@ public class PasswordActivity extends BaseActivity {
                     user.sendEmailVerification();
                     mAdmin.saveUserID(user.getUid());
                     Log.v("Mario", mAdmin.getUserID());
-                    DataService.sharedInstance().registerUser(email, mAdmin.getUserID(), accType, new Callback() {
+                    DataService.sharedInstance().registerUser(email, mAdmin.getUserID(), accType, company, new Callback() {
                         @Override
                         public void success(Object data) {
                             Log.v(TAG, "User registration successful");
