@@ -8,6 +8,8 @@
 
 package com.affiliates.iap.iapspring2017.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -80,9 +82,60 @@ public class StudentsOfInterestActivity extends BaseActivity {
                 }
             });
         } else {
-            Log.v(TAG, Constants.getUnlikedStudents().size() + " " +Constants.getLikedStudents().size() + " "+ Constants.getUndecidedStudents().size());
             setListView("Interested");
         }
+
+        mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final IAPStudent student = (IAPStudent) mListView.getItemAtPosition(position);
+                final ArrayList<String> a = new ArrayList<String>(){{
+                    add("Interested");
+                    add("Undecided");
+                    add("Not Interested");
+                }};
+                final CharSequence[] c = new CharSequence[2];
+                a.remove(mState);
+                a.toArray(c);
+                new AlertDialog.
+                        Builder(StudentsOfInterestActivity.this)
+                        .setTitle("Change Interest")
+                        .setItems(c, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.v(TAG, "TEST: " +c[which]);
+                                switch (mState){
+                                    case "Undecided":
+                                        Constants.getUndecidedStudents().remove(student);
+                                        break;
+                                    case "Not Interested":
+                                        Constants.getUnlikedStudents().remove(student);
+                                        break;
+                                    default:
+                                        Constants.getLikedStudents().remove(student);
+                                        break;
+                                }
+                                if(c[which].equals("Undecided")){
+                                    Constants.getUndecidedStudents().add(student);
+                                    DataService.sharedInstance()
+                                            .setInterestForStudent(student.getUserID(), "Undecided");
+                                } else if ( c[which].equals("Not Interested")){
+                                    Constants.getUnlikedStudents().add(student);
+                                    DataService.sharedInstance()
+                                            .setInterestForStudent(student.getUserID(), "Unlike");
+                                } else if ( c[which].equals("Interested")){
+                                    Constants.getLikedStudents().add(student);
+                                    DataService.sharedInstance()
+                                            .setInterestForStudent(student.getUserID(), "Like");
+                                }
+                                setListView(mState);
+
+
+                            }
+                        }).setNegativeButton("CANCEL", null).create().show();
+                return true;
+            }
+        });
     }
 
 
@@ -114,27 +167,27 @@ public class StudentsOfInterestActivity extends BaseActivity {
     }
 
     private void setListView(String status){
-//        if (mStudentAdapter == null) {
-//            mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), new ArrayList<IAPStudent>());
-//
-//        }
+        if (mStudentAdapter == null) {
+            mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), new ArrayList<IAPStudent>());
+
+        }
         switch (status){
             case "Interested":
-                mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), Constants.getLikedStudents());
+//                mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), Constants.getLikedStudents());
 
-//                mStudentAdapter.clear();
-//                mStudentAdapter.addAll(Constants.getLikedStudents());
+                mStudentAdapter.clear();
+                mStudentAdapter.addAll(Constants.getLikedStudents());
                 break;
             case "Not Interested":
-                mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), Constants.getUnlikedStudents());
+//                mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), Constants.getUnlikedStudents());
 //
-//                mStudentAdapter.clear();
-//                mStudentAdapter.addAll(Constants.getUnlikedStudents());
+                mStudentAdapter.clear();
+                mStudentAdapter.addAll(Constants.getUnlikedStudents());
                 break;
             case "Undecided":
-               mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), Constants.getUndecidedStudents());
-//                mStudentAdapter.clear();
-//                mStudentAdapter.addAll(Constants.getUndecidedStudents());
+//               mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), Constants.getUndecidedStudents());
+                mStudentAdapter.clear();
+                mStudentAdapter.addAll(Constants.getUndecidedStudents());
                 break;
         }
         mListView.setAdapter(mStudentAdapter);
@@ -251,6 +304,7 @@ public class StudentsOfInterestActivity extends BaseActivity {
         super.onResume();
         if (mStudentAdapter != null) {
             mStudentAdapter.notifyDataSetChanged();
+            setListView(mState);
             Log.v(TAG, "Passed By");
         }
         Log.v(TAG,"onResume() " + mStudentAdapter );
