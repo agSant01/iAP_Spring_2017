@@ -60,9 +60,9 @@ public class UPRMAccount extends User implements UserDelegate {
    @Override
    public void vote(String projectID, final Vote vote, Context context, final Callback callback) throws VoteErrorException {
       if (vote instanceof OverallVote){
-         DataService.sharedInstance().submitGeneralVote(projectID, ((OverallVote) vote).getNumberFromType(), new Callback() {
+         DataService.sharedInstance().submitGeneralVote(projectID, ((OverallVote) vote).getNumberFromType(), new Callback<Vote>() {
             @Override
-            public void success(Object data) {
+            public void success(Vote data) {
                setVoted((OverallVote) vote);
                callback.success(null);
             }

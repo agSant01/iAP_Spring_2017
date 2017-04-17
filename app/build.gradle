@@ -21,7 +21,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -29,42 +29,34 @@ dependencies {
     compile 'com.android.support:design:25.2.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.code.gson:gson:2.8.0'
-
     // FireBase
     compile 'com.google.firebase:firebase-core:10.2.0'
     compile 'com.google.firebase:firebase-storage:10.2.0'
     compile 'com.google.firebase:firebase-database:10.2.0'
     compile 'com.google.firebase:firebase-auth:10.2.0'
-
     // Image Download Manager
     compile 'com.squareup.picasso:picasso:2.5.2'
-
     // Horizontal scrollview cell library
     compile 'org.lucasr.twowayview:twowayview:0.1.4'
-
     // Circle imageview for profile pictures
     compile 'de.hdodenhof:circleimageview:2.1.0'
-
     // Ratingbar Material
     compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
-
     // Helper Library for introduction screens
     compile 'com.matthew-tamlin:sliding-intro-screen:3.2.0'
-
     // Helper library for binding resources to views controllers through annotations
     compile 'com.jakewharton:butterknife:8.5.1'
-
     // Helper library for the search bar
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
-
-    // Helper library
+    // Helper library spinner
     compile 'com.jaredrummler:material-spinner:1.1.0'
+    // Helper library date picker
     compile 'com.wdullaer:materialdatetimepicker:3.1.3'
+    // Helper library for floating action button
     compile 'com.github.clans:fab:1.6.4'
+    // Helper library bottom selection dialog
 
     testCompile 'junit:junit:4.12'
-
-    compile "com.miguelcatalan:materialsearchview:1.4.0"
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -30,10 +30,12 @@ import com.affiliates.iap.iapspring2017.Models.CompanyUser;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -82,7 +84,27 @@ public class IAPStudentProfile extends BaseActivity {
         setResume();
 
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
-            setInterestOptions();
+            if(Constants.getUndecidedStudents() == null
+                    || Constants.getUnlikedStudents() == null
+                    || Constants.getLikedStudents() == null ){
+                DataService.sharedInstance().getIAPStudentsOfInterest(new Callback<HashMap<String, ArrayList<IAPStudent>>>() {
+                    @Override
+                    public void success(HashMap<String, ArrayList<IAPStudent>> data) {
+                        Log.v(TAG, "Get Successfull");
+                        Constants.setUndecidedStudents(data.get("undecided"));
+                        Constants.setLikedStudents(data.get("liked"));
+                        Constants.setUnlikedStudents(data.get("unliked"));
+                        setInterestOptions();
+                        Log.v(TAG, data.get("undecided").size() + " " + data.get("liked").size() + " "+ data.get("unliked").size() + "");
+                    }
+                    @Override
+                    public void failure(String message) {
+                        Log.e(TAG, message);
+                    }
+                });
+            } else {
+                setInterestOptions();
+            }
         }
     }
 

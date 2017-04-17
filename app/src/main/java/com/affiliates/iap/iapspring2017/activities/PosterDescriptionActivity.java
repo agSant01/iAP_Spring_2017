@@ -66,8 +66,9 @@ public class PosterDescriptionActivity extends BaseActivity {
     private Button mVoteButton;
     private Button mPoster;
 
-    private Poster mPosterData;
+    private ImageView mPosterImg;
     private ImageView mVoteImg;
+    private Poster mPosterData;
     private Toolbar mToolbar;
 
     @Override
@@ -85,6 +86,11 @@ public class PosterDescriptionActivity extends BaseActivity {
 
         showProgressBar(mAdvisorProg);
         showProgressBar(mTeamProg);
+
+        if(mPosterData.getPosterURL().equals("NA")) {
+            mPosterImg.setImageResource(R.drawable.ic_poster_icon);
+            mPoster.setBackgroundResource(R.drawable.button_oval_shape_grey);
+        }
 
         mTitle.setText(mPosterData.getProjectName());
         seeLess();
@@ -122,11 +128,11 @@ public class PosterDescriptionActivity extends BaseActivity {
                 Log.v(TAG, mPosterData.getPosterURL());
                 String url = mPosterData.getPosterURL();
                 if(!url.contains("https://firebasestorage.googleapis.com")){
-                    new AlertDialog.Builder(v.getContext())
-                            .setMessage("Poster not Available")
+                    new AlertDialog.Builder(PosterDescriptionActivity.this)
+                            .setMessage("Poster Not Available")
                             .setPositiveButton("OK",  new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {}                // do nothing
-                            }).show();
+                            }).create().show();
                 }else{
                     Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(mPosterData.getPosterURL()));
                     startActivity(browser);
@@ -155,10 +161,10 @@ public class PosterDescriptionActivity extends BaseActivity {
             }
         });
 
-        DataService.sharedInstance().getPosterAdvisorMembers(mPosterData, new Callback() {
+        DataService.sharedInstance().getPosterAdvisorMembers(mPosterData, new Callback<ArrayList<Advisor>>() {
             @Override
-            public void success(Object data) {
-                mAdvisors = (ArrayList<Advisor>) data;
+            public void success(ArrayList<Advisor> data) {
+                mAdvisors = data;
                 mAdvisorsAdapter.addAll(mAdvisors);
                 hideProgressBar(mAdvisorProg);
             }
@@ -219,6 +225,7 @@ public class PosterDescriptionActivity extends BaseActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar_poster_desc);
         mVoteButton = (Button) findViewById(R.id.button_evaluate);
         mTitle = (TextView) findViewById(R.id.poster_desc_title);
+        mPosterImg = (ImageView) findViewById(R.id.poster_link);
         mSeeMore = (TextView) findViewById(R.id.seeMoreButton);
         mVoteImg = (ImageView) findViewById(R.id.poster_vote);
         mPoster = (Button) findViewById(R.id.button_poster);
@@ -257,6 +264,16 @@ public class PosterDescriptionActivity extends BaseActivity {
             mVoteImg.setImageResource(R.drawable.ic_evaluate);
             mVoteButton.setText("Evaluated");
             mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
+            mVoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(PosterDescriptionActivity.this)
+                            .setMessage("Poster Already Evaluated")
+                            .setPositiveButton("OK",  new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {}                // do nothing
+                            }).create().show();
+                }
+            });
         }
     }
 
@@ -315,19 +332,7 @@ public class PosterDescriptionActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
-            CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
-            mVoteImg = (ImageView) findViewById(R.id.poster_vote);
-            if(companyUser.hasEvaluated(mPosterData.getPosterID())){
-                mVoteButton.setText("Evaluate");
-                mVoteButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                });
-                mVoteImg.setImageResource(R.drawable.ic_evaluate);
-                mVoteButton.setText("Evaluated");
-                mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
-            }
+            setCompanyEvaluation((CompanyUser) Constants.getCurrentLoggedInUser());
         }
         System.out.println("ON RESUME YEAH YEAH");
     }

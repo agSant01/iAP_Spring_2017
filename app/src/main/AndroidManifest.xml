@@ -34,32 +34,32 @@
             android:name=".activities.MainActivity"
             android:label="Schedule"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/SplashScreen" />
         <activity
             android:name=".activities.PosterDescriptionActivity"
             android:label="Posters"
             android:parentActivityName=".activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/SplashScreen"/>
         <activity
             android:name=".sing_in.LogInOrRegister"
             android:screenOrientation="portrait" />
 
         <activity
             android:name=".profiles.IAPStudentProfile"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/SplashScreen"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
             android:name=".profiles.AdvisorProfile"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/SplashScreen"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
             android:name=".evaluation_center.EvaluationActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/SplashScreen"
             android:screenOrientation="portrait">
         </activity>
 
@@ -83,15 +83,19 @@
 
         <activity
             android:name=".sing_in.EnterEmail"
+            android:theme="@style/SplashScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".sing_in.AccountType"
+            android:theme="@style/SplashScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".sing_in.EmailConfirmation"
+            android:theme="@style/SplashScreen"
             android:screenOrientation="portrait" />
         <activity
             android:name=".sing_in.PasswordActivity"
+            android:theme="@style/SplashScreen"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".evaluation_center.GeneralVoteActivity"
