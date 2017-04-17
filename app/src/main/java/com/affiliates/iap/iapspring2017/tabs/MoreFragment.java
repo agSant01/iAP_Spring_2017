@@ -75,10 +75,10 @@ public class MoreFragment extends Fragment {
         String projects = "";
         switch (Constants.getCurrentLoggedInUser().getAccountType()) {
             case CompanyUser:
-                url = ((CompanyUser)Constants.getCurrentLoggedInUser()).getPhotoURL();
+                url = Constants.getCurrentLoggedInUser().getPhotoURL();
                 break;
             case Advisor:
-                url = ((Advisor)Constants.getCurrentLoggedInUser()).getPhotoURL();
+                url = Constants.getCurrentLoggedInUser().getPhotoURL();
                 break;
 
             case IAPStudent:

@@ -132,7 +132,7 @@ public class Advisor extends User implements UserDelegate {
     @Override
     public void vote(OverallVote vote) {
         if (!hasVoted( vote)) {
-            setVoted((OverallVote) vote);
+            setVoted(vote);
             Log.v("Voting", "Voted!");
 
         }
@@ -171,7 +171,7 @@ public class Advisor extends User implements UserDelegate {
    private HashMap<String, Object> exportProjects(){
       HashMap<String, Object> p = new HashMap<>();
       for(int i = 0; i < projects.size(); i++)
-         p.put(projects.get(i), "true");
+         p.put(projects.get(i), true);
       return p;
    }
 

@@ -101,8 +101,6 @@ public class PosterDescriptionActivity extends BaseActivity {
                 Constants.setCurrentLogedInUser((User) data);
                 //get the latest status on voted
                 Log.v(TAG, "User updated");
-
-
             }
 
             @Override
@@ -288,9 +286,6 @@ public class PosterDescriptionActivity extends BaseActivity {
                 intent.putExtra("posterID", mPosterData.getPosterID());
                 intent.putExtra("posterName", mPosterData.getProjectName());
                 startActivity(intent);
-
-
-
             }});
         }
         else {
@@ -304,10 +299,7 @@ public class PosterDescriptionActivity extends BaseActivity {
                 }
             });
         }
-
-
     }
-
 
     private void seeMore(){
         if(mPosterData.get_abstract().length() <= 300 ){
@@ -348,12 +340,5 @@ public class PosterDescriptionActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
         Log.v(TAG, "DESTROY");
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent in = new Intent(PosterDescriptionActivity.this, MainActivity.class);
-        startActivity(in);
-        overridePendingTransition(0,0);
     }
 }

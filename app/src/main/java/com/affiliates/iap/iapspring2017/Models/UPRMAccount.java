@@ -103,7 +103,7 @@ public class UPRMAccount extends User implements UserDelegate {
    @Override
    public void vote(OverallVote vote) {
       if (!hasVoted( vote)) {
-         setVoted((OverallVote) vote);
+         setVoted(vote);
          Log.v("Voting", "Voted!");
 
       }

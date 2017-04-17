@@ -55,11 +55,12 @@ public abstract class User implements UserDelegate{
 
    User(String email, AccountType accountType){
       this.accountType = accountType;
-      this.photoURL = "";
+      this.photoURL = "NA";
       this.userID = "";
       this.gender = "";
       this.email = email;
       this.name = "";
+      Log.v(TAG, email);
    }
 
    public static void login(String email, String password, final Callback<User> callback) {
@@ -68,7 +69,6 @@ public abstract class User implements UserDelegate{
             @Override
             public void onComplete(Task<AuthResult> task) {
                Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-
                // If sign in fails, display a message to the user. If sign in succeeds
                // the auth state listener will be notified and logic to handle the
                // signed in user can be handled in the listener.

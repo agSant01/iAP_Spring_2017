@@ -58,7 +58,7 @@ public class SplashScreen extends Activity {
 
                             @Override
                             public void failure(String message) {
-                                Log.e(TAG, "Failed get user data");
+                                Log.e(TAG, "Failed get data curentRegisteringUserData");
                                 if(message.contains("No user ID Registered"))
                                     try {
                                         Constants.getCurrentLoggedInUser().logOut(getBaseContext());

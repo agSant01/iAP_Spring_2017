@@ -33,7 +33,7 @@ public class Constants {
    private static ArrayList<Event> events;
    private static ArrayList<Sponsors> sponsor;
    private static Map<String, Drawable> sponsorLogos = new HashMap<>();
-   public static JSONObject data;
+   public static JSONObject curentRegisteringUserData;
 
    public static ArrayList<Sponsors> getSponsor() {
       return sponsor;

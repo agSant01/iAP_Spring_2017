@@ -97,6 +97,7 @@ public class CompanyUser extends User implements UserDelegate {
    public HashMap<String, Object> toMap() {
       return new HashMap<String, Object>(){{
          put("AccountType", "Company");
+         put("Company", companyName);
          put("Name", getName());
          put("Email", getEmail());
          put("PhotoURL", getPhotoURL());
