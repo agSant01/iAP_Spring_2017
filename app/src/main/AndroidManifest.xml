@@ -93,6 +93,10 @@
         <activity
             android:name=".sing_in.PasswordActivity"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".evaluation_center.GeneralVoteActivity"
+            android:theme="@style/SplashScreen"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

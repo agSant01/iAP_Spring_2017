@@ -105,6 +105,16 @@ public class CompanyUser extends User implements UserDelegate {
       }};
    }
 
+   @Override
+   public boolean hasVoted(int type) {
+      return false; //should never be reached
+   }
+
+   @Override
+   public void vote(OverallVote vote) {
+      //do nothing, should never be reached
+   }
+
    public void setVoted(final String projectID){
       votes.add(projectID);
       final DatabaseReference ref = FirebaseDatabase.getInstance()

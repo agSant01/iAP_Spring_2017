@@ -9,6 +9,7 @@
 package com.affiliates.iap.iapspring2017.Models;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
@@ -86,6 +87,29 @@ public class UPRMAccount extends User implements UserDelegate {
          put("PhotoURL", getPhotoURL());
          put("Voted", exportVoted());
       }};
+   }
+
+   @Override
+   public boolean hasVoted(int type) {
+      switch (type){
+         case 0:
+            return voted.bestPoster;
+         case 1:
+            return voted.bestPresentation;
+      }
+      return false;
+   }
+
+   @Override
+   public void vote(OverallVote vote) {
+      if (!hasVoted( vote)) {
+         setVoted((OverallVote) vote);
+         Log.v("Voting", "Voted!");
+
+      }
+      else{
+         Log.v("Voting", "Already Voted!");
+      }
    }
 
    private void setVoted(OverallVote vote){

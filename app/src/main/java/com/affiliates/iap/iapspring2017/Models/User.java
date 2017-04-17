@@ -31,7 +31,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-public class User implements UserDelegate{
+public abstract class User implements UserDelegate{
    private static final String TAG = "User";
 
    private AccountType accountType;
@@ -158,4 +158,8 @@ public class User implements UserDelegate{
    public void setID(String id) {
       this.userID = id;
    }
+
+   public abstract boolean hasVoted(int type);
+    public abstract void vote(OverallVote vote);
+
 }

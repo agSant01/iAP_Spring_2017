@@ -205,11 +205,13 @@ public class DataService {
       final String voteID = generalVoteRef().push().getKey();
       final OverallVote vote = new OverallVote(voteID, projecID, voteType);
 
+
       generalVoteRef().child(vote.getStringFromType()).updateChildren(vote.makeJSON())
          .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-               runGeneralVoteTransaction(vote);
+               Constants.getCurrentLoggedInUser().vote(vote);
+                runGeneralVoteTransaction(vote);
                callback.success(null);
             }})
          .addOnFailureListener(new OnFailureListener() {
@@ -225,15 +227,23 @@ public class DataService {
       ref.runTransaction(new Transaction.Handler() {
          @Override
          public Transaction.Result doTransaction(MutableData mutableData) {
-            Integer score = (Integer) ((mutableData.getValue() == null) ? 0 : mutableData.getValue());
-            score += 1;
-            mutableData.setValue(score);
+             Object data = mutableData.getValue();
+             try{
+                 Integer score = (Integer) ((data == null) ? 0 : data);
+                 score += 1;
+                 mutableData.setValue(score);
+             }catch(ClassCastException e){
+                Long score = (Long) ((data == null) ? 0 : data);
+                 score += 1;
+                 mutableData.setValue(score);
+             }
             return Transaction.success(mutableData);
          }
          @Override
          public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
             // Transaction completed
             Log.d(TAG, "runGeneralVoteTransaction() -> onComplete: " + databaseError);
+
          }
       });
    }

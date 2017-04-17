@@ -9,6 +9,7 @@
 package com.affiliates.iap.iapspring2017.Models;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
@@ -117,7 +118,30 @@ public class Advisor extends User implements UserDelegate {
       }};
    }
 
-   private void setVoted(OverallVote vote) {
+    @Override
+    public boolean hasVoted(int type) {
+        switch (type){
+            case 0:
+                return voted.bestPoster;
+            case 1:
+                return voted.bestPresentation;
+        }
+        return false;
+    }
+
+    @Override
+    public void vote(OverallVote vote) {
+        if (!hasVoted( vote)) {
+            setVoted((OverallVote) vote);
+            Log.v("Voting", "Voted!");
+
+        }
+        else{
+            Log.v("Voting", "Already Voted!");
+        }
+    }
+
+    private void setVoted(OverallVote vote) {
       switch (vote.getVoteType()){
          case BestPoster:
             this.voted.bestPoster = true;

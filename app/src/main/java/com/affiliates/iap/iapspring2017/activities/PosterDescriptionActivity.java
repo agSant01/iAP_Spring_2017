@@ -33,6 +33,7 @@ import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.adapters.TeamAdvisorsAdapter;
 import com.affiliates.iap.iapspring2017.adapters.TeamMembersAdapter;
 import com.affiliates.iap.iapspring2017.evaluation_center.EvaluationActivity;
+import com.affiliates.iap.iapspring2017.evaluation_center.GeneralVoteActivity;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.profiles.AdvisorProfile;
 import com.affiliates.iap.iapspring2017.profiles.IAPStudentProfile;
@@ -120,12 +121,8 @@ public class PosterDescriptionActivity extends BaseActivity {
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
             setCompanyEvaluation(companyUser);
-        } else if (Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.Advisor){
-            Advisor advisor = (Advisor) Constants.getCurrentLoggedInUser();
-
-        } else if (Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.IAPStudent){
-            IAPStudent iapStudent = (IAPStudent) Constants.getCurrentLoggedInUser();
-
+        } else {
+            setFavoriteEvaluation(Constants.getCurrentLoggedInUser());
         }
 
         DataService.sharedInstance().getPosterTeamMembers(mPosterData, new Callback() {
@@ -244,6 +241,24 @@ public class PosterDescriptionActivity extends BaseActivity {
             mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
         }
     }
+
+    private  void setFavoriteEvaluation(final com.affiliates.iap.iapspring2017.Models.User user){
+        mVoteImg.setImageResource(R.drawable.ic_like);
+        mVoteButton.setText("Favorite");
+        mVoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PosterDescriptionActivity.this, GeneralVoteActivity.class);
+                intent.putExtra("posterID", mPosterData.getPosterID());
+                intent.putExtra("posterName", mPosterData.getProjectName());
+                startActivity(intent);
+
+
+            }
+        });
+
+    }
+
 
     private void seeMore(){
         if(mPosterData.get_abstract().length() <= 300 ){
