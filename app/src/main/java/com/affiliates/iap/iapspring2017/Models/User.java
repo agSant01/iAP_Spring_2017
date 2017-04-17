@@ -160,6 +160,6 @@ public abstract class User implements UserDelegate{
    }
 
    public abstract boolean hasVoted(int type);
-    public abstract void vote(OverallVote vote);
+   public abstract void vote(OverallVote vote);
 
 }

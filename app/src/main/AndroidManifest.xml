@@ -100,7 +100,7 @@
         <activity
             android:name=".evaluation_center.GeneralVoteActivity"
             android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

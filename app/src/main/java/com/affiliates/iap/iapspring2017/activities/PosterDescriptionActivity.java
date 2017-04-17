@@ -289,7 +289,7 @@ public class PosterDescriptionActivity extends BaseActivity {
             }});
         }
         else {
-            mVoteImg.setImageResource(R.drawable.ic_thumb_up_unfilled);
+            mVoteImg.setImageResource(R.drawable.ic_thumb_up_grey);
             mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
             mVoteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -325,6 +325,8 @@ public class PosterDescriptionActivity extends BaseActivity {
         super.onResume();
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             setCompanyEvaluation((CompanyUser) Constants.getCurrentLoggedInUser());
+        } else {
+            setFavoriteEvaluation(Constants.getCurrentLoggedInUser());
         }
         System.out.println("ON RESUME YEAH YEAH");
     }

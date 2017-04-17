@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:theme="@style/AppTheme.NoActionBar"
-    tools:context=".PosterDescription">
+    tools:context=".activities.PosterDescriptionActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -95,7 +95,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:paddingBottom="20dp"
-                app:srcCompat="@drawable/ic_like" />
+                app:srcCompat="@drawable/ic_thumb_up_filled_green" />
 
             <Space
                 android:layout_width="20dp"
