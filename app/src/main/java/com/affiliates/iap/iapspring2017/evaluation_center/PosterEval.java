@@ -24,16 +24,13 @@ import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class PosterEval extends Fragment {
     private static final String TAG = "PosterEval";
-    private static int pos;
 
+    static MaterialRatingBar mMethodPoster;
     static MaterialRatingBar mTechPoster;
     static MaterialRatingBar mPresPoster;
-    static MaterialRatingBar mMethodPoster;
     static MaterialRatingBar mResPoster;
-    private Button mSave;
 
     public static PosterEval newInstance(int p) {
-        pos = p;
         return new PosterEval();
     }
 
@@ -52,13 +49,12 @@ public class PosterEval extends Fragment {
         mPresPoster = (MaterialRatingBar) view.findViewById(R.id.poster_rating_pres);
         mResPoster =(MaterialRatingBar) view.findViewById(R.id.poster_rating_res);
 
-        mSave = (Button) view.findViewById(R.id.button5);
-
         mTechPoster.setOnRatingChangeListener(new MaterialRatingBar.OnRatingChangeListener() {
             @Override
             public void onRatingChanged(MaterialRatingBar ratingBar, float rating) {
                 Summary.mTechPoster.setText((int) rating+"");
                 Summary.calculateTotalPoster();
+                Summary.saveVote(getContext());
             }
         });
         mPresPoster.setOnRatingChangeListener(new MaterialRatingBar.OnRatingChangeListener() {
@@ -66,6 +62,7 @@ public class PosterEval extends Fragment {
             public void onRatingChanged(MaterialRatingBar ratingBar, float rating) {
                 Summary.mPresPoster.setText((int) rating+"");
                 Summary.calculateTotalPoster();
+                Summary.saveVote(getContext());
             }
         });
         mMethodPoster.setOnRatingChangeListener(new MaterialRatingBar.OnRatingChangeListener() {
@@ -73,6 +70,7 @@ public class PosterEval extends Fragment {
             public void onRatingChanged(MaterialRatingBar ratingBar, float rating) {
                 Summary.mMethodPoster.setText((int) rating+"");
                 Summary.calculateTotalPoster();
+                Summary.saveVote(getContext());
             }
         });
         mResPoster.setOnRatingChangeListener(new MaterialRatingBar.OnRatingChangeListener() {
@@ -80,17 +78,10 @@ public class PosterEval extends Fragment {
             public void onRatingChanged(MaterialRatingBar ratingBar, float rating) {
                 Summary.mResPoster.setText((int) rating+"");
                 Summary.calculateTotalPoster();
-            }
-        });
-
-        updateOralRating();
-        mSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 Summary.saveVote(getContext());
             }
         });
-
+        updateOralRating();
         return view;
     }
     static void updateOralRating(){

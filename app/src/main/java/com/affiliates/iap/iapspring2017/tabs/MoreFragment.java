@@ -157,7 +157,7 @@ public class MoreFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(getActivity()).setTitle("Confirmation")
-                        .setMessage("Do you want to sign out.").setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                        .setMessage("Sign Out").setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         try {
                             Constants.getCurrentLoggedInUser().logOut(getContext());
@@ -169,7 +169,7 @@ public class MoreFragment extends Fragment {
                         startActivity(in);
                         getActivity().finish();
                     }
-                }).setNegativeButton("no", new DialogInterface.OnClickListener() {
+                }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
                     }

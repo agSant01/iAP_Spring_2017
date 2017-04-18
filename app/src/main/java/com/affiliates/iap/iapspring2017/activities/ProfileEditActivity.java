@@ -351,7 +351,7 @@ public class ProfileEditActivity extends BaseActivity {
             Advisor advisor = (Advisor) user;
             advisor.setDepartment(mDepartment.getText().toString().isEmpty() ? "Engineering" : mDepartment.getText().toString());
             advisor.setWebPage(mGradDate.getText().toString().isEmpty() ? "https://uprm.edu" : mGradDate.getText().toString());
-            advisor.setResearchIntent(mObjective.getText().toString());
+            advisor.setResearchIntent(mObjective.getText().toString().isEmpty() ? "To be Defined" : mObjective.getText().toString());
         }
 
         if(mImage != null){

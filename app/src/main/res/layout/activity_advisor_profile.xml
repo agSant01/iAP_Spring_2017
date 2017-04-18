@@ -36,7 +36,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:clipToPadding="false"
         android:fillViewport="false">
@@ -54,39 +54,13 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="24dp"
                 android:src="@drawable/ic_gender_0"
                 app:civ_border_color="@color/appGreen"
                 app:civ_border_width="2dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/profile_advisor_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="22dp"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="21dp"
-                android:text="juan.pueblo0@upr.edu"
-                app:layout_constraintLeft_toRightOf="@+id/imageView7"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
-
-            <ImageView
-                android:id="@+id/imageView7"
-                android:layout_width="37dp"
-                android:layout_height="33dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="45dp"
-                android:layout_marginTop="14dp"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view"
-                app:srcCompat="@drawable/ic_email" />
 
             <TextView
                 android:id="@+id/profile_advisor_name"
@@ -112,66 +86,13 @@
                 android:layout_marginLeft="45dp"
                 android:layout_marginRight="45dp"
                 android:layout_marginStart="45dp"
-                android:layout_marginTop="9dp"
+                android:layout_marginTop="8dp"
 
                 android:background="@android:color/darker_gray"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profile_advisor_name" />
-
-            <TextView
-                android:id="@+id/profile_advisor_deptm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginStart="25dp"
-
-                android:layout_marginTop="11dp"
-                android:text="Computer Engineering"
-                app:layout_constraintLeft_toRightOf="@+id/imageView6"
-                app:layout_constraintTop_toBottomOf="@+id/profile_advisor_email" />
-
-            <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintHorizontal_bias="0.14"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView7"
-                app:srcCompat="@drawable/ic_building" />
-
-            <TextView
-                android:id="@+id/profile_advisor_website"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="13dp"
-                android:autoLink="all"
-                android:linksClickable="true"
-                android:text="www.dvibsd.com"
-                android:textColor="@color/appLightGrey"
-                app:layout_constraintLeft_toRightOf="@+id/imageView8"
-                app:layout_constraintTop_toBottomOf="@+id/profile_advisor_deptm" />
-
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="31dp"
-                android:layout_height="31dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="2dp"
-                app:layout_constraintHorizontal_bias="0.12"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView6"
-                app:srcCompat="@drawable/ic_grad" />
 
             <View
                 android:id="@+id/view3"
@@ -197,19 +118,18 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="26dp"
                 android:text="Research Intent"
                 android:textColor="@color/appGreen"
                 android:textSize="18sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_advisor_website" />
+                app:layout_constraintTop_toBottomOf="@+id/tableLayout2" />
 
             <TextView
                 android:id="@+id/profile_advisor_research"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -219,18 +139,17 @@
                 android:gravity="center"
                 android:text="Coop, Internship"
                 android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.501"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view3"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/view3" />
 
 
             <TextView
                 android:id="@+id/textView12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -239,12 +158,11 @@
                 android:text="Projects"
                 android:textColor="@color/appGreen"
                 android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/project_list"
+                app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profile_advisor_research"
-                app:layout_constraintHorizontal_bias="0.501"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toTopOf="@+id/project_list"
                 app:layout_constraintVertical_bias="0.0" />
 
 
@@ -266,19 +184,152 @@
 
             <LinearLayout
                 android:id="@+id/project_list"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="0dp"
-                android:layout_marginTop="27dp"
+                android:layout_marginTop="16dp"
+                android:animateLayoutChanges="false"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
+
                 android:paddingLeft="55dp"
                 android:paddingRight="55dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view13"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/view13">
+
+            </LinearLayout>
+
+            <TableLayout
+                android:id="@+id/tableLayout2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintHorizontal_bias="0.503"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintRight_toLeftOf="@+id/profile_advisor_email"
+                        app:layout_constraintTop_toBottomOf="@+id/view"
+                        app:srcCompat="@drawable/ic_email" />
+
+                    <TextView
+                        android:id="@+id/profile_advisor_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|start"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        android:gravity="center"
+                        android:paddingEnd="8dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingStart="8dp"
+                        android:text="juan.pueblo0@upr.edu"
+                        android:textSize="15sp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="4dp"
+
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintRight_toLeftOf="@+id/profile_advisor_deptm"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView7"
+                        app:srcCompat="@drawable/ic_building" />
+
+                    <TextView
+                        android:id="@+id/profile_advisor_deptm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|start"
+
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="Computer Engineering"
+                        android:textSize="15sp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_advisor_email" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView8"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintRight_toLeftOf="@+id/profile_advisor_website"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView6"
+                        app:srcCompat="@drawable/ic_grad" />
+
+                    <TextView
+                        android:id="@+id/profile_advisor_website"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|start"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        android:autoLink="all"
+                        android:gravity="start"
+                        android:linksClickable="true"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:text="www.dvibsd.com"
+                        android:textSize="15sp"
+                        app:layout_constraintHorizontal_bias="0.46"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_advisor_deptm" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </TableLayout>
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>
