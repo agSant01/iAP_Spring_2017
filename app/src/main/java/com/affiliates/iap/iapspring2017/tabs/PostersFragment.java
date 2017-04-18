@@ -141,7 +141,7 @@ public class PostersFragment extends Fragment {
       Log.v(TAG, "passed by");
       if(mPosterAdapter != null){
          mPosterAdapter.notifyDataSetChanged();
-          if(Constants.getPosters()!=null)
+          if(Constants.getPosters()!=null && mPosterAdapter.isEmpty())
           mPosterAdapter.addAll(Constants.getSortedPosters());
       }
    }
