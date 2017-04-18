@@ -8,11 +8,9 @@
 
 package com.affiliates.iap.iapspring2017.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -95,10 +93,10 @@ public class PosterDescriptionActivity extends BaseActivity {
         mTitle.setText(mPosterData.getProjectName());
         seeLess();
         //update to see if user can vote
-        DataService.sharedInstance().getUserData( Constants.getCurrentLoggedInUser().getUserID(), new Callback() {
+        DataService.sharedInstance().getUserData( Constants.getCurrentLoggedInUser().getUserID(), new Callback<User>() {
             @Override
-            public void success(Object data) {
-                Constants.setCurrentLogedInUser((User) data);
+            public void success(User data) {
+                Constants.setCurrentLogedInUser(data);
                 //get the latest status on voted
                 Log.v(TAG, "User updated");
             }
@@ -126,11 +124,9 @@ public class PosterDescriptionActivity extends BaseActivity {
                 Log.v(TAG, mPosterData.getPosterURL());
                 String url = mPosterData.getPosterURL();
                 if(!url.contains("https://firebasestorage.googleapis.com")){
-                    new AlertDialog.Builder(PosterDescriptionActivity.this)
-                            .setMessage("Poster Not Available")
-                            .setPositiveButton("OK",  new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {}                // do nothing
-                            }).create().show();
+
+                    Toast.makeText(PosterDescriptionActivity.this,
+                            "Poster Not Available", Toast.LENGTH_SHORT).show();
                 }else{
                     Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(mPosterData.getPosterURL()));
                     startActivity(browser);
@@ -256,6 +252,8 @@ public class PosterDescriptionActivity extends BaseActivity {
                     Intent eval = new Intent(getBaseContext(), EvaluationActivity.class);
                     eval.putExtra("posterID", mPosterData.getPosterID());
                     startActivity(eval);
+                    Log.v(TAG, "NO FUNC");
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                 }
             });
         } else {
@@ -265,11 +263,8 @@ public class PosterDescriptionActivity extends BaseActivity {
             mVoteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new AlertDialog.Builder(PosterDescriptionActivity.this)
-                            .setMessage("Poster Already Evaluated")
-                            .setPositiveButton("OK",  new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {}                // do nothing
-                            }).create().show();
+                    Toast.makeText(PosterDescriptionActivity.this,
+                            "Poster Already Evaluated", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -289,13 +284,14 @@ public class PosterDescriptionActivity extends BaseActivity {
             }});
         }
         else {
-            mVoteImg.setImageResource(R.drawable.ic_thumb_up_unfilled);
+            mVoteImg.setImageResource(R.drawable.ic_thumb_up_grey);
             mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
             mVoteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Log.v("Mario", "Clicked");
-                    Toast.makeText(getApplicationContext(), "Sorry, you have already spent your votes", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),
+                            "Sorry, you have already spent your votes", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -325,6 +321,8 @@ public class PosterDescriptionActivity extends BaseActivity {
         super.onResume();
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             setCompanyEvaluation((CompanyUser) Constants.getCurrentLoggedInUser());
+        } else {
+            setFavoriteEvaluation(Constants.getCurrentLoggedInUser());
         }
         System.out.println("ON RESUME YEAH YEAH");
     }

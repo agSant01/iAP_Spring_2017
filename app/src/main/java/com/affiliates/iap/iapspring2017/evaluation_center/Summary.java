@@ -9,10 +9,12 @@
 package com.affiliates.iap.iapspring2017.evaluation_center;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,7 +90,6 @@ public class Summary extends Fragment{
         mResOral = (TextView) view.findViewById(R.id.sumary_res_oral);
         mTotalOral = (TextView) view.findViewById(R.id.sumary_total_oral);
 
-        mCancel = (Button) view.findViewById(R.id.button2);
         mSubmit = (Button) view.findViewById(R.id.button3);
 
         Intent in = getActivity().getIntent();
@@ -114,31 +115,32 @@ public class Summary extends Fragment{
         mPresOral.setText(mCompanyVote.getPresentationScore().presentation+"");
         mTotalOral.setText(mCompanyVote.getPresentationTotal()+"");
 
-        mCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
-
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveVote(getContext());
-                DataService.sharedInstance().submitCompanyEval(mCompanyVote, new Callback() {
-                    @Override
-                    public void success(Object data) {
-                        Log.v(TAG, "Evaluation submissson was good!");
-                        companyUser.setVoted(mPosterID);
-                        mCompanyVote.removeVoteFromMemory(getContext());
-                        getActivity().finish();
-                    }
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Confirm Evaluation")
+                        .setMessage("Are you sure you want to submit this evaluation?")
+                        .setPositiveButton("CONFIRM",  new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                DataService.sharedInstance().submitCompanyEval(mCompanyVote,
+                                        new Callback<Object>() {
+                                    @Override
+                                    public void success(Object data) {
+                                        Log.v(TAG, "Evaluation submissson was good!");
+                                        companyUser.setVoted(mPosterID);
+                                        mCompanyVote.removeVoteFromMemory(getContext());
+                                        getActivity().onBackPressed();
+                                    }
 
-                    @Override
-                    public void failure(String message) {
-                        Log.v(TAG, message);
-                    }
-                });
+                                    @Override
+                                    public void failure(String message) {
+                                        Log.v(TAG, message);
+                                    }
+                                });
+                            }
+                        }).setNegativeButton("Cancel", null).create().show();
             }
         });
         return view;

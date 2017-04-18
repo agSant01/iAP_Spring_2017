@@ -38,24 +38,118 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/linear_layout"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintVertical_bias="0.441"
+            android:id="@+id/tableLayout4"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView13"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profile_image_activity"
+                    app:srcCompat="@drawable/ic_gender_icon" />
+
+                <EditText
+                    android:id="@+id/_name"
+                    android:layout_width="265dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="0dp"
+                    android:ems="10"
+                    android:hint="Name"
+                    android:inputType="textPersonName"
+                    android:singleLine="true"
+                    android:textSize="16sp"
+                    app:layout_constraintHorizontal_bias="0.27"
+                    app:layout_constraintLeft_toRightOf="@+id/imageView13"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/profile_image_activity" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageView13"
+                    app:srcCompat="@drawable/ic_email" />
+
+                <TextView
+                    android:id="@+id/editText4"
+                    android:layout_width="263dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="0dp"
+                    android:ems="10"
+                    android:gravity="center_vertical"
+                    android:hint="gabriel.santiago16@upr.edu"
+                    android:paddingStart="2dp"
+                    android:textSize="18sp"
+                    app:layout_constraintHorizontal_bias="0.162"
+                    app:layout_constraintLeft_toRightOf="@+id/imageView14"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/_name" />
+            </TableRow>
+
+        </TableLayout>
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image_activity"
             android:layout_width="85dp"
             android:layout_height="85dp"
             android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="100dp"
             android:adjustViewBounds="false"
             android:filterTouchesWhenObscured="false"
             android:src="@drawable/ic_gender_0"
             app:civ_border_color="@color/appGreen"
             app:civ_border_width="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/tableLayout4"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintVertical_bias="0.64" />
 
         <LinearLayout
             android:id="@+id/linear_layout"
@@ -67,7 +161,9 @@
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
 
         </LinearLayout>
 
@@ -75,7 +171,6 @@
             android:id="@+id/change_pic"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginBottom="0dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/oval_background_white"
 
@@ -88,66 +183,12 @@
             app:layout_constraintVertical_bias="1.0"
             app:srcCompat="@drawable/ic_add_circle_outline" />
 
-        <EditText
-            android:id="@+id/_name"
-            android:layout_width="265dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="33dp"
-            android:ems="10"
-            android:hint="Name"
-            android:inputType="textPersonName"
-            android:singleLine="true"
-            android:textSize="16sp"
-            app:layout_constraintHorizontal_bias="0.27"
-            app:layout_constraintLeft_toRightOf="@+id/imageView13"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_image_activity" />
-
-        <TextView
-            android:id="@+id/editText4"
-            android:layout_width="263dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:gravity="center_vertical"
-            android:hint="gabriel.santiago16@upr.edu"
-            android:paddingStart="2dp"
-            android:textSize="18sp"
-            app:layout_constraintHorizontal_bias="0.162"
-            app:layout_constraintLeft_toRightOf="@+id/imageView14"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/_name" />
-
-        <ImageView
-            android:id="@+id/imageView13"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="43dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile_image_activity"
-            app:srcCompat="@drawable/ic_gender_icon" />
-
-        <ImageView
-            android:id="@+id/imageView14"
-            android:layout_width="32dp"
-            android:layout_height="35dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView13"
-            app:srcCompat="@drawable/ic_email" />
-
         <Button
             android:id="@+id/reset_password"
             android:layout_width="260dp"
-            android:layout_height="30dp"
+            android:layout_height="33dp"
 
-            android:layout_marginBottom="31dp"
+            android:layout_marginBottom="16dp"
 
             android:layout_marginEnd="8dp"
 
@@ -169,7 +210,7 @@
             android:layout_width="260dp"
             android:layout_height="33dp"
 
-            android:layout_marginBottom="33dp"
+            android:layout_marginBottom="30dp"
 
             android:layout_marginEnd="8dp"
 
@@ -181,6 +222,7 @@
             android:textColor="@color/appWhite"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 

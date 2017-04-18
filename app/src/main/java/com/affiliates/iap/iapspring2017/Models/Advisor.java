@@ -41,7 +41,7 @@ public class Advisor extends User implements UserDelegate {
    public Advisor(JSONObject data){
       super(data.optString("Email"), AccountType.Advisor );
       this.projects = parseData(data.optJSONObject("Projects"));
-      this.researchIntent = "NA";
+      this.researchIntent = "To be defined";
       this.voted = new Voted();
       this.department = "NA";
       this.webPage = "NA";
@@ -112,7 +112,7 @@ public class Advisor extends User implements UserDelegate {
          put("Sex", getGender());
          put("Department", department);
          put("ResearchIntent", researchIntent);
-         put("Webpage", webPage);
+         put("webpage", webPage);
          put("Projects", exportProjects());
          put("Voted", exportVoted());
       }};

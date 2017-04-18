@@ -169,24 +169,16 @@ public class StudentsOfInterestActivity extends BaseActivity {
     private void setListView(String status){
         if (mStudentAdapter == null) {
             mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), new ArrayList<IAPStudent>());
-
         }
+        mStudentAdapter.clear();
         switch (status){
             case "Interested":
-//                mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), Constants.getLikedStudents());
-
-                mStudentAdapter.clear();
                 mStudentAdapter.addAll(Constants.getLikedStudents());
                 break;
             case "Not Interested":
-//                mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), Constants.getUnlikedStudents());
-//
-                mStudentAdapter.clear();
                 mStudentAdapter.addAll(Constants.getUnlikedStudents());
                 break;
             case "Undecided":
-//               mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), Constants.getUndecidedStudents());
-                mStudentAdapter.clear();
                 mStudentAdapter.addAll(Constants.getUndecidedStudents());
                 break;
         }

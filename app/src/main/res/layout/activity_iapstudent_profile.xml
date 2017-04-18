@@ -36,12 +36,154 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:clipToPadding="false">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <TableLayout
+                android:id="@+id/tableLayout5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        app:layout_constraintHorizontal_bias="0.01"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/view"
+                        app:srcCompat="@drawable/ic_email" />
+
+                    <TextView
+                        android:id="@+id/profile_iap_email"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="0dp"
+                        android:text="juan.pueblo0@upr.edu"
+                        android:textSize="15sp"
+                        app:layout_constraintLeft_toRightOf="@+id/imageView7"
+                        app:layout_constraintTop_toBottomOf="@+id/view" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="30dp"
+                        android:layout_height="25dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginRight="0dp"
+                        app:layout_constraintHorizontal_bias="0.14"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView7"
+                        app:srcCompat="@drawable/ic_building" />
+
+                    <TextView
+                        android:id="@+id/profile_iap_graddate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="0dp"
+                        android:text="May 2020"
+                        android:textSize="15sp"
+                        app:layout_constraintLeft_toRightOf="@+id/imageView8"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_iap_deptm" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView8"
+                        android:layout_width="29dp"
+                        android:layout_height="29dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        app:layout_constraintHorizontal_bias="0.12"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView6"
+                        app:srcCompat="@drawable/ic_grad" />
+
+                    <TextView
+                        android:id="@+id/profile_iap_deptm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="0dp"
+
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="0dp"
+                        android:text="Computer Engineering"
+                        android:textSize="15sp"
+                        app:layout_constraintLeft_toRightOf="@+id/imageView6"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_iap_email" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginRight="0dp"
+                        android:layout_marginStart="0dp"
+                        app:layout_constraintHorizontal_bias="0.13"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView8"
+                        app:srcCompat="@drawable/ic_poster_icon_green" />
+
+                    <TextView
+                        android:id="@+id/profile_iap_project"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="0dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="0dp"
+                        android:text="IAP APP"
+                        android:textSize="15sp"
+                        app:layout_constraintLeft_toRightOf="@+id/imageView9"
+                        app:layout_constraintTop_toBottomOf="@+id/profile_iap_graddate" />
+                </TableRow>
+            </TableLayout>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image_activity"
@@ -52,39 +194,13 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="87dp"
+                android:layout_marginTop="79dp"
                 android:src="@drawable/ic_gender_0"
                 app:civ_border_color="@color/appGreen"
                 app:civ_border_width="2dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/profile_iap_email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="22dp"
-                android:layout_marginStart="22dp"
-                android:layout_marginTop="16dp"
-                android:text="juan.pueblo0@upr.edu"
-                app:layout_constraintLeft_toRightOf="@+id/imageView7"
-                app:layout_constraintTop_toBottomOf="@+id/view" />
-
-            <ImageView
-                android:id="@+id/imageView7"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="45dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintHorizontal_bias="0.01"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view"
-                app:srcCompat="@drawable/ic_email" />
 
             <TextView
                 android:id="@+id/profile_iap_name"
@@ -118,81 +234,6 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profile_iap_name" />
 
-            <TextView
-                android:id="@+id/profile_iap_deptm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginStart="25dp"
-
-                android:layout_marginTop="7dp"
-                android:text="Computer Engineering"
-                app:layout_constraintLeft_toRightOf="@+id/imageView6"
-                app:layout_constraintTop_toBottomOf="@+id/profile_iap_email" />
-
-            <ImageView
-                android:id="@+id/imageView6"
-                android:layout_width="30dp"
-                android:layout_height="25dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                app:layout_constraintHorizontal_bias="0.14"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView7"
-                app:srcCompat="@drawable/ic_building" />
-
-            <TextView
-                android:id="@+id/profile_iap_graddate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="13dp"
-                android:text="May 2020"
-                app:layout_constraintLeft_toRightOf="@+id/imageView8"
-                app:layout_constraintTop_toBottomOf="@+id/profile_iap_deptm" />
-
-            <ImageView
-                android:id="@+id/imageView8"
-                android:layout_width="29dp"
-                android:layout_height="29dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="2dp"
-                app:layout_constraintHorizontal_bias="0.12"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView6"
-                app:srcCompat="@drawable/ic_grad" />
-
-            <TextView
-                android:id="@+id/profile_iap_project"
-                android:layout_width="225dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="25dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginTop="11dp"
-                android:text="IAP APP"
-                app:layout_constraintLeft_toRightOf="@+id/imageView9"
-                app:layout_constraintTop_toBottomOf="@+id/profile_iap_graddate" />
-
-            <ImageView
-                android:id="@+id/imageView9"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                app:layout_constraintHorizontal_bias="0.13"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView8"
-                app:srcCompat="@drawable/ic_poster_icon_green" />
-
             <View
                 android:id="@+id/view3"
                 android:layout_width="0dp"
@@ -217,11 +258,10 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="17dp"
+                android:layout_marginTop="35dp"
                 android:text="Objective"
                 android:textColor="@color/appGrey"
                 android:textSize="18sp"
-                app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profile_iap_resume" />
@@ -230,7 +270,6 @@
                 android:id="@+id/profile_iap_objective"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -240,40 +279,40 @@
                 android:gravity="center"
                 android:text="Coop, Internship"
                 android:textAlignment="center"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.501"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/view3"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toBottomOf="@+id/view3" />
 
             <Button
                 android:id="@+id/profile_iap_resume"
                 android:layout_width="200dp"
-                android:layout_height="30dp"
+                android:layout_height="33dp"
 
                 android:layout_marginEnd="8dp"
+
                 android:layout_marginLeft="8dp"
-
                 android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
 
-                android:layout_marginTop="25dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
                 android:background="@drawable/button_oval_shape_green"
                 android:text="Resume"
                 android:textColor="@color/appWhite"
                 android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_iap_project" />
+                app:layout_constraintTop_toBottomOf="@+id/tableLayout5" />
 
             <LinearLayout
                 android:id="@+id/linear_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -282,6 +321,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/profile_iap_objective">
 
             </LinearLayout>
+
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

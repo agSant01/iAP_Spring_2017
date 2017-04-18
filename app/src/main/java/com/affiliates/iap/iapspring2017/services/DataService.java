@@ -117,18 +117,12 @@ public class DataService {
    }
 
    public void getUserData(final String id, final Callback<User> callback) throws InvalidAccountTypeExeption{
-      if(usersRef().child(id)==null){
-         Log.e(TAG, "No user ID Registered" );
-         callback.failure("No user ID Registered");
-         return;
-      }
-
       usersRef().child(id).addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot){
             if (!dataSnapshot.hasChildren()) {
-               Log.e(TAG, "No user ID Registered" );
-               callback.failure("No user ID Registered");
+               Log.e(TAG, "No user ID Registered " + id );
+               callback.failure("No user ID Registered " + id);
                return;
             }
             JSONObject json =  new JSONObject((Map) dataSnapshot.getValue());
@@ -315,14 +309,18 @@ public class DataService {
          callback.failure("No members registered in the research: " + poster.getProjectName());
          return;
       }
+      final Queue<String> dispatch = new ArrayDeque<String>();
       for (int i = 0; i < poster.getTeam().size(); i++){
+         dispatch.add(poster.getTeam().get(i));
+          Log.v(TAG, "getTeam()// dispach.add()"+dispatch.element());
          getUserData(poster.getTeam().get(i), new Callback<User>() {
             @Override
             public void success(User user) {
                System.out.println(TAG + team.size() + "  " + poster.getTeam().size());
                if (user instanceof IAPStudent) {
+                   Log.v(TAG, "getTeam()// dispach.poll()"+dispatch.poll());;
                   team.add((IAPStudent) user);
-                  if (team.size() == poster.getTeam().size())
+                  if (dispatch.isEmpty())
                      callback.success(team);
                }
             }
@@ -340,13 +338,16 @@ public class DataService {
          callback.failure("No advisors registered in the research: " + poster.getProjectName());
          return;
       }
+      final Queue<String> dispatch = new ArrayDeque<String>();
       for (String id : poster.getAdvisors()){
+         dispatch.add(id);
          getUserData(id, new Callback<User>() {
             @Override
             public void success(User user) {
                if (user instanceof Advisor){
+                  dispatch.poll();
                   advisors.add((Advisor) user);
-                  if(advisors.size() == poster.getAdvisors().size())
+                  if(dispatch.isEmpty())
                      callback.success(advisors);
                }
             }
@@ -413,14 +414,18 @@ public class DataService {
             final ArrayList<IAPStudent> unLiked = new ArrayList<IAPStudent>();
             final ArrayList<IAPStudent> undecided = new ArrayList<IAPStudent>();
             if (dataSnapshot.getValue() != null){
+               Log.v(TAG, "WHAT");
                final JSONObject json = new JSONObject((HashMap<String,Object>) dataSnapshot.getValue());
                final Iterator<String> it = json.keys();
+               final Queue<String> diapatch = new ArrayDeque<String>();
                while (it.hasNext()) {
                   final String id = it.next();
+                  diapatch.add(id);
                   Log.v(TAG, id);
                   getUserData(id, new Callback<User>() {
                      @Override
                      public void success(User data) {
+                        diapatch.poll();
                         if(json.optString(id).equals("Like")) {
                            Log.v(TAG, "like");
                            liked.add((IAPStudent) data);
@@ -430,7 +435,7 @@ public class DataService {
                         } else if (json.optString(id).equals("Undecided")){
                            undecided.add((IAPStudent) data);
                         }
-                        if(json.length() == liked.size()+undecided.size()+unLiked.size()){
+                        if(diapatch.isEmpty()){
                            interest.put("liked", liked);
                            interest.put("unliked", unLiked);
                            interest.put("undecided", undecided);
@@ -443,6 +448,12 @@ public class DataService {
                      }
                   });
                }
+            } else {
+               Log.v(TAG, "getIAPStudentsOfInterest(): No hay nada");
+               interest.put("liked", liked);
+               interest.put("unliked", unLiked);
+               interest.put("undecided", undecided);
+               callback.success(interest);
             }
          }
          @Override
@@ -454,7 +465,17 @@ public class DataService {
 
    public void setInterestForStudent(final String id, final String interest){
       usersOfInterestRef().child(Constants.getCurrentLoggedInUser().getUserID())
-              .updateChildren(new HashMap<String, Object>() {{ put(id, interest);}});
+              .updateChildren(new HashMap<String, Object>() {{ put(id, interest);}})
+              .addOnCompleteListener(new OnCompleteListener<Void>() {
+                 @Override
+                 public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()){
+                       Log.v(TAG, "setInterestForStudent(): succesfull -> " + id);
+                    } else {
+                       Log.v(TAG, "setInterestForStudent(): unsuccesfull -> " + id);
+                    }
+                 }
+              });
    }
 
    public void updateUserData(final User user,final Uri uri, final Callback<User> callback){

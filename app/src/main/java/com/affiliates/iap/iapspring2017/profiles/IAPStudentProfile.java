@@ -83,10 +83,12 @@ public class IAPStudentProfile extends BaseActivity {
         mBio.setText(in.getStringExtra("bio"));
         setResume();
 
+        Log.v(TAG, "TIPO: " + Constants.getCurrentLoggedInUser().getAccountType().toString());
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             if(Constants.getUndecidedStudents() == null
                     || Constants.getUnlikedStudents() == null
                     || Constants.getLikedStudents() == null ){
+                Log.v(TAG, "Entro!");
                 DataService.sharedInstance().getIAPStudentsOfInterest(new Callback<HashMap<String, ArrayList<IAPStudent>>>() {
                     @Override
                     public void success(HashMap<String, ArrayList<IAPStudent>> data) {
@@ -168,7 +170,7 @@ public class IAPStudentProfile extends BaseActivity {
                     mUndecided.setImageResource(R.drawable.ic_thumbs_undecided_unfilled);
                 }
                 for (int i = 0; i < arr.size(); i++)
-                    if(arr.get(i).getUserID().contains(in.getStringExtra("id"))) {
+                    if(arr.get(i).getUserID().equals(in.getStringExtra("id"))) {
                         Log.v(TAG,arr.get(i).getUserID());
                         Constants.getUnlikedStudents().add(arr.remove(i));
                         break;
@@ -188,11 +190,13 @@ public class IAPStudentProfile extends BaseActivity {
                 if(companyUser.isLiked(getIntent().getStringExtra("id"))) return;
                 ArrayList<IAPStudent> arr;
                 if(companyUser.isUnliked(getIntent().getStringExtra("id"))){
+                    Log.v(TAG, "Select: Unlik");
                     if ( Constants.getUnlikedStudents() == null )
                         Constants.setUnlikedStudents(new ArrayList<IAPStudent>());
                     arr = Constants.getUnlikedStudents();
                     mUnlike.setImageResource(R.drawable.ic_thumb_down_unfilled);
                 } else {
+                    Log.v(TAG, "Select: Undecieds");
                     if ( Constants.getUndecidedStudents() == null)
                         Constants.setUndecidedStudents(new ArrayList<IAPStudent>());
                     arr = Constants.getUndecidedStudents();
@@ -200,6 +204,7 @@ public class IAPStudentProfile extends BaseActivity {
                 }
                 for (int i = 0; i < arr.size(); i++)
                     if(arr.get(i).getUserID().contains(in.getStringExtra("id"))) {
+                        Log.v(TAG, "FOUND");
                         Log.v(TAG,arr.get(i).getUserID());
                         Constants.getLikedStudents().add(arr.remove(i));
                         break;
