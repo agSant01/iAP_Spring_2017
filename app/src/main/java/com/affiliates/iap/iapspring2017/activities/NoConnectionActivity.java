@@ -19,6 +19,7 @@ import com.affiliates.iap.iapspring2017.MainActivity;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
+import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
 import com.affiliates.iap.iapspring2017.sing_in.RegisterActivity;
 import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
 
@@ -49,15 +50,10 @@ public class NoConnectionActivity extends BaseActivity {
                         finish();
                     } else {
                         hideProgressDialog();
-                        Intent in = new Intent(NoConnectionActivity.this, SignInActivity.class);
+                        Intent in = new Intent(NoConnectionActivity.this, LogInOrRegister.class);
                         startActivity(in);
                         finish();
                     }
-                    hideProgressDialog();
-                    Snackbar.make(findViewById(R.id.no_conection), Tmessage, Snackbar.LENGTH_SHORT).show();
-                    Intent in = new Intent(NoConnectionActivity.this, RegisterActivity.class);
-                    startActivity(in);
-                    finish();
                 } else {
                     //There is no internet yet.
                     hideProgressDialog();
