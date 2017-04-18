@@ -151,6 +151,7 @@ public class PosterDescriptionActivity extends BaseActivity {
 
             @Override
             public void failure(String message) {
+                hideProgressBar(mTeamProg);
                 Log.e(TAG,message);
             }
         });
@@ -165,6 +166,7 @@ public class PosterDescriptionActivity extends BaseActivity {
 
             @Override
             public void failure(String message) {
+                hideProgressBar(mAdvisorProg);
                 Log.e(TAG, message);
             }
         });

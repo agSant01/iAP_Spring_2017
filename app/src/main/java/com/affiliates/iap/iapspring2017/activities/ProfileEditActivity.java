@@ -40,7 +40,9 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.squareup.picasso.Picasso;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -104,8 +106,10 @@ public class ProfileEditActivity extends BaseActivity {
 
         this.bind();
         setToolbar();
-
-        Picasso.with(getBaseContext()).load(Constants.getCurrentLoggedInUser().getPhotoURL())
+        String path = "NA";
+        if(!Constants.getCurrentLoggedInUser().getPhotoURL().equals(""))
+            path = Constants.getCurrentLoggedInUser().getPhotoURL();
+        Picasso.with(getBaseContext()).load(path)
                 .error(R.drawable.ic_gender_0).placeholder(R.drawable.ic_gender_0)
                 .into(mCircleImageView);
         deptms = new ArrayList<String>(){{
@@ -280,10 +284,22 @@ public class ProfileEditActivity extends BaseActivity {
     private void showResetPasswordDialog() {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_reset_password, null);
+        final EditText oldPass = (EditText) dialogView.findViewById(R.id.oldPass);
         final EditText newPass = (EditText) dialogView.findViewById(R.id.password);
         final EditText confirmPass = (EditText) dialogView.findViewById(R.id.confirm_password);
+        ImageView oldPassShow = (ImageView) dialogView.findViewById(R.id.show_old_pass);
         ImageView passShow = (ImageView) dialogView.findViewById(R.id.show_pass);
         ImageView confPassShow = (ImageView) dialogView.findViewById(R.id.show_confirm_pass);
+
+        oldPassShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(oldPass.getTransformationMethod() != null)
+                    oldPass.setTransformationMethod(null);
+                else
+                    oldPass.setTransformationMethod(new PasswordTransformationMethod());
+            }
+        });
 
         passShow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -318,18 +334,38 @@ public class ProfileEditActivity extends BaseActivity {
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        resetPassword(newPass.getText().toString(), confirmPass.getText().toString(), new Callback<String>() {
+                            showProgressDialog("Resseting your password");
+                            String email = FirebaseAuth.getInstance().getCurrentUser().getEmail(),
+                                    pass = oldPass.getText().toString();
+                        User.login(email, pass, new Callback<User>() {
                             @Override
-                            public void success(String data) {
-                                Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
+                            public void success(User data) {
+                                resetPassword(newPass.getText().toString(), confirmPass.getText().toString(), new Callback<String>() {
+                                    @Override
+                                    public void success(String data) {
+                                        hideProgressDialog();
+                                        Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void failure(String message) {
+                                        hideProgressDialog();
+                                        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+                                    }
+                                });
                             }
 
                             @Override
                             public void failure(String message) {
-                                Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getBaseContext(), "Sorry, that is not your current password", Toast.LENGTH_SHORT).show();
+                                oldPass.selectAll();
+                                oldPass.setSelected(true);
+                                hideProgressDialog();
                             }
                         });
+
+
                     }
                 });
             }
