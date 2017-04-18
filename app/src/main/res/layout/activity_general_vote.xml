@@ -40,17 +40,17 @@
         <TextView
             android:id="@+id/poster_desc_title"
             android:layout_width="0dp"
-            android:layout_height="90dp"
+            android:layout_height="115dp"
             android:layout_gravity="center"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="52dp"
             android:layout_weight="0"
             android:fontFamily="sans-serif"
             android:gravity="center_vertical|center_horizontal"
-            android:text="Title"
+            android:text="This is a test so i can test that this test is enough long to test the thing that i need yo test in this test and maybe is not long enough yet"
             android:textAlignment="center"
             android:textColor="@color/appGrey"
             android:textSize="20sp"
@@ -79,17 +79,20 @@
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="0dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent">
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            app:layout_constraintVertical_bias="0.0">
 
             <TextView
                 android:id="@+id/best_poster_label"
@@ -109,7 +112,7 @@
             <ImageView
                 android:id="@+id/poster_link"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:layout_weight="0"
                 android:clickable="true"
@@ -117,12 +120,12 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="15dp"
+                android:layout_height="10dp"
                 android:layout_weight="0" />
 
             <Button
                 android:id="@+id/button_poster"
-                android:layout_width="300dp"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="0"
@@ -135,7 +138,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="15dp"
+                android:layout_height="10dp"
                 android:layout_weight="0" />
 
             <TextView
@@ -150,25 +153,25 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="15dp"
+                android:layout_height="10dp"
                 android:layout_weight="0" />
 
             <ImageView
                 android:id="@+id/poster_vote"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="80dp"
                 android:layout_gravity="center"
                 android:layout_weight="0"
                 app:srcCompat="@drawable/ic_thumb_up_filled_green" />
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="15dp"
+                android:layout_height="10dp"
                 android:layout_weight="0" />
 
             <Button
                 android:id="@+id/button_presentation"
-                android:layout_width="300dp"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="0"
@@ -181,13 +184,11 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="15dp"
-                android:layout_marginBottom="0dp"
-                android:layout_weight="0"
-                app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-                tools:layout_editor_absoluteX="8dp" />
+                android:layout_height="10dp"
+                android:layout_weight="0" />
 
         </LinearLayout>
+
     </android.support.constraint.ConstraintLayout>
 
 
