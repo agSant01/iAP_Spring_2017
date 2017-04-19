@@ -21,6 +21,7 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.w3c.dom.Text;
 
@@ -82,11 +83,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
         bestPoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Client c = new Client(getBaseContext());
-                if(c.isConnectionAvailable())
-                    displaySubmissionDialog(0);
-                else
-                    Snackbar.make(findViewById(R.id.general_voting), "No Internet Connection, Please Connect", Snackbar.LENGTH_SHORT).show();
+               voteProcess(0);
 
                 Log.v(TAG, "Voted for best Poster");
             }
@@ -101,15 +98,25 @@ public class GeneralVoteActivity extends AppCompatActivity {
         bestPresentation.setOnClickListener(new View.OnClickListener() {
             @Override
         public void onClick(View v) {
-                Client c = new Client(getBaseContext());
-                if(c.isConnectionAvailable())
-                    displaySubmissionDialog(1);
-                else
-                    Snackbar.make(findViewById(R.id.general_voting), "No Internet Connection, Please Connect", Snackbar.LENGTH_SHORT).show();
+                voteProcess(1);
             Log.v(TAG, "Voted for best Presentation");
             }
         });
 
+    }
+
+    private void voteProcess(int type){
+        Client c = new Client(getBaseContext());
+        if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
+            if (c.isConnectionAvailable())
+                displaySubmissionDialog(type);
+            else
+                Snackbar.make(findViewById(R.id.general_voting), "No Internet Connection, Please Connect", Snackbar.LENGTH_SHORT).show();
+        }
+        else{
+            Snackbar.make(findViewById(R.id.general_voting), "Sorry, you need to verify your email first.", Snackbar.LENGTH_SHORT).show();
+
+        }
     }
 
     private void vote(final int type){
