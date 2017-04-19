@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.CompanyUser;
@@ -124,6 +125,7 @@ public class Summary extends Fragment{
                         .setMessage("Are you sure you want to submit this evaluation?")
                         .setPositiveButton("CONFIRM",  new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                                ((EvaluationActivity) getActivity()).showProgressDialog("Submitting Evaluation");
                                 DataService.sharedInstance().submitCompanyEval(mCompanyVote,
                                         new Callback<Object>() {
                                     @Override
@@ -131,12 +133,15 @@ public class Summary extends Fragment{
                                         Log.v(TAG, "Evaluation submissson was good!");
                                         companyUser.setVoted(mPosterID);
                                         mCompanyVote.removeVoteFromMemory(getContext());
+                                        ((EvaluationActivity) getActivity()).hideProgressDialog();
+                                        Toast.makeText(getContext(), "Submission succesful",Toast.LENGTH_SHORT).show();
                                         getActivity().onBackPressed();
                                     }
 
                                     @Override
                                     public void failure(String message) {
                                         Log.v(TAG, message);
+                                        Toast.makeText(getContext(), "Error on submission, try again shortly",Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
