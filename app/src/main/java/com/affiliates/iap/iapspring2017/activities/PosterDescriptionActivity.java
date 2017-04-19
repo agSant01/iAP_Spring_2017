@@ -227,9 +227,9 @@ public class PosterDescriptionActivity extends BaseActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar_poster_desc);
         mVoteButton = (Button) findViewById(R.id.button_evaluate);
         mTitle = (TextView) findViewById(R.id.poster_desc_title);
-        mPosterImg = (ImageView) findViewById(R.id.poster_link);
+        mPosterImg = (ImageView) findViewById(R.id.poster_image);
         mSeeMore = (TextView) findViewById(R.id.seeMoreButton);
-        mVoteImg = (ImageView) findViewById(R.id.poster_vote);
+        mVoteImg = (ImageView) findViewById(R.id.presentation_image);
         mPoster = (Button) findViewById(R.id.button_poster);
     }
 

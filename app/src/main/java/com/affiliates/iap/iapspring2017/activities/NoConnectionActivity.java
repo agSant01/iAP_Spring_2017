@@ -17,6 +17,7 @@ import android.widget.Button;
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.MainActivity;
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.SplashScreen;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
@@ -43,17 +44,8 @@ public class NoConnectionActivity extends BaseActivity {
             public void onClick(View v) {
                 showProgressDialog();
                 if (mClient.isConnectionAvailable()){
-                    if(mAccAdmin.getUserID() != null){
-                        hideProgressDialog();
-                        Intent in = new Intent(NoConnectionActivity.this, MainActivity.class);
-                        startActivity(in);
-                        finish();
-                    } else {
-                        hideProgressDialog();
-                        Intent in = new Intent(NoConnectionActivity.this, LogInOrRegister.class);
-                        startActivity(in);
-                        finish();
-                    }
+                    Intent in = new Intent(NoConnectionActivity.this, SplashScreen.class);
+                    startActivity(in);
                 } else {
                     //There is no internet yet.
                     hideProgressDialog();

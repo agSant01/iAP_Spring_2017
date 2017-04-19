@@ -63,7 +63,6 @@
                 android:textAlignment="center"
                 android:textColor="@color/appGrey"
                 android:textSize="18sp"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -84,7 +83,7 @@
                 app:layout_constraintHorizontal_bias="0.4" />
 
             <ImageView
-                android:id="@+id/poster_link"
+                android:id="@+id/poster_image"
                 android:layout_width="120dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="8dp"
@@ -118,7 +117,7 @@
                 app:layout_constraintVertical_bias="0.176" />
 
             <ImageView
-                android:id="@+id/poster_vote"
+                android:id="@+id/presentation_image"
                 android:layout_width="125dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="8dp"
@@ -145,10 +144,9 @@
                 android:text="Abstract"
                 android:textColor="@color/appGrey"
                 android:textSize="22sp"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/poster_vote" />
+                app:layout_constraintTop_toBottomOf="@+id/presentation_image" />
 
             <View
                 android:id="@+id/view4"
@@ -160,7 +158,6 @@
                 android:layout_marginStart="45dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -214,7 +211,6 @@
                 android:layout_marginStart="45dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
@@ -229,7 +225,6 @@
                 android:layout_marginStart="45dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/advisors" />
@@ -249,12 +244,11 @@
             <org.lucasr.twowayview.TwoWayView
                 android:id="@+id/poster_team_members"
                 style="@style/TwoWayView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="133dp"
 
                 android:layout_marginTop="12dp"
                 android:drawSelectorOnTop="false"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view5"
@@ -271,7 +265,6 @@
                 android:textAlignment="center"
                 android:textColor="@color/appGrey"
                 android:textSize="22sp"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/poster_team_members" />
@@ -279,11 +272,10 @@
             <org.lucasr.twowayview.TwoWayView
                 android:id="@+id/poster_team_advisors"
                 style="@style/TwoWayView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="133dp"
                 android:layout_marginTop="8dp"
                 android:drawSelectorOnTop="false"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view6"
@@ -292,7 +284,7 @@
             <Button
                 android:id="@+id/button_evaluate"
                 android:layout_width="110dp"
-                android:layout_height="28dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -304,12 +296,12 @@
                 app:layout_constraintHorizontal_bias="0.316"
                 app:layout_constraintLeft_toRightOf="@+id/view2"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/poster_vote" />
+                app:layout_constraintTop_toBottomOf="@+id/presentation_image" />
 
             <Button
                 android:id="@+id/button_poster"
                 android:layout_width="110dp"
-                android:layout_height="28dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -321,7 +313,7 @@
                 app:layout_constraintHorizontal_bias="0.68"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/view2"
-                app:layout_constraintTop_toBottomOf="@+id/poster_link" />
+                app:layout_constraintTop_toBottomOf="@+id/poster_image" />
 
             <ProgressBar
                 android:id="@+id/member_progress"
