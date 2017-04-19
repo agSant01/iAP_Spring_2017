@@ -44,8 +44,6 @@ dependencies {
     compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
     // Helper Library for introduction screens
     compile 'com.matthew-tamlin:sliding-intro-screen:3.2.0'
-    // Helper library for binding resources to views controllers through annotations
-    compile 'com.jakewharton:butterknife:8.5.1'
     // Helper library for the search bar
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
     // Helper library spinner

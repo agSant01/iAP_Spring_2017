@@ -156,8 +156,10 @@ public class MoreFragment extends Fragment {
         mSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(getActivity()).setTitle("Confirmation")
-                        .setMessage("Sign Out").setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Sign Out")
+                        .setMessage("Do you want to sign out?")
+                        .setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         try {
                             Constants.getCurrentLoggedInUser().logOut(getContext());

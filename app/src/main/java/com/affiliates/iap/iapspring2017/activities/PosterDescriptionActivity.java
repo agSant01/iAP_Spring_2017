@@ -57,6 +57,8 @@ public class PosterDescriptionActivity extends BaseActivity {
     private ProgressBar mAdvisorProg;
     private ProgressBar mTeamProg;
 
+    private TextView mNoStudentsRegistered;
+    private TextView mNoAdivisorsRegistered;
     private TextView mAbstract;
     private TextView mSeeMore;
     private TextView mTitle;
@@ -152,6 +154,7 @@ public class PosterDescriptionActivity extends BaseActivity {
             @Override
             public void failure(String message) {
                 hideProgressBar(mTeamProg);
+                mNoStudentsRegistered.setVisibility(View.VISIBLE);
                 Log.e(TAG,message);
             }
         });
@@ -167,6 +170,7 @@ public class PosterDescriptionActivity extends BaseActivity {
             @Override
             public void failure(String message) {
                 hideProgressBar(mAdvisorProg);
+                mNoAdivisorsRegistered.setVisibility(View.VISIBLE);
                 Log.e(TAG, message);
             }
         });
@@ -215,6 +219,8 @@ public class PosterDescriptionActivity extends BaseActivity {
     private void bind(){
         mAdvisorScrollView = (TwoWayView) findViewById(R.id.poster_team_advisors);
         mStudentScrollView = (TwoWayView) findViewById(R.id.poster_team_members);
+        mNoAdivisorsRegistered = (TextView) findViewById(R.id._no_advisors);
+        mNoStudentsRegistered = (TextView) findViewById(R.id._no_students);
         mAdvisorProg = (ProgressBar) findViewById(R.id.advisor_progress);
         mAbstract = (TextView) findViewById(R.id.poster_desc_abstract);
         mTeamProg = (ProgressBar) findViewById(R.id.member_progress);
@@ -225,8 +231,6 @@ public class PosterDescriptionActivity extends BaseActivity {
         mSeeMore = (TextView) findViewById(R.id.seeMoreButton);
         mVoteImg = (ImageView) findViewById(R.id.poster_vote);
         mPoster = (Button) findViewById(R.id.button_poster);
-
-
     }
 
     private void setToolBar(){
