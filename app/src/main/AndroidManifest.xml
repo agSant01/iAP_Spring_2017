@@ -31,14 +31,14 @@
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".MainActivity"
             android:label="Schedule"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
         <activity
             android:name=".activities.PosterDescriptionActivity"
             android:label="Posters"
-            android:parentActivityName=".activities.MainActivity"
+            android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen"/>
         <activity

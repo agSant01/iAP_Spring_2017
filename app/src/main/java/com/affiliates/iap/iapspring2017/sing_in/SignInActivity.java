@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.Constants;
-import com.affiliates.iap.iapspring2017.activities.MainActivity;
+import com.affiliates.iap.iapspring2017.MainActivity;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;

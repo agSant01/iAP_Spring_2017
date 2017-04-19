@@ -103,7 +103,7 @@ public class AdvisorProfile extends BaseActivity {
         for (String s : getIntent().getStringArrayListExtra("projects")) {
             if (Constants.getPosters().containsKey(s)) {
                 TextView listItem = new TextView(getBaseContext());
-                listItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                listItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
                 listItem.setText(++counter + ". " + Constants.getPosters().get(s).getProjectName());
                 listItem.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
                 listItem.setLayoutParams(params);

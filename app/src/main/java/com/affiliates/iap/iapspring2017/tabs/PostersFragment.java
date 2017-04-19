@@ -23,7 +23,7 @@ import android.widget.ProgressBar;
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.activities.MainActivity;
+import com.affiliates.iap.iapspring2017.MainActivity;
 import com.affiliates.iap.iapspring2017.activities.PosterDescriptionActivity;
 import com.affiliates.iap.iapspring2017.adapters.PosterAdapter;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
@@ -141,6 +141,13 @@ public class PostersFragment extends Fragment {
       Log.v(TAG, "passed by");
       if(mPosterAdapter != null){
          mPosterAdapter.notifyDataSetChanged();
+          if(Constants.getPosters()!=null && mPosterAdapter.isEmpty())
+          mPosterAdapter.addAll(Constants.getSortedPosters());
       }
+   }
+
+   @Override
+   public void onPause() {
+      super.onPause();
    }
 }

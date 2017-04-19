@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,7 +14,10 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar_poster_desc"
@@ -33,151 +37,196 @@
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appbar">
 
-        <TextView
-            android:id="@+id/poster_desc_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="80dp"
-            android:fontFamily="sans-serif"
-            android:text="Poster Title"
-            android:textAlignment="center"
-            android:textColor="@color/appGrey"
-            android:textSize="20sp" />
-
-        <View
-            android:id="@+id/view"
-            android:layout_width="300dp"
-            android:layout_height="1dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:background="@android:color/darker_gray"
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/poster_desc_title" />
+            app:layout_constraintTop_toBottomOf="@+id/appbar"
+            app:layout_constraintVertical_bias="0.5">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Space
-                android:layout_width="20dp"
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_marginEnd="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/poster_link"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:paddingBottom="20dp"
-                app:srcCompat="@drawable/ic_poster_icon_green" />
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="0"
+                    android:background="@android:color/darker_gray"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/poster_desc_title" />
 
-            <Space
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/poster_desc_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_weight="0"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="This is a test so i can test that this test is enough long to test the thing that i need yo test in this test and maybe is not long enough yet"
+                    android:textAlignment="center"
+                    android:textColor="@color/appGrey"
+                    android:textSize="18sp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/poster_vote"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
-                android:paddingBottom="20dp"
-                app:srcCompat="@drawable/ic_thumb_up_filled_green" />
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="34dp"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/view">
 
-            <Space
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                    <TextView
+                        android:id="@+id/best_poster_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:text="Best Poster?"
+                        android:textAlignment="center"
+                        android:textColor="@color/appGrey"
+                        android:textSize="20sp" />
 
-        </LinearLayout>
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp"
+                        android:layout_weight="0" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/poster_link"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0"
+                        android:clickable="true"
+                        app:srcCompat="@drawable/ic_poster_icon_green" />
 
-            <Space
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_weight="0" />
 
-            <Button
-                android:id="@+id/button_poster"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/button_oval_shape_green"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="Vote Best Poster"
-                android:textColor="@color/appWhite" />
+                    <Button
+                        android:id="@+id/button_poster"
+                        android:layout_width="256dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0"
+                        android:background="@drawable/button_oval_shape_green"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Yes"
+                        android:textColor="@color/appWhite"
+                        android:textSize="16sp" />
 
-            <Space
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_weight="0" />
 
-            <Button
-                android:id="@+id/button_presentation"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/button_oval_shape_green"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:text="Vote Best Presentation"
-                android:textColor="@color/appWhite" />
+                    <TextView
+                        android:id="@+id/best_presentation_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="55dp"
+                        android:layout_weight="0"
+                        android:text="Best Presentation?"
+                        android:textAlignment="center"
+                        android:textColor="@color/appGrey"
+                        android:textSize="20sp" />
 
-            <Space
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_weight="0" />
 
-        </LinearLayout>
+                    <ImageView
+                        android:id="@+id/poster_vote"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0"
+                        app:srcCompat="@drawable/ic_thumb_up_filled_green" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_weight="0" />
 
-            <Space
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                    <Button
+                        android:id="@+id/button_presentation"
+                        android:layout_width="256dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center"
+                        android:layout_weight="0"
+                        android:background="@drawable/button_oval_shape_green"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:text="Yes"
+                        android:textColor="@color/appWhite"
+                        android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/button_cancel"
-                android:layout_width="235dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:background="@drawable/button_oval_shape_green"
-                android:text="Cancel"
-                android:textColor="@color/appWhite" />
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:layout_weight="0" />
 
-            <Space
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-        </LinearLayout>
+                </LinearLayout>
+            </android.support.constraint.ConstraintLayout>
 
-    </LinearLayout>
-
-
-</android.support.design.widget.CoordinatorLayout>
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
+</android.support.v7.widget.LinearLayoutCompat>

@@ -9,6 +9,7 @@
 package com.affiliates.iap.iapspring2017;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.affiliates.iap.iapspring2017.Models.Event;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class Constants {
    private static User currentLoggedInUser;
@@ -102,4 +104,16 @@ public class Constants {
    public static void setUnlikedStudents(ArrayList<IAPStudent> unlikedStudents) {
       Constants.unlikedStudents = unlikedStudents;
    }
+
+   public static void sortEvents(){
+       PriorityQueue<Event> sorted = new PriorityQueue<>();
+       sorted.addAll(events);
+       events = new ArrayList<>();
+      while(!sorted.isEmpty()){
+          events.add(sorted.remove());
+          Log.v("Sorting", events.get(events.size()-1).getStartDate().toString());
+      }
+   }
+
+
 }

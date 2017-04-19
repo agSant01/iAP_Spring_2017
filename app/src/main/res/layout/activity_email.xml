@@ -45,44 +45,54 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.479" />
+        app:layout_constraintVertical_bias="0.45999998"
+        app:layout_constraintHorizontal_bias="0.501" />
 
     <TextView
         android:id="@+id/backButton"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="160dp"
+        android:layout_width="120dp"
         android:layout_height="60dp"
         android:layout_marginBottom="137dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
-        android:text="Back"
-        android:textColor="@color/appGreen"
 
+        android:text="Back"
+        android:textColor="@color/appGrey"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_email"
+        app:layout_constraintVertical_bias="0.502" />
 
     <TextView
         android:id="@+id/nextButton"
         style="@style/Widget.AppCompat.Button"
-        android:layout_width="160dp"
+        android:layout_width="120dp"
         android:layout_height="60dp"
         android:layout_marginBottom="137dp"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:text="Next"
-        android:textColor="@color/appGreen"
+        android:textColor="@color/appGrey"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toRightOf="@+id/studentButton"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_email"
+        app:layout_constraintVertical_bias="0.502" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="20dp"
         android:layout_height="20dp"
         app:srcCompat="@drawable/ic_triangle_right_icon"
-        android:layout_marginRight="33dp"
+        android:layout_marginRight="8dp"
         app:layout_constraintRight_toRightOf="@+id/nextButton"
         app:layout_constraintTop_toTopOf="@+id/nextButton"
         android:layout_marginTop="8dp"
@@ -97,7 +107,7 @@
         app:srcCompat="@drawable/ic_triangle_left_icon"
         app:layout_constraintTop_toTopOf="@+id/backButton"
         android:layout_marginTop="8dp"
-        android:layout_marginLeft="33dp"
+        android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="@+id/backButton"
         app:layout_constraintBottom_toBottomOf="@+id/backButton"
         android:layout_marginBottom="8dp"

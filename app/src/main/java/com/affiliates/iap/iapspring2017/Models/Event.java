@@ -11,10 +11,12 @@ package com.affiliates.iap.iapspring2017.Models;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import org.json.JSONObject;
+
+import android.support.annotation.NonNull;
 import android.util.Log;
 import java.util.Date;
 
-public class Event {
+public class Event implements Comparable<Event>{
    private final SimpleDateFormat format;
    private String eventDescription;
    private String eventName;
@@ -99,4 +101,11 @@ public class Event {
 
       return str;
    }
+
+    @Override
+    public int compareTo(@NonNull Event other) {
+        if(this.startDate.after(other.startDate)) return 1;
+        if(this.startDate.before(other.startDate)) return -1;
+        return 0;
+    }
 }

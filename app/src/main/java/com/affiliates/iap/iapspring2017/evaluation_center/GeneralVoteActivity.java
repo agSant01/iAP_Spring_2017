@@ -53,15 +53,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
                 Log.v(TAG, "Voted for best Presentation");
             }
         });
-        cancel = (Button) findViewById(R.id.button_cancel);
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GeneralVoteActivity.super.onBackPressed();
-                finish();
 
-            }
-        });
     }
 
     private void vote(int type){

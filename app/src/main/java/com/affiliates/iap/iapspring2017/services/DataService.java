@@ -691,7 +691,8 @@ public class DataService {
 
                            @Override
                            public void failure(String message) {
-                              Log.e(TAG, message);
+
+                               Log.e(TAG, message);
                            }
                         });
                   } else if (user.getAccountType().equals(User.AccountType.CompanyUser)){
@@ -737,21 +738,27 @@ public class DataService {
 
    private void addAdvisorToProjects(final Advisor advisor, final Callback<String> callback){
       final Queue<String> dispatch = new ArrayDeque<>();
-      for(String project : advisor.getProjects()){
-         dispatch.add(project);
-         postersRef().child(project).child("Advisors").updateChildren(new HashMap<String, Object>(){{
-                    put(advisor.getUserID(), true);
-                 }}).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-               if (!task.isSuccessful())
-                  callback.failure("addAdvisorToProjects(): " +task.getException().getMessage());
-               dispatch.poll();
-               if(dispatch.isEmpty())
-                  callback.success("Advisor added to all projects successful");
-            }
-         });
+      if (advisor.getProjects() != null) {
+         for(String project : advisor.getProjects()){
+            dispatch.add(project);
+            postersRef().child(project).child("Advisors").updateChildren(new HashMap<String, Object>(){{
+               put(advisor.getUserID(), true);
+            }}).addOnCompleteListener(new OnCompleteListener<Void>() {
+               @Override
+               public void onComplete(@NonNull Task<Void> task) {
+                  if (!task.isSuccessful())
+                     callback.failure("addAdvisorToProjects(): " +task.getException().getMessage());
+                  dispatch.poll();
+                  if(dispatch.isEmpty())
+                     callback.success("Advisor added to all projects successful");
+               }
+            });
+         }
       }
+      else{
+          callback.success("Advisor doesn't has any Poster");
+      }
+
    }
 
    private void addIAPStudentToProjects(final IAPStudent student, final Callback<String> callback){
