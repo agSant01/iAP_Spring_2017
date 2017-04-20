@@ -38,11 +38,12 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/evaluation"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            app:tabBackground="@color/appCyan"
+            android:layout_height="48dp"
+            app:tabBackground="@color/appWhite"
             app:tabIndicatorColor="@color/appWhite"
             app:tabIndicatorHeight="2dp"
-            app:tabTextColor="@color/appWhite" />
+            app:tabSelectedTextColor="@color/appGreen"
+            app:tabTextColor="@color/appLightGrey" />
 
     </android.support.design.widget.AppBarLayout>
 

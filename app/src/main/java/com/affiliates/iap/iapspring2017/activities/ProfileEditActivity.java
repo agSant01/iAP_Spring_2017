@@ -37,6 +37,7 @@ import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.Models.User.AccountType;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
+import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -59,6 +60,7 @@ public class ProfileEditActivity extends BaseActivity {
     private static final int READ_REQUEST_CODE_IMAGE = 42;
     private static final int READ_REQUEST_CODE_PDF = 40;
 
+    private Client c;
     private CircleImageView mCircleImageView;
     private ImageView mChangeProfilePhoto;
     private Button mResetPassword;
@@ -91,6 +93,7 @@ public class ProfileEditActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        c = new Client(getBaseContext());
         mAccType = Constants.getCurrentLoggedInUser().getAccountType();
         Log.v(TAG, mAccType + " " + AccountType.Advisor);
         if(mAccType == AccountType.IAPStudent)
@@ -123,15 +126,13 @@ public class ProfileEditActivity extends BaseActivity {
         }};
 
         mName.setTextKeepState(!Constants.getCurrentLoggedInUser().getName().contains("NA") ? Constants.getCurrentLoggedInUser().getName() : "");
-        mName.clearFocus();
-        mEmail.setText(Constants.getCurrentLoggedInUser().getEmail());
+        mEmail.setTextKeepState(Constants.getCurrentLoggedInUser().getEmail());
         mResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showResetPasswordDialog();
             }
         });
-
         mChangeProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,17 +203,18 @@ public class ProfileEditActivity extends BaseActivity {
     }
 
     private void setIAPStudent(){
+        mGradDate.setFocusable(false);
         final IAPStudent student = (IAPStudent) Constants.getCurrentLoggedInUser();
         if(!student.getDepartment().equals("NA")){
             deptms.remove(student.getDepartment());
             deptms.add(0, student.getDepartment());
             mDepartment.setItems(deptms);
-            mDepartment.setText(student.getDepartment());
+            mDepartment.setTextKeepState(student.getDepartment());
         } else {
             mDepartment.setItems(deptms);
         }
-        mGradDate.setText(!student.getGradDate().equals("NA") ? student.getGradDate() : "Jun 20, 2017");
-        mObjective.setText(!student.getObjective().equals("NA") ? student.getObjective() : "");
+        mGradDate.setTextKeepState(!student.getGradDate().equals("NA") ? student.getGradDate() : "Jun 20, 2017");
+        mObjective.setTextKeepState(!student.getObjective().equals("NA") ? student.getObjective() : "");
         months = new HashMap<String, Integer>(){{
             put("Jan", 0);
             put("Feb", 1);
@@ -228,33 +230,29 @@ public class ProfileEditActivity extends BaseActivity {
             put("Dec", 11);
         }};
 
-        mGradDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mGradDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                Log.v(TAG, "JHV");
-                if(hasFocus){
-                    String[] grad = student.getGradDate().split("[, ]+");
-                    Calendar calendar = Calendar.getInstance();
-                    if(grad.length > 1)
-                        calendar.set(Integer.parseInt(grad[2]), months.get(grad[0]), Integer.parseInt(grad[1]));
+            public void onClick(View v) {
+                String[] grad = student.getGradDate().split("[, ]+");
+                Calendar calendar = Calendar.getInstance();
+                if(grad.length > 1)
+                    calendar.set(Integer.parseInt(grad[2]), months.get(grad[0]), Integer.parseInt(grad[1]));
 
-                    DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                            for(String s : months.keySet()){
-                                if (months.get(s) == monthOfYear){
-                                    mGradDate.setText(s + " " + dayOfMonth + ", " + year);
-                                    break;
-                                }
-                            }
-                        }
-                    },calendar.get(Calendar.YEAR),
-                            calendar.get(Calendar.MONTH),
-                            calendar.get(Calendar.DAY_OF_MONTH));
-                    datePickerDialog.setVersion(DatePickerDialog.Version.VERSION_1);
-                    datePickerDialog.show(getFragmentManager(), "");
-                    mGradDate.clearFocus();
-                }
+                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(new DatePickerDialog.OnDateSetListener() {
+                                                                                     @Override
+                                                                                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                                                                                         for(String s : months.keySet()){
+                                                                                             if (months.get(s) == monthOfYear){
+                                                                                                 mGradDate.setText(s + " " + dayOfMonth + ", " + year);
+                                                                                                 break;
+                                                                                             }
+                                                                                         }
+                                                                                     }
+                                                                                 },calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.setVersion(DatePickerDialog.Version.VERSION_1);
+                datePickerDialog.show(getFragmentManager(), "");
             }
         });
     }
@@ -377,6 +375,11 @@ public class ProfileEditActivity extends BaseActivity {
     }
 
     private void saveChanges(){
+        if (!c.isConnectionAvailable()){
+            Log.v(TAG, "I");
+            startActivity(new Intent(getBaseContext(), NoConnectionActivity.class));
+            return;
+        }
         showProgressDialog("Uploading Changes");
         final User user = Constants.getCurrentLoggedInUser();
         user.setName(mName.getText().toString().isEmpty() ? "NA" : mName.getText().toString());
@@ -416,14 +419,16 @@ public class ProfileEditActivity extends BaseActivity {
                             Log.v(TAG, "updateUserData success");
                             hideProgressDialog();
                             Constants.setCurrentLogedInUser(user);
-                            new AlertDialog.Builder(ProfileEditActivity.this)
+                            AlertDialog alertDialog = new AlertDialog.Builder(ProfileEditActivity.this)
                                     .setTitle("Successfully Updated Your Profile")
                                     .setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             finish();
                                         }
-                                    }).create().show();
+                                    }).create();
+                            alertDialog.setCancelable(false);
+                            alertDialog.show();
                         }
 
                         @Override
@@ -465,7 +470,7 @@ public class ProfileEditActivity extends BaseActivity {
                                         public void onClick(DialogInterface dialog, int which) {
                                             finish();
                                         }
-                                    }).create().show();
+                                    }).setCancelable(false).create().show();
                 }
 
                 @Override

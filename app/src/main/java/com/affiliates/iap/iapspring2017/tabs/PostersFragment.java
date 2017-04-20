@@ -24,9 +24,11 @@ import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.MainActivity;
+import com.affiliates.iap.iapspring2017.activities.NoConnectionActivity;
 import com.affiliates.iap.iapspring2017.activities.PosterDescriptionActivity;
 import com.affiliates.iap.iapspring2017.adapters.PosterAdapter;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
+import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
 
 import java.util.ArrayList;
@@ -55,7 +57,7 @@ public class PostersFragment extends Fragment {
    @Override
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                          Bundle savedInstance) {
-
+      final Client c = new Client(getContext());
       mRootView = inflater.inflate(R.layout.list_view, container, false);
       mListView = (ListView) mRootView.findViewById(R.id.poster_listview);
       mPB = (ProgressBar) mRootView.findViewById(R.id.progressBar);
@@ -93,6 +95,11 @@ public class PostersFragment extends Fragment {
                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                   @Override
                   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                     if (!c.isConnectionAvailable()){
+                        Log.v(TAG, "I");
+                        startActivity(new Intent(getActivity().getBaseContext(), NoConnectionActivity.class));
+                        return;
+                     }
                      Intent in = new Intent(getActivity().getBaseContext(), PosterDescriptionActivity.class);
                      String ID = mPosterAdapter.getItem(position).getPosterID();
                      in.putExtra("posterID", ID);

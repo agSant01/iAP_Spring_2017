@@ -103,7 +103,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_weight="0"
                     android:fontFamily="sans-serif"
                     android:gravity="center_vertical|center_horizontal"
@@ -113,7 +113,8 @@
                     android:textSize="18sp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0" />
 
                 <LinearLayout
                     android:id="@+id/linearLayout"

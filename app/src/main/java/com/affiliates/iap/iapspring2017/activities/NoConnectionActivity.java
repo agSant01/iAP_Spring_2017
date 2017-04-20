@@ -9,13 +9,16 @@
 package com.affiliates.iap.iapspring2017.activities;
 
 import android.content.Intent;
+import android.opengl.GLException;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.MainActivity;
+import com.affiliates.iap.iapspring2017.Models.OverallVote;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.SplashScreen;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
@@ -44,12 +47,16 @@ public class NoConnectionActivity extends BaseActivity {
             public void onClick(View v) {
                 showProgressDialog();
                 if (mClient.isConnectionAvailable()){
-                    Intent in = new Intent(NoConnectionActivity.this, SplashScreen.class);
-                    startActivity(in);
+                    hideProgressDialog();
+                    Toast.makeText(getBaseContext(), Tmessage, Toast.LENGTH_SHORT).show();
+                    if(getIntent().getStringExtra("Splash").equals("splash")){
+                        startActivity(new Intent(getBaseContext(), SplashScreen.class));
+                    }
+                    finish();
                 } else {
                     //There is no internet yet.
                     hideProgressDialog();
-                    Snackbar.make(findViewById(R.id.no_conection), message, Snackbar.LENGTH_SHORT).show();
+                    Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT).show();
                 }
             }
         });

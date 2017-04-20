@@ -1,12 +1,10 @@
 package com.affiliates.iap.iapspring2017.evaluation_center;
 
-import android.content.Context;
 import android.content.DialogInterface;
-import android.media.Image;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,29 +14,29 @@ import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.User;
+import com.affiliates.iap.iapspring2017.Models.Vote;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
-import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.w3c.dom.Text;
-
 public class GeneralVoteActivity extends AppCompatActivity {
+    private final static String TAG = "GeneralVoteActivity";
+
     private String name, id;
     private TextView title;
     private Button bestPoster, bestPresentation;
     private ImageView posterImage, presentationImage;
     private AlertDialog submission, noInternet;
-    private final static String TAG = "GeneralVoteActivity";
+    private Toolbar mToolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_general_vote);
         bind();
-
-
+        setToolBar();
 
     }
 
@@ -68,7 +66,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
         submission.show();
     }
     private void bind(){
-
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_poster_desc);
         name = getIntent().getStringExtra("posterName");
         id = getIntent().getStringExtra("posterID");
         title = (TextView) findViewById(R.id.poster_desc_title);
@@ -105,26 +103,42 @@ public class GeneralVoteActivity extends AppCompatActivity {
 
     }
 
+    private void setToolBar(){
+        setSupportActionBar(mToolbar);
+
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+
     private void voteProcess(int type){
         Client c = new Client(getBaseContext());
         if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
             if (c.isConnectionAvailable())
                 displaySubmissionDialog(type);
             else
-                Snackbar.make(findViewById(R.id.general_voting), "No Internet Connection, Please Connect", Snackbar.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), "No Internet Connection, Please Connect", Toast.LENGTH_SHORT).show();
         }
         else{
-            Snackbar.make(findViewById(R.id.general_voting), "Sorry, you need to verify your email first.", Snackbar.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), "Sorry, you need to verify your email first.", Toast.LENGTH_SHORT).show();
 
         }
     }
 
     private void vote(final int type){
         User user = Constants.getCurrentLoggedInUser();
-        DataService.sharedInstance().getUserData(user.getUserID(), new Callback() {
+        DataService.sharedInstance().getUserData(user.getUserID(), new Callback<User>() {
             @Override
-            public void success(Object data) {
-                Constants.setCurrentLogedInUser((User) data);
+            public void success(User data) {
+                Constants.setCurrentLogedInUser(data);
                 //get the latest status on voted
                 Log.v(TAG, "User updated");
                 if(type==0)
@@ -140,9 +154,9 @@ public class GeneralVoteActivity extends AppCompatActivity {
             }
         });
         if(!user.hasVoted(type)){
-            DataService.sharedInstance().submitGeneralVote(id, type, new Callback() {
+            DataService.sharedInstance().submitGeneralVote(id, type, new Callback<Vote>() {
                 @Override
-                public void success(Object data) {
+                public void success(Vote data) {
                     Log.v(TAG, "Voting completed");
                     GeneralVoteActivity.super.onBackPressed();
                     finish();
@@ -150,9 +164,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void failure(String message) {
-
-                }
+                public void failure(String message) {}
             });
         }
         else{

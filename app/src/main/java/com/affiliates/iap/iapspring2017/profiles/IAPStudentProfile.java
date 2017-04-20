@@ -70,17 +70,16 @@ public class IAPStudentProfile extends BaseActivity {
         String projects = "";
         ArrayList<String> arr = in.getStringArrayListExtra("projects");
         int i;
-        for(i = 0; i < arr.size()-1; i++){
-            projects += (i+1) + ". " + arr.get(i) + "\n\n";
+        for(i = 0; i < arr.size(); i++){
+            projects += "\u2022 " + arr.get(i) + "\n";
         }
-        projects += (i+1) + ". " + arr.get(i);
 
         mProyectName.setText(projects);
-        mGradDate.setText(in.getStringExtra("gradDate"));
+        mGradDate.setText(in.getStringExtra("gradDate").equals("NA") ? "Not defined" : in.getStringExtra("gradDate"));
         mEmail.setText(in.getStringExtra("email"));
         mName.setText(in.getStringExtra("name"));
-        mDept.setText(in.getStringExtra("dpt"));
-        mBio.setText(in.getStringExtra("bio"));
+        mDept.setText(in.getStringExtra("dpt").equals("NA") ? "Not defined" : in.getStringExtra("dpt"));
+        mBio.setText(in.getStringExtra("bio").equals("NA") ? "Not defined" : in.getStringExtra("bio"));
         setResume();
 
         Log.v(TAG, "TIPO: " + Constants.getCurrentLoggedInUser().getAccountType().toString());

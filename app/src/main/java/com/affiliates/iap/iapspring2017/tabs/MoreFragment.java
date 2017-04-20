@@ -25,12 +25,13 @@ import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.activities.CompanyListActivity;
 import com.affiliates.iap.iapspring2017.Constants;
-import com.affiliates.iap.iapspring2017.Models.Advisor;
-import com.affiliates.iap.iapspring2017.Models.CompanyUser;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.activities.LocationActivity;
+import com.affiliates.iap.iapspring2017.activities.NoConnectionActivity;
 import com.affiliates.iap.iapspring2017.activities.ProfileEditActivity;
 import com.affiliates.iap.iapspring2017.activities.StudentsOfInterestActivity;
+import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.squareup.picasso.Picasso;
@@ -50,7 +51,7 @@ public class MoreFragment extends Fragment {
     private TextView mProjects;
     private TextView mStudInt;
     private TextView mEmail;
-    private TextView mAbout;
+    private TextView mLocation;
     private Button mSignOut;
     private View mRootView;
     private String mTester;
@@ -69,6 +70,7 @@ public class MoreFragment extends Fragment {
                              Bundle savedInstance) {
         mRootView = inflater.inflate(R.layout.fragment_more, container, false);
         this.bind();
+        final Client client = new Client(getContext());
         mTester = Constants.getCurrentLoggedInUser().getPhotoURL();
 
         String url = "NA"; //this can't be empty!
@@ -96,6 +98,10 @@ public class MoreFragment extends Fragment {
         mEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!client.isConnectionAvailable()){
+                    startActivity(new Intent(getActivity().getBaseContext(), NoConnectionActivity.class));
+                    return;
+                }
                 Intent in = new Intent(getActivity(), ProfileEditActivity.class );
                 startActivity(in);
             }
@@ -130,6 +136,10 @@ public class MoreFragment extends Fragment {
             mStudInt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(!client.isConnectionAvailable()){
+                        startActivity(new Intent(getActivity().getBaseContext(), NoConnectionActivity.class));
+                        return;
+                    }
                     Intent in = new Intent(getActivity(), StudentsOfInterestActivity.class );
                     startActivity(in);
                 }
@@ -139,23 +149,35 @@ public class MoreFragment extends Fragment {
         mCompanies.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!client.isConnectionAvailable()){
+                    startActivity(new Intent(getActivity().getBaseContext(), NoConnectionActivity.class));
+                    return;
+                }
                 Intent in = new Intent(getActivity(), CompanyListActivity.class );
                 startActivity(in);
             }
         });
 
-//
-//        mAbout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent in = new Intent(getActivity(), About.class);
-//                startActivity(in);
-//            }
-//        });
+
+        mLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!client.isConnectionAvailable()){
+                    startActivity(new Intent(getActivity().getBaseContext(), NoConnectionActivity.class));
+                    return;
+                }
+                Intent in = new Intent(getActivity(), LocationActivity.class);
+                startActivity(in);
+            }
+        });
 
         mSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!client.isConnectionAvailable()){
+                    startActivity(new Intent(getActivity().getBaseContext(), NoConnectionActivity.class));
+                    return;
+                }
                 new AlertDialog.Builder(getActivity())
                         .setTitle("Sign Out")
                         .setMessage("Do you want to sign out?")
@@ -191,6 +213,7 @@ public class MoreFragment extends Fragment {
         mEmail = (TextView) mRootView.findViewById(R.id._department);
         mProjects = (TextView) mRootView.findViewById(R.id._project);
         mUserName = (TextView) mRootView.findViewById(R.id._name);
+        mLocation = (TextView) mRootView.findViewById(R.id.more_location);
     }
 
     @Override

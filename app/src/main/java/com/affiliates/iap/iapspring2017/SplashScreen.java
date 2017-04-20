@@ -38,18 +38,18 @@ public class SplashScreen extends Activity {
             public void run() {
                 if(!client.isConnectionAvailable()){
                     Intent in = new Intent(SplashScreen.this , NoConnectionActivity.class);
+                    in.putExtra("splash", "splash");
                     startActivity(in);
                     finish();
                 } else {
                     String id = aa.getUserID();
                     if(id != null && !id.equals("")){
-                        Log.v(TAG, "UserID from Memory succesfull");
+                        Log.v(TAG, "Getting user data");
                         DataService.sharedInstance().getUserData(id, new Callback<User>() {
                             @Override
                             public void success(User user) {
                                 Log.v(TAG, "Get user data successfull");
                                 Constants.setCurrentLogedInUser(user);
-
                                 Intent in = new Intent(SplashScreen.this, MainActivity.class);
                                 startActivity(in);
                                 finish();
@@ -81,6 +81,6 @@ public class SplashScreen extends Activity {
                     }
                 }
             }
-        },1000);
+        },0);
     }
 }

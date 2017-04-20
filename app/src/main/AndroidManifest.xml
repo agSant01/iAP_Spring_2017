@@ -42,6 +42,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen"/>
         <activity
+            android:name=".activities.LocationActivity"
+            android:theme="@style/SplashScreen"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
             android:name=".sing_in.LogInOrRegister"
             android:screenOrientation="portrait" />
 

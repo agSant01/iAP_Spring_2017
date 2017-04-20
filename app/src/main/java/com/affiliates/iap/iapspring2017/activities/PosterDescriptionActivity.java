@@ -62,6 +62,7 @@ public class PosterDescriptionActivity extends BaseActivity {
     private TextView mAbstract;
     private TextView mSeeMore;
     private TextView mTitle;
+    private TextView mCat;
 
     private Button mVoteButton;
     private Button mPoster;
@@ -93,6 +94,12 @@ public class PosterDescriptionActivity extends BaseActivity {
         }
 
         mTitle.setText(mPosterData.getProjectName());
+        String p = "";
+        for(int i = 0; i < mPosterData.getCategories().size()-1; i++){
+            p += mPosterData.getCategories().get(i) + ", ";
+        }
+        p += mPosterData.getCategories().get(mPosterData.getCategories().size()-1);
+        mCat.setText(p);
         seeLess();
         //update to see if user can vote
         DataService.sharedInstance().getUserData( Constants.getCurrentLoggedInUser().getUserID(), new Callback<User>() {
@@ -231,6 +238,7 @@ public class PosterDescriptionActivity extends BaseActivity {
         mSeeMore = (TextView) findViewById(R.id.seeMoreButton);
         mVoteImg = (ImageView) findViewById(R.id.presentation_image);
         mPoster = (Button) findViewById(R.id.button_poster);
+        mCat = (TextView) findViewById(R.id.textView20);
     }
 
     private void setToolBar(){
@@ -307,7 +315,7 @@ public class PosterDescriptionActivity extends BaseActivity {
         if(mPosterData.get_abstract().length() <= 300 ){
             mSeeMore.setVisibility(View.INVISIBLE);
         }
-        mAbstract.setText(mPosterData.get_abstract());
+        mAbstract.setText(mPosterData.get_abstract().equals("NA") ? "Abstract currently unavailable" : mPosterData.get_abstract());
         mSeeMore.setText("See less");
     }
 
