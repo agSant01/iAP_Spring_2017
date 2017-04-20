@@ -11,14 +11,12 @@ package com.affiliates.iap.iapspring2017.Models;
 import android.content.Context;
 import android.util.Log;
 
-import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
 import com.affiliates.iap.iapspring2017.services.DataService;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -54,7 +52,7 @@ public class Advisor extends User implements UserDelegate {
       this.researchIntent = data.optString("ResearchIntent");
       this.voted = new Voted(data.optJSONObject("Voted"));
       this.department = data.optString("Department");
-      this.webPage = data.optString("webpage");
+      this.webPage = data.optString("Webpage");
    }
 
    private static Void checkType(AccountType accountType)
@@ -112,7 +110,7 @@ public class Advisor extends User implements UserDelegate {
          put("Sex", getGender());
          put("Department", department);
          put("ResearchIntent", researchIntent);
-         put("webpage", webPage);
+         put("Webpage", webPage);
          put("Projects", exportProjects());
          put("Voted", exportVoted());
       }};

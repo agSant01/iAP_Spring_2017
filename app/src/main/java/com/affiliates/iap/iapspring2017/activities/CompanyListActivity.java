@@ -26,6 +26,7 @@ import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.adapters.CompanyListAdapter;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;
+import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.ArrayList;
 
@@ -58,6 +59,7 @@ public class CompanyListActivity extends BaseActivity {
 
                 @Override
                 public void failure(String message) {
+                    FirebaseCrash.log(TAG+ " :"+ message);
                     Log.e(TAG, message);
                 }
             });

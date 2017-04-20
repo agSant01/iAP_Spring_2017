@@ -9,7 +9,6 @@
 package com.affiliates.iap.iapspring2017.Models;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.affiliates.iap.iapspring2017.Constants;
@@ -20,14 +19,11 @@ import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.database.FirebaseDatabase;
-
-import org.json.JSONObject;
+import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.HashMap;
 
@@ -73,15 +69,16 @@ public abstract class User implements UserDelegate{
                // the auth state listener will be notified and logic to handle the
                // signed in user can be handled in the listener.
                if (!task.isSuccessful()) {
-                  Log.w(TAG, "signInWithEmail:failed", task.getException());
+                  FirebaseCrash.log(TAG + "signInWithEmail:failed" + task.getException());
+                  Log.e(TAG, "signInWithEmail:failed", task.getException());
                   callback.failure(task.getException().getMessage());
                   return;
                }try{
                   DataService.sharedInstance().getUserData(task.getResult().getUser().getUid(), callback);
                } catch (InvalidAccountTypeExeption e){
+                  FirebaseCrash.log("User.class -> login(): Invalid Account Exeption");
                   callback.failure("User.class -> login(): Invalid Account Exeption");
                }
-
             }
          });
    }
@@ -89,7 +86,7 @@ public abstract class User implements UserDelegate{
    public void logOut(Context context) throws FirebaseAuthException{
       FirebaseAuth.getInstance().signOut();
       AccountAdministration aa = new AccountAdministration(context);
-      aa.saveUserID("");
+      aa.saveUserID("second");
       Constants.setCurrentLogedInUser(null);
    }
 

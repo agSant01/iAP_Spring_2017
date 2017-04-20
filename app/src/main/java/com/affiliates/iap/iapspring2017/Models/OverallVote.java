@@ -9,6 +9,7 @@
 package com.affiliates.iap.iapspring2017.Models;
 
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
+import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.HashMap;
 
@@ -31,6 +32,7 @@ public class OverallVote extends Vote {
             this.voteType = BestPresentation;
             break;
          default:
+            FirebaseCrash.log("OveralVote.class -> OveralVote(): Vote type value can only be 1 or 0");
             throw new VoteErrorException("OveralVote.class -> OveralVote(): Vote type value can only be 1 or 0");
       }
    }

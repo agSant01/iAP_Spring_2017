@@ -45,20 +45,35 @@
             android:theme="@style/AppTheme">
 
             <TextView
-                android:id="@+id/poster_desc_title"
+                android:id="@+id/textView19"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Categories"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0.02"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/poster_desc_title" />
+
+            <TextView
+                android:id="@+id/poster_desc_title"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
                 android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
+                android:layout_marginLeft="0dp"
 
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="70dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center_vertical|center"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
                 android:text="This is a test so i can test that this test is enough long to test the thing that i need yo test in this test and maybe is not long enough yet"
                 android:textAlignment="center"
                 android:textColor="@color/appGrey"
@@ -72,19 +87,19 @@
                 android:id="@+id/view"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginEnd="45dp"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="45dp"
-                android:layout_marginStart="45dp"
-                android:layout_marginTop="14dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
                 android:background="@android:color/darker_gray"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/poster_desc_title"
-                app:layout_constraintHorizontal_bias="0.4" />
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
             <ImageView
-                android:id="@+id/poster_link"
+                android:id="@+id/poster_image"
                 android:layout_width="120dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="8dp"
@@ -118,7 +133,7 @@
                 app:layout_constraintVertical_bias="0.176" />
 
             <ImageView
-                android:id="@+id/poster_vote"
+                android:id="@+id/presentation_image"
                 android:layout_width="125dp"
                 android:layout_height="100dp"
                 android:layout_marginEnd="8dp"
@@ -145,22 +160,20 @@
                 android:text="Abstract"
                 android:textColor="@color/appGrey"
                 android:textSize="22sp"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/poster_vote" />
+                app:layout_constraintTop_toBottomOf="@+id/presentation_image" />
 
             <View
                 android:id="@+id/view4"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginEnd="45dp"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="45dp"
-                android:layout_marginStart="45dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView4" />
@@ -179,6 +192,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:ellipsize="end"
+                android:minLines="4"
                 android:text="I would like to draw a line right in the middle of a layout and use it as a separator of other items like TextView. Is there a good widget for this.I don't really want to use an image as it would be hard to match the other components to it. And I want it to be relatively positioned as well. Thanks"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -208,13 +222,12 @@
                 android:id="@+id/view5"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginEnd="45dp"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="45dp"
-                android:layout_marginStart="45dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
@@ -223,13 +236,12 @@
                 android:id="@+id/view6"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_marginEnd="45dp"
-                android:layout_marginLeft="45dp"
-                android:layout_marginRight="45dp"
-                android:layout_marginStart="45dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:background="@android:color/darker_gray"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/advisors" />
@@ -249,12 +261,11 @@
             <org.lucasr.twowayview.TwoWayView
                 android:id="@+id/poster_team_members"
                 style="@style/TwoWayView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="133dp"
 
                 android:layout_marginTop="12dp"
                 android:drawSelectorOnTop="false"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view5"
@@ -271,7 +282,6 @@
                 android:textAlignment="center"
                 android:textColor="@color/appGrey"
                 android:textSize="22sp"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/poster_team_members" />
@@ -279,11 +289,10 @@
             <org.lucasr.twowayview.TwoWayView
                 android:id="@+id/poster_team_advisors"
                 style="@style/TwoWayView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="133dp"
                 android:layout_marginTop="8dp"
                 android:drawSelectorOnTop="false"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view6"
@@ -292,7 +301,7 @@
             <Button
                 android:id="@+id/button_evaluate"
                 android:layout_width="110dp"
-                android:layout_height="28dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -304,12 +313,12 @@
                 app:layout_constraintHorizontal_bias="0.316"
                 app:layout_constraintLeft_toRightOf="@+id/view2"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/poster_vote" />
+                app:layout_constraintTop_toBottomOf="@+id/presentation_image" />
 
             <Button
                 android:id="@+id/button_poster"
                 android:layout_width="110dp"
-                android:layout_height="28dp"
+                android:layout_height="30dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
@@ -321,7 +330,7 @@
                 app:layout_constraintHorizontal_bias="0.68"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@+id/view2"
-                app:layout_constraintTop_toBottomOf="@+id/poster_link" />
+                app:layout_constraintTop_toBottomOf="@+id/poster_image" />
 
             <ProgressBar
                 android:id="@+id/member_progress"
@@ -366,7 +375,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="No Students registered at the momnt"
+                android:text="No team members added yet"
                 android:textSize="14sp"
                 android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/poster_team_members"
@@ -380,7 +389,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:text="No Advisors registered at the moment"
+                android:text="No advisors added yet"
                 android:textSize="14sp"
                 android:visibility="invisible"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -392,6 +401,24 @@
                 app:layout_constraintVertical_bias="0.507"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/textView20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginTop="8dp"
+                android:paddingEnd="6dp"
+                android:paddingStart="6dp"
+                android:text="TextView"
+                android:textColor="@color/appGrey"
+                android:textSize="15sp"
+                app:layout_constraintHorizontal_bias="0.02"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 </android.support.design.widget.CoordinatorLayout>

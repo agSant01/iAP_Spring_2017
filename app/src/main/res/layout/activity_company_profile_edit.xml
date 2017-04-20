@@ -40,7 +40,7 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -49,7 +49,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintVertical_bias="0.5">
 
             <TableLayout
                 android:id="@+id/tableLayout3"
@@ -90,7 +90,6 @@
                         android:ems="10"
                         android:hint="Name"
                         android:inputType="textPersonName"
-                        android:singleLine="true"
                         android:textSize="15sp"
                         app:layout_constraintHorizontal_bias="0.27"
                         app:layout_constraintLeft_toRightOf="@+id/imageView13"
@@ -228,27 +227,26 @@
 
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="105dp"
 
                 android:background="@drawable/button_oval_shape_green"
                 android:backgroundTint="@color/appWhite"
                 android:text="Reset Password"
                 android:textColor="@color/appGreen"
                 android:textSize="14sp"
-                app:layout_constraintHorizontal_bias="0.488"
+                app:layout_constraintHorizontal_bias="0.489"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tableLayout3" />
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toTopOf="@+id/save_changes" />
 
             <Button
                 android:id="@+id/save_changes"
                 android:layout_width="256dp"
                 android:layout_height="33dp"
 
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="24dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="16dp"
                 android:background="@drawable/button_oval_shape_green"
                 android:text="Save Changes"
                 android:textColor="@color/appWhite"
@@ -256,9 +254,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/reset_password"
-                app:layout_constraintVertical_bias="0.49" />
+                app:layout_constraintRight_toRightOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>

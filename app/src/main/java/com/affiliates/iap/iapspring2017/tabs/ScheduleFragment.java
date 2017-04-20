@@ -27,10 +27,12 @@ import com.affiliates.iap.iapspring2017.services.DataService;
 
 import java.util.ArrayList;
 
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
+
 public class ScheduleFragment extends Fragment {
     private static final String TAG = "ScheduleFragment";
     private EventAdapter mEventAdapter;
-    private ListView mListView;
+    private StickyListHeadersListView mListView;
     private ProgressBar mPB;
     private View mRootView;
 
@@ -47,9 +49,9 @@ public class ScheduleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstance) {
-        mRootView = inflater.inflate(R.layout.list_view, container, false);
+        mRootView = inflater.inflate(R.layout.schedule_listview, container, false);
 
-        mListView = (ListView) mRootView.findViewById(R.id.poster_listview);
+        mListView = (StickyListHeadersListView) mRootView.findViewById(R.id.sticky_list);
         mPB = (ProgressBar) mRootView.findViewById(R.id.progressBar);
         mPB.setVisibility(ProgressBar.VISIBLE);
         mPB.setVerticalFadingEdgeEnabled(true);
@@ -58,11 +60,11 @@ public class ScheduleFragment extends Fragment {
         fadeOutAnimation.setFillAfter(true);//to keep it at 0 when animation ends
 
         if (Constants.getEvents() == null){
-            DataService.sharedInstance().getEvent(new Callback() {
+            DataService.sharedInstance().getEvent(new Callback<ArrayList<Event>>() {
                 @Override
-                public void success(Object data) {
+                public void success(ArrayList<Event> data) {
                     Log.v(TAG, "Get events succesfull");
-                    Constants.setEvents((ArrayList<Event>) data);
+                    Constants.setEvents(data);
                     Constants.sortEvents();
                     mEventAdapter = new EventAdapter(getContext(),Constants.getEvents());
 
@@ -86,7 +88,6 @@ public class ScheduleFragment extends Fragment {
             mPB.startAnimation(fadeOutAnimation);
             mPB.setVisibility(ProgressBar.INVISIBLE);
         }
-
         return mRootView;
     }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.LinearLayoutCompat
+    android:id="@+id/general_voting"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -102,7 +103,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:layout_weight="0"
                     android:fontFamily="sans-serif"
                     android:gravity="center_vertical|center_horizontal"
@@ -112,7 +113,8 @@
                     android:textSize="18sp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0" />
 
                 <LinearLayout
                     android:id="@+id/linearLayout"
@@ -146,7 +148,7 @@
                         android:layout_weight="0" />
 
                     <ImageView
-                        android:id="@+id/poster_link"
+                        android:id="@+id/poster_image"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:layout_gravity="center"
@@ -194,7 +196,7 @@
                         android:layout_weight="0" />
 
                     <ImageView
-                        android:id="@+id/poster_vote"
+                        android:id="@+id/presentation_image"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:layout_gravity="center"

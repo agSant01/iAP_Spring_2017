@@ -15,13 +15,15 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Event;
 import com.affiliates.iap.iapspring2017.R;
 
 import java.util.ArrayList;
 
-public class EventAdapter extends ArrayAdapter<Event> {
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
+
+public class EventAdapter extends ArrayAdapter<Event> implements StickyListHeadersAdapter{
+    private LayoutInflater inflater;
 
     private static class ViewHolder{
         TextView mTitle;
@@ -32,8 +34,13 @@ public class EventAdapter extends ArrayAdapter<Event> {
         }
     }
 
+    class HeaderViewHolder {
+        TextView text;
+    }
+
     public EventAdapter(Context context, ArrayList<Event> events){
         super(context, 0, events);
+        inflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -41,17 +48,36 @@ public class EventAdapter extends ArrayAdapter<Event> {
         ViewHolder viewHolder;
         Event event = getItem(position);
         if (convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.cell_event, viewGroup, false);
+            convertView = inflater.inflate(R.layout.cell_event, viewGroup, false);
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         String time = event.getStartTime() + " - " + event.getEndTime();
-
         viewHolder.mTime.setText(time);
         viewHolder.mTitle.setText(event.getEventName());
-
         return convertView;
+    }
+
+    @Override
+    public View getHeaderView(int position, View convertView, ViewGroup parent) {
+        HeaderViewHolder holder;
+        if (convertView == null) {
+            holder = new HeaderViewHolder();
+            convertView = inflater.inflate(R.layout.header_xml, parent, false);
+            holder.text = (TextView) convertView.findViewById(R.id.header);
+            convertView.setTag(holder);
+        } else {
+            holder = (HeaderViewHolder) convertView.getTag();
+        }
+        String headerText = "" + getItem(position).getFormatedStartDate();
+        holder.text.setText(headerText);
+        return convertView;
+    }
+
+    @Override
+    public long getHeaderId(int position) {
+        return getItem(position).getStartDate().toString().subSequence(0, 1).charAt(0);
     }
 }

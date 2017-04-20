@@ -29,7 +29,7 @@
 
     <EditText
         android:id="@+id/email_box"
-        android:layout_width="260dp"
+        android:layout_width="300dp"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -45,16 +45,15 @@
         android:inputType="textEmailAddress"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.477"
-        tools:layout_editor_absoluteY="266dp" />
+        app:layout_constraintVertical_bias="0.45"
+        app:layout_constraintHorizontal_bias="0.484" />
 
     <EditText
         android:id="@+id/password_box"
-        android:layout_width="260dp"
+        android:layout_width="300dp"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
 
@@ -70,13 +69,12 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_box"
-        app:layout_constraintVertical_bias="0.005"
-        tools:layout_editor_absoluteY="271dp" />
+        app:layout_constraintVertical_bias="0.100000024" />
 
     <Button
         android:id="@+id/sign_in_button"
         android:layout_width="265dp"
-        android:layout_height="33dp"
+        android:layout_height="30dp"
         android:layout_marginBottom="8dp"
 
         android:layout_marginLeft="8dp"
@@ -88,10 +86,73 @@
         android:textColor="@color/appWhite"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.553"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_box"
-        app:layout_constraintVertical_bias="0.191" />
+        app:layout_constraintVertical_bias="0.3" />
+
+    <ImageView
+        android:id="@+id/show_pass"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/password_box"
+        app:layout_constraintRight_toRightOf="@+id/password_box"
+        app:layout_constraintTop_toTopOf="@+id/password_box"
+        app:layout_constraintVertical_bias="0.5"
+        app:srcCompat="@drawable/ic_show_password" />
+
+    <TextView
+        android:id="@+id/forgot_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="7dp"
+        android:text="Forgot Password?"
+        android:textColor="@color/appGreen"
+        app:layout_constraintRight_toRightOf="@+id/password_box"
+        app:layout_constraintTop_toBottomOf="@+id/password_box" />
+
+    <ImageView
+        android:id="@+id/imageView12"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="-6dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_box"
+        app:srcCompat="@drawable/ic_email"
+        app:layout_constraintHorizontal_bias="0.489" />
+
+    <ImageView
+        android:id="@+id/imageView17"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_box"
+        app:srcCompat="@drawable/ic_lock"
+        app:layout_constraintHorizontal_bias="0.498" />
+
+    <TextView
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="10dp"
+        android:text="REGISTER"
+        android:textColor="@color/appGreen"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintRight_toRightOf="@+id/sign_in_button"
+        app:layout_constraintTop_toBottomOf="@+id/sign_in_button" />
 
 </android.support.constraint.ConstraintLayout>

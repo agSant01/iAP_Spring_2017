@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -29,14 +28,12 @@ import com.affiliates.iap.iapspring2017.Models.CompanyVote;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
+import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.gson.Gson;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 public class Summary extends Fragment{
     private static final String TAG = "Summary";
@@ -76,7 +73,7 @@ public class Summary extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
         View view = inflater.inflate(R.layout.evaluation_summary, container, false);
-
+        final Client client = new Client(getContext());
         mProjectName = (TextView) view.findViewById(R.id.evaluation_summary_project_name);
 
         mTechPoster = (TextView) view.findViewById(R.id.sumary_tech_poster);
@@ -124,14 +121,18 @@ public class Summary extends Fragment{
                         .setTitle("Confirm Evaluation")
                         .setMessage("Are you sure you want to submit this evaluation?")
                         .setPositiveButton("CONFIRM",  new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
+                            public void onClick(final DialogInterface dialog, int which) {
+                                if(!client.isConnectionAvailable()){
+                                    Toast.makeText(getContext(), "Connection error, make sure you are connected",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
                                 ((EvaluationActivity) getActivity()).showProgressDialog("Submitting Evaluation");
                                 DataService.sharedInstance().submitCompanyEval(mCompanyVote,
                                         new Callback<Object>() {
                                     @Override
                                     public void success(Object data) {
                                         Log.v(TAG, "Evaluation submissson was good!");
-                                        companyUser.setVoted(mPosterID);
+                                        ((CompanyUser) Constants.getCurrentLoggedInUser()).setVoted(mPosterID);
                                         mCompanyVote.removeVoteFromMemory(getContext());
                                         ((EvaluationActivity) getActivity()).hideProgressDialog();
                                         Toast.makeText(getContext(), "Submission succesful",Toast.LENGTH_SHORT).show();
@@ -141,7 +142,9 @@ public class Summary extends Fragment{
                                     @Override
                                     public void failure(String message) {
                                         Log.v(TAG, message);
+                                        ((EvaluationActivity) getActivity()).hideProgressDialog();
                                         Toast.makeText(getContext(), "Error on submission, try again shortly",Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
                                     }
                                 });
                             }

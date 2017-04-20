@@ -17,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +31,8 @@ import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -70,17 +71,16 @@ public class IAPStudentProfile extends BaseActivity {
         String projects = "";
         ArrayList<String> arr = in.getStringArrayListExtra("projects");
         int i;
-        for(i = 0; i < arr.size()-1; i++){
-            projects += (i+1) + ". " + arr.get(i) + "\n\n";
+        for(i = 0; i < arr.size(); i++){
+            projects += "\u2022 " + arr.get(i) + "\n";
         }
-        projects += (i+1) + ". " + arr.get(i);
 
         mProyectName.setText(projects);
-        mGradDate.setText(in.getStringExtra("gradDate"));
+        mGradDate.setText(in.getStringExtra("gradDate").equals("NA") ? "Not defined" : in.getStringExtra("gradDate"));
         mEmail.setText(in.getStringExtra("email"));
         mName.setText(in.getStringExtra("name"));
-        mDept.setText(in.getStringExtra("dpt"));
-        mBio.setText(in.getStringExtra("bio"));
+        mDept.setText(in.getStringExtra("dpt").equals("NA") ? "Not defined" : in.getStringExtra("dpt"));
+        mBio.setText(in.getStringExtra("bio").equals("NA") ? "Not defined" : in.getStringExtra("bio"));
         setResume();
 
         Log.v(TAG, "TIPO: " + Constants.getCurrentLoggedInUser().getAccountType().toString());
@@ -101,6 +101,7 @@ public class IAPStudentProfile extends BaseActivity {
                     }
                     @Override
                     public void failure(String message) {
+                        FirebaseCrash.log(TAG + ": " + message);
                         Log.e(TAG, message);
                     }
                 });

@@ -8,7 +8,6 @@
 
 package com.affiliates.iap.iapspring2017.Models;
 
-
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 
 import org.json.JSONException;

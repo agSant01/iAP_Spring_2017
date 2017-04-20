@@ -37,10 +37,6 @@ public class Event implements Comparable<Event>{
       this.eventName = data.optString("EventName");
    }
 
-   public String getEventDescription() {
-      return eventDescription;
-   }
-
    public SimpleDateFormat getFormat() {
       return format;
    }
@@ -49,18 +45,9 @@ public class Event implements Comparable<Event>{
       return eventName;
    }
 
-   public String getEventType() {
-      return eventType;
-   }
-
    public Date getStartDate() {
       return startDate;
    }
-
-   public Date getEndDate() {
-      return endDate;
-   }
-
 
    public String getStartTime(){
       String s = format.format(startDate);
@@ -98,14 +85,18 @@ public class Event implements Comparable<Event>{
          str += "pm";
          str = Integer.toString( Integer.parseInt( str.substring(0,2) ) - 12) + str.substring(2);
       }
-
       return str;
    }
 
-    @Override
-    public int compareTo(@NonNull Event other) {
-        if(this.startDate.after(other.startDate)) return 1;
-        if(this.startDate.before(other.startDate)) return -1;
-        return 0;
-    }
+   public String getFormatedStartDate(){
+      return startDate.toString().substring(4,10) + ", "
+              + startDate.toString().substring(startDate.toString().length()-4, startDate.toString().length());
+   }
+
+   @Override
+   public int compareTo(@NonNull Event other) {
+      if (this.startDate.after(other.startDate)) return 1;
+      if (this.startDate.before(other.startDate)) return -1;
+      return 0;
+   }
 }

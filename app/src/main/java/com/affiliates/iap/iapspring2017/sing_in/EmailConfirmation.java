@@ -9,11 +9,8 @@ import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.MainActivity;
 import com.affiliates.iap.iapspring2017.R;
 
-
 public class EmailConfirmation extends BaseActivity {
     private static final String TAG = "EmailConfirmation";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +31,7 @@ public class EmailConfirmation extends BaseActivity {
 
 
     public void onBackPressed(){
-        Intent in = new Intent(EmailConfirmation.this, LogInOrRegister.class);
+        Intent in = new Intent(EmailConfirmation.this, SignInActivity.class);
         startActivity(in);
         overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
         finish();

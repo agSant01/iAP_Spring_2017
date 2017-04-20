@@ -10,105 +10,100 @@ package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
-import com.affiliates.iap.iapspring2017.Constants;
-import com.affiliates.iap.iapspring2017.MainActivity;
-import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.interfaces.Callback;
+import com.affiliates.iap.iapspring2017.interfaces.CustomViewPager;
+import com.affiliates.iap.iapspring2017.sing_in.intro_screens.IntroScreensManager;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
+import com.matthewtamlin.sliding_intro_screen_library.indicators.Dot;
+import com.matthewtamlin.sliding_intro_screen_library.indicators.DotIndicator;
 
 public class SignInActivity extends BaseActivity {
    private static final String TAG = "SignIn";
+   private static final int REQUEST_EXIT = 5;
 
-   private AccountAdministration mAdmin;
-   private EditText mPasswordField;
-   private EditText mEmailField;
-   private Client mClient;
-   private Button mSubmit;
+   public CustomViewPager mViewPager;
+   private IntroScreensManager mSectionsPagerAdapter;
+   private TabLayout mTabLayout;
+   private DotIndicator mDotIndicator;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_sign_in);
+      setContentView(R.layout.intro_screen_manager);
 
-      this.bind();
+      bind();
 
-      mAdmin = new AccountAdministration(getBaseContext());
-      mClient = new Client(getBaseContext());
+      mDotIndicator.setSelectedItem(0,true);
+      // Create the adapter that will return a fragment for each of the three
+      // primary sections of the activity.
+      mSectionsPagerAdapter = new IntroScreensManager(getSupportFragmentManager());
+      mTabLayout.setupWithViewPager(mViewPager);
 
-      mSubmit.setOnClickListener(
-            new View.OnClickListener()  {
-               @Override
-               public void onClick(View view) {
-                  String email = mEmailField.getText().toString();
-                  String password = mPasswordField.getText().toString();
-                  if(!mClient.isConnectionAvailable()){
-                     try {
-                        Thread.sleep(100);
-                     } catch (InterruptedException e) {
-                        e.printStackTrace();
-                     }
-                     hideProgressDialog();
-                     Toast.makeText(getBaseContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
-                  }else if (email.length() > 0 && password.length() > 0 ){
-                     System.out.println( "DATA: " + email +"   " + password);
-                     showProgressDialog();
+      final TextView next = (TextView) findViewById(R.id._next);
+      final TextView skip = (TextView) findViewById(R.id._skip);
 
-                     User.login(email, password, new Callback<User>(){
-                        @Override
-                        public void success(User user) {
-                           Constants.setCurrentLogedInUser(user);
-                           mAdmin.saveUserID(user.getUserID());
-                           System.out.println("DATA -> " + Constants.getCurrentLoggedInUser().getName());
-                           Intent in = new Intent(SignInActivity.this, MainActivity.class);
+      next.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+            mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
+         }
+      });
 
-                           hideProgressDialog();
-                           startActivity(in);
-                           overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                           finishAffinity();
-                        }
+      skip.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+            mViewPager.setCurrentItem(6);
+         }
+      });
 
-                        @Override
-                        public void failure(String message) {
-                           String s = "";
-                           if(message.contains("password is invalid")){
-                              s = "Incorrect Password";
-                           } else if (message.contains("There is no user record corresponding to this identifier.")){
-                              s = "Incorrect Email";
-                           } else if (message.contains("badly formatted")){
-                              s = "Invalid Email";
-                           } else{
-                              Log.v(TAG, message);
-                           }
-                           hideProgressDialog();
-                           Log.e(TAG, message);
-                           Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-                        }
-                     });
-                  }else if (email.length() == 0 && password.length() == 0) {
-                     Toast.makeText(getBaseContext(), "Please, enter credentials", Toast.LENGTH_SHORT).show();
-                  }
-                  else if (email.length() == 0){
-                     Toast.makeText(getBaseContext(), "Invalid Email", Toast.LENGTH_SHORT).show();
-                  } else if(password.length() == 0){
-                     Toast.makeText(getBaseContext(), "Invalid Password", Toast.LENGTH_SHORT).show();
-                  }
-               }
-            });
+      // Set up the ViewPager with the sections adapter.
+      mViewPager.setAdapter(mSectionsPagerAdapter);
+      mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+         @Override
+         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+         @Override
+         public void onPageSelected(int position) {
+            if(position<5) {
+               mDotIndicator.setVisibility(true);
+               mDotIndicator.setSelectedItem(position, true);
+               next.setVisibility(View.VISIBLE);
+               skip.setVisibility(View.VISIBLE);
+            } else{
+               next.setVisibility(View.INVISIBLE);
+               skip.setVisibility(View.INVISIBLE);
+               mDotIndicator.setVisibility(false);
+            }
+         }
+
+         @Override
+         public void onPageScrollStateChanged(int state) {}
+      });
+
+      if (getIntent().getStringExtra("splash").equals("second")){
+         Log.v(TAG, "second");
+         mViewPager.setCurrentItem(5);
+         mDotIndicator.setSelectedItem(4,true);
+         mViewPager.setPagingEnabled(false);
+      }
+
    }
 
    private void bind(){
-      mPasswordField = (EditText) findViewById(R.id.password_box);
-      mEmailField = (EditText) findViewById(R.id.email_box);
-      mSubmit = (Button) findViewById(R.id.sign_in_button);
+      mViewPager = (CustomViewPager) findViewById(R.id.viewpager_container);
+      mDotIndicator = (DotIndicator) findViewById(R.id.dots_indicator);
+      mTabLayout = (TabLayout) findViewById(R.id.tabs);
    }
 
    @Override
@@ -116,5 +111,14 @@ public class SignInActivity extends BaseActivity {
       super.onBackPressed();
       overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
       finish();
+   }
+
+   @Override
+   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+      if (requestCode == REQUEST_EXIT) {
+         if (resultCode == RESULT_OK) {
+            this.finish();
+         }
+      }
    }
 }

@@ -12,7 +12,9 @@
         android:dividerHeight="1dp"
         android:transformPivotY="10dp"
         android:smoothScrollbar="true"
-        android:focusableInTouchMode="false">
+        android:focusableInTouchMode="false"
+        android:clickable="false"
+        android:background="@color/appWhite">
         <!--android:animateLayoutChanges="true">-->
     </ListView>
 
