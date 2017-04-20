@@ -41,6 +41,7 @@
         android:layout_marginTop="5dp"
         android:paddingStart="80dp"
         android:text="Computer Engineering"
+        app:layout_constraintBottom_toTopOf="@+id/cell_poster_keyword"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/list_poster_title" />
