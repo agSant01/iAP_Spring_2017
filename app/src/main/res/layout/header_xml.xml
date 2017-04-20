@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/appLightGrey"
+        android:paddingLeft="8dp"
+        android:paddingStart="8dp"
+        android:text="TextView"
+        android:textColor="@color/appGrey"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        tools:text="4/26/2017" />
+</LinearLayout>

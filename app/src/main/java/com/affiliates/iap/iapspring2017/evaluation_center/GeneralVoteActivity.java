@@ -41,7 +41,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
     }
 
 
-    private void displaySubmissionDialog(final int type){
+    private void displaySubmissionDialog(final int type) {
         final android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(this);
         dialogBuilder.setTitle("Confirm Submission").setMessage("You can only vote for this category once. " +
                 "Are you sure this is your favorite?").setPositiveButton("Confirm", null)
@@ -64,7 +64,8 @@ public class GeneralVoteActivity extends AppCompatActivity {
 
         submission.show();
     }
-    private void bind(){
+
+    private void bind() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar_poster_desc);
         name = getIntent().getStringExtra("posterName");
         id = getIntent().getStringExtra("posterID");
@@ -72,7 +73,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
         title.setText(name);
         bestPoster = (Button) findViewById(R.id.button_poster);
         posterImage = (ImageView) findViewById(R.id.poster_image);
-        if(Constants.getCurrentLoggedInUser().hasVoted(0)) {
+        if (Constants.getCurrentLoggedInUser().hasVoted(0)) {
             bestPoster.setBackgroundResource(R.drawable.button_oval_shape_grey);
             posterImage.setImageResource(R.drawable.ic_poster_icon);
         }
@@ -80,28 +81,28 @@ public class GeneralVoteActivity extends AppCompatActivity {
         bestPoster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               voteProcess(0);
+                voteProcess(0);
                 Log.v(TAG, "Voted for best Poster");
             }
         });
 
         presentationImage = (ImageView) findViewById(R.id.presentation_image);
         bestPresentation = (Button) findViewById(R.id.button_presentation);
-        if(Constants.getCurrentLoggedInUser().hasVoted(1)) {
+        if (Constants.getCurrentLoggedInUser().hasVoted(1)) {
             bestPresentation.setBackgroundResource(R.drawable.button_oval_shape_grey);
             presentationImage.setImageResource(R.drawable.ic_thumb_up_grey);
         }
         bestPresentation.setOnClickListener(new View.OnClickListener() {
             @Override
-        public void onClick(View v) {
+            public void onClick(View v) {
                 voteProcess(1);
-            Log.v(TAG, "Voted for best Presentation");
+                Log.v(TAG, "Voted for best Presentation");
             }
         });
 
     }
 
-    private void setToolBar(){
+    private void setToolBar() {
         setSupportActionBar(mToolbar);
 
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -117,9 +118,9 @@ public class GeneralVoteActivity extends AppCompatActivity {
         });
     }
 
-    private void voteProcess(int type){
+    private void voteProcess(int type) {
         Client c = new Client(getBaseContext());
-        if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
+        if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
             if (c.isConnectionAvailable())
                 if (Constants.getCurrentLoggedInUser().hasVoted(type))
                     Toast.makeText(getBaseContext(), "Already voted for this category", Toast.LENGTH_SHORT).show();
@@ -127,14 +128,13 @@ public class GeneralVoteActivity extends AppCompatActivity {
                     displaySubmissionDialog(type);
             else
                 Toast.makeText(getBaseContext(), "No Internet Connection, Please Connect", Toast.LENGTH_SHORT).show();
-        }
-        else{
+        } else {
             Toast.makeText(getBaseContext(), "Sorry, you need to verify your email first.", Toast.LENGTH_SHORT).show();
 
         }
     }
 
-    private void vote(final int type){
+    private void vote(final int type) {
         User user = Constants.getCurrentLoggedInUser();
         DataService.sharedInstance().getUserData(user.getUserID(), new Callback<User>() {
             @Override
@@ -142,7 +142,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
                 Constants.setCurrentLogedInUser(data);
                 //get the latest status on voted
                 Log.v(TAG, "User updated");
-                if(type==0)
+                if (type == 0)
                     posterImage.setImageResource(R.drawable.ic_poster_icon);
                 else
                     presentationImage.setImageResource(R.drawable.ic_thumb_up_grey);
@@ -154,25 +154,23 @@ public class GeneralVoteActivity extends AppCompatActivity {
 
             }
         });
-        if(!user.hasVoted(type)){
+        if (!user.hasVoted(type)) {
             DataService.sharedInstance().submitGeneralVote(id, type, new Callback<Vote>() {
                 @Override
                 public void success(Vote data) {
                     Log.v(TAG, "Voting completed");
-                    GeneralVoteActivity.super.onBackPressed();
-                    finish();
-
+                    onBackPressed();
                 }
 
                 @Override
-                public void failure(String message) {}
+                public void failure(String message) {
+                }
             });
-        }
-        else{
+        } else {
 
             Log.v(TAG, "User already Voted");
-            String voteType ="";
-            switch(type){
+            String voteType = "";
+            switch (type) {
                 case 0:
                     voteType = "Presentation";
                     break;
@@ -184,11 +182,13 @@ public class GeneralVoteActivity extends AppCompatActivity {
 
             }
             Toast.makeText(getApplicationContext(), "You've already voted for Best " + voteType, Toast.LENGTH_SHORT).show();
-
-
         }
-
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
+        finish();
+    }
 }

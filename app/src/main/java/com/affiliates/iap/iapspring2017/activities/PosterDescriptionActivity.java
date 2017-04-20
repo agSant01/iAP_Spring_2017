@@ -328,7 +328,9 @@ public class PosterDescriptionActivity extends BaseActivity {
                     Intent intent = new Intent(PosterDescriptionActivity.this, GeneralVoteActivity.class);
                     intent.putExtra("posterID", mPosterData.getPosterID());
                     intent.putExtra("posterName", mPosterData.getProjectName());
+                    Log.v(TAG, "QUEPASA?");
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                 }
             }});
         }
