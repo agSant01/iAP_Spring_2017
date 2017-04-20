@@ -39,10 +39,7 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.profiles.AdvisorProfile;
 import com.affiliates.iap.iapspring2017.profiles.IAPStudentProfile;
 import com.affiliates.iap.iapspring2017.services.DataService;
-import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
 
 import org.lucasr.twowayview.TwoWayView;

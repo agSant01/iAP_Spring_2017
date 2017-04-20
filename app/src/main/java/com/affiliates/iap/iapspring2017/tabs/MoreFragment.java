@@ -32,7 +32,7 @@ import com.affiliates.iap.iapspring2017.activities.NoConnectionActivity;
 import com.affiliates.iap.iapspring2017.activities.ProfileEditActivity;
 import com.affiliates.iap.iapspring2017.activities.StudentsOfInterestActivity;
 import com.affiliates.iap.iapspring2017.services.Client;
-import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
+import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.squareup.picasso.Picasso;
 
@@ -189,7 +189,8 @@ public class MoreFragment extends Fragment {
                             e.printStackTrace();
                             Toast.makeText(getContext(), "Error login Out", Toast.LENGTH_LONG).show();
                         }
-                        Intent in = new Intent(getActivity(), LogInOrRegister.class);
+                        Intent in = new Intent(getActivity(), SignInActivity.class);
+                        in.putExtra("splash", "second");
                         startActivity(in);
                         getActivity().finish();
                     }

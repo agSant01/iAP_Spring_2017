@@ -20,7 +20,7 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
-import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
+import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
 import com.google.firebase.auth.FirebaseAuthException;
 
 public class SplashScreen extends Activity {
@@ -44,43 +44,52 @@ public class SplashScreen extends Activity {
                 } else {
                     String id = aa.getUserID();
                     if(id != null && !id.equals("")){
-                        Log.v(TAG, "Getting user data");
-                        DataService.sharedInstance().getUserData(id, new Callback<User>() {
-                            @Override
-                            public void success(User user) {
-                                Log.v(TAG, "Get user data successfull");
-                                Constants.setCurrentLogedInUser(user);
-                                Intent in = new Intent(SplashScreen.this, MainActivity.class);
-                                startActivity(in);
-                                finish();
-                            }
+                        if(id.equals("second")){
+                            Log.v(TAG,"No user signed in.");
+                            Intent in = new Intent(SplashScreen.this, SignInActivity.class);
+                            in.putExtra("splash", "second");
+                            startActivity(in);
+                            finish();
+                        }else {
+                            Log.v(TAG, "Getting user data");
+                            DataService.sharedInstance().getUserData(id, new Callback<User>() {
+                                @Override
+                                public void success(User user) {
+                                    Log.v(TAG, "Get user data successfull");
+                                    Constants.setCurrentLogedInUser(user);
+                                    Intent in = new Intent(SplashScreen.this, MainActivity.class);
+                                    startActivity(in);
+                                    finish();
+                                }
 
-                            @Override
-                            public void failure(String message) {
-                                Log.e(TAG, "Failed get data curentRegisteringUserData");
-                                if(message.contains("No user ID Registered"))
-                                    try {
-                                        Constants.getCurrentLoggedInUser().logOut(getBaseContext());
-                                    } catch (FirebaseAuthException e) {
-                                        e.printStackTrace();
-                                    }
-                                    catch(NullPointerException exep){
-                                        Log.v(TAG, "No one has logged in yet!");
-                                    }
-                                Log.v(TAG,"No user signed in.");
-                                Intent in = new Intent(SplashScreen.this, LogInOrRegister.class);
-                                startActivity(in);
-                                finish();
-                            }
-                        });
+                                @Override
+                                public void failure(String message) {
+                                    Log.e(TAG, "Failed get data curentRegisteringUserData");
+                                    if (message.contains("No user ID Registered"))
+                                        try {
+                                            Constants.getCurrentLoggedInUser().logOut(getBaseContext());
+                                        } catch (FirebaseAuthException e) {
+                                            e.printStackTrace();
+                                        } catch (NullPointerException exep) {
+                                            Log.v(TAG, "No one has logged in yet!");
+                                        }
+                                    Log.v(TAG, "No user signed in.");
+                                    Intent in = new Intent(SplashScreen.this, SignInActivity.class);
+                                    in.putExtra("splash", "second");
+                                    startActivity(in);
+                                    finish();
+                                }
+                            });
+                        }
                     } else {
-                        Log.v(TAG,"No user signed in.");
-                        Intent in = new Intent(SplashScreen.this, LogInOrRegister.class);
+                        Log.v(TAG,"First launch");
+                        Intent in = new Intent(SplashScreen.this, SignInActivity.class);
+                        in.putExtra("splash", "first");
                         startActivity(in);
                         finish();
                     }
                 }
             }
-        },0);
+        },1500);
     }
 }

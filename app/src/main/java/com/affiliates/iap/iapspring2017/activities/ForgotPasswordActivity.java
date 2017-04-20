@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.services.Client;
-import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
+import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,7 +61,7 @@ public class ForgotPasswordActivity extends BaseActivity{
                                     hideProgressDialog();
                                     if(task.isSuccessful()){
                                         setResult(RESULT_OK);
-                                        startActivity(new Intent(ForgotPasswordActivity.this, LogInOrRegister.class));
+                                        startActivity(new Intent(ForgotPasswordActivity.this, SignInActivity.class));
                                         onBackPressed();
                                     } else {
                                         String s = "";

@@ -86,7 +86,7 @@ public abstract class User implements UserDelegate{
    public void logOut(Context context) throws FirebaseAuthException{
       FirebaseAuth.getInstance().signOut();
       AccountAdministration aa = new AccountAdministration(context);
-      aa.saveUserID("");
+      aa.saveUserID("second");
       Constants.setCurrentLogedInUser(null);
    }
 

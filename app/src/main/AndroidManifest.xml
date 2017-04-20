@@ -54,10 +54,6 @@
         </activity>
 
         <activity
-            android:name=".sing_in.LogInOrRegister"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name=".profiles.IAPStudentProfile"
             android:theme="@style/SplashScreen"
             android:screenOrientation="portrait">
