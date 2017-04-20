@@ -99,6 +99,16 @@ public class AdvisorProfile extends BaseActivity {
     private void setAllProyects(){
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.bottomMargin = 11;
+        if(getIntent().getStringArrayListExtra("projects") == null){
+            TextView listItem = new TextView(getBaseContext());
+            listItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            listItem.setText("No projects registered for this advisor");
+            listItem.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+            listItem.setLayoutParams(params);
+            listItem.setTextColor(getResources().getColor(R.color.appGrey));
+            mProjectsList.addView(listItem);
+            return;
+        }
         for (String s : getIntent().getStringArrayListExtra("projects")) {
             if (Constants.getPosters().containsKey(s)) {
                 TextView listItem = new TextView(getBaseContext());

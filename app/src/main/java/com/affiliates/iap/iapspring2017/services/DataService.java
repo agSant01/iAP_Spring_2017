@@ -830,6 +830,7 @@ public class DataService {
 
         for(i = 0; i < k.length-1; i++)
             str += k[i] + "_";
+        FirebaseCrash.log(TAG + "parseEmailToKey(): " + str + k[i]);
         return str + k[i];
     }
 

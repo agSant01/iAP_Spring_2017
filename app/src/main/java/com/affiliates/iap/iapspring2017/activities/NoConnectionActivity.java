@@ -29,21 +29,22 @@ public class NoConnectionActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.no_connection);
         final String message = "Without Connection";
-        final String Tmessage = "Conection Established";
+        final String Tmessage = "Connection Established";
 
         mClient = new Client(getBaseContext());
         mAccAdmin = new AccountAdministration(getBaseContext());
 
         Button tryAgain = (Button) findViewById(R.id.try_again);
-        tryAgain.setOnClickListener(new View.OnClickListener() {                                       // Listener for try again
+        tryAgain.setOnClickListener(new View.OnClickListener() {        // Listener for try again
             @Override
             public void onClick(View v) {
                 showProgressDialog();
                 if (mClient.isConnectionAvailable()){
                     hideProgressDialog();
                     Toast.makeText(getBaseContext(), Tmessage, Toast.LENGTH_SHORT).show();
-                    if(getIntent().getStringExtra("Splash").equals("splash")){
-                        startActivity(new Intent(getBaseContext(), SplashScreen.class));
+                    if(getIntent().getStringExtra("Splash") != null){
+                        if(getIntent().getStringExtra("Splash").equals("splash"))
+                            startActivity(new Intent(getBaseContext(), SplashScreen.class));
                     }
                     finish();
                 } else {
