@@ -43,6 +43,7 @@ import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.lucasr.twowayview.TwoWayView;
 
@@ -118,7 +119,7 @@ public class PosterDescriptionActivity extends BaseActivity {
 
             @Override
             public void failure(String message) {
-
+                FirebaseCrash.log(TAG + ": " + message);
             }
         });
         mSeeMore.setOnClickListener(new View.OnClickListener() {
@@ -139,7 +140,6 @@ public class PosterDescriptionActivity extends BaseActivity {
                 Log.v(TAG, mPosterData.getPosterURL());
                 String url = mPosterData.getPosterURL();
                 if(!url.contains("https://firebasestorage.googleapis.com")){
-
                     Toast.makeText(PosterDescriptionActivity.this,
                             "Poster Not Available", Toast.LENGTH_SHORT).show();
                 }else{
@@ -284,7 +284,6 @@ public class PosterDescriptionActivity extends BaseActivity {
                         Intent eval = new Intent(getBaseContext(), EvaluationActivity.class);
                         eval.putExtra("posterID", mPosterData.getPosterID());
                         startActivity(eval);
-                        Log.v(TAG, "NO FUNC");
                         overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                     }
                 }
@@ -304,6 +303,7 @@ public class PosterDescriptionActivity extends BaseActivity {
     }
 
     private  void setFavoriteEvaluation(final User user){
+        mVoteButton.setText("Favorite");
         if(mPosterData.getPosterID().equals("IAP")){
             mVoteImg.setImageResource(R.drawable.ic_thumb_up_grey);
             mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
@@ -374,7 +374,7 @@ public class PosterDescriptionActivity extends BaseActivity {
         } else {
             setFavoriteEvaluation(Constants.getCurrentLoggedInUser());
         }
-        System.out.println("ON RESUME YEAH YEAH");
+        Log.v(TAG, "onResume()");
     }
 
     @Override
