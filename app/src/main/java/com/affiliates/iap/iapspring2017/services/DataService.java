@@ -35,6 +35,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -121,6 +122,7 @@ public class DataService {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot){
             if (!dataSnapshot.hasChildren()) {
+               FirebaseCrash.log(TAG + ": No user ID Registered " + id );
                Log.e(TAG, "No user ID Registered " + id );
                callback.failure("No user ID Registered " + id);
                return;
@@ -144,17 +146,21 @@ public class DataService {
                      callback.success(new IAPStudent(json, User.AccountType.IAPStudent, id));
                      return;
                   case NA:
+                     FirebaseCrash.log("DataSevice -> getUserData(): Invalid account type" + accType);
                      callback.failure("DataSevice -> getUserData(): Invalid account type" + accType);
                      return;
                }
             } catch (JSONException e){
+               FirebaseCrash.log(TAG + "DataService -> getUserData() / switch()"+ e);
                Log.e(TAG, "DataService -> getUserData() / switch()", e);
                e.printStackTrace();
             }
+            FirebaseCrash.log("No user ID Registered" + id);
             callback.failure("No user ID Registered");
          }
          @Override
          public void onCancelled(DatabaseError databaseError) {
+            FirebaseCrash.log(TAG + ": getUserData() -> " + databaseError.toString());
             Log.e(TAG, databaseError.toString());
          }
       });
@@ -172,12 +178,13 @@ public class DataService {
    }
 
    public void submitGeneralVote(String projecID, int voteType, final Callback<Vote> callback) throws VoteErrorException{
-      if(voteType != 0 && voteType != 1)
+      if(voteType != 0 && voteType != 1) {
+         FirebaseCrash.log(TAG +": submitGeneralVoe() -> Vote type value can only be 1 or 0.");
          callback.failure("Vote type value can only be 1 or 0.");
+      }
 
       final String voteID = generalVoteRef().push().getKey();
       final OverallVote vote = new OverallVote(voteID, projecID, voteType);
-
 
       generalVoteRef().child(vote.getStringFromType()).updateChildren(vote.makeJSON())
          .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -190,6 +197,7 @@ public class DataService {
          .addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+               FirebaseCrash.log("DataService.class -> submitCGeneralVote() : " + e.toString());
                callback.failure("DataService.class -> submitCGeneralVote() : " + e.toString());
             }
          });
@@ -215,6 +223,7 @@ public class DataService {
          @Override
          public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
             // Transaction completed
+            FirebaseCrash.log(TAG + ": runGeneralVoteTransaction() -> onComplete: " + databaseError);
             Log.d(TAG, "runGeneralVoteTransaction() -> onComplete: " + databaseError);
 
          }
@@ -252,6 +261,7 @@ public class DataService {
 
          @Override
          public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+            FirebaseCrash.log(TAG + ": runCompanyVoteTransaction() -> onComplete(): " + databaseError);
             Log.d(TAG, "runCompanyVoteTransaction() -> onComplete(): " + databaseError);
          }
       });
@@ -267,6 +277,7 @@ public class DataService {
 
          @Override
          public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+            FirebaseCrash.log(TAG + "runCompanyVoteTransaction() -> onComplete(): " + databaseError);
             Log.d(TAG, "runCompanyVoteTransaction() -> onComplete(): " + databaseError);
          }
       });
@@ -291,6 +302,7 @@ public class DataService {
                   last = p.getPosterNumber();
                }
             } catch (JSONException e) {
+               FirebaseCrash.log(TAG + ": getPosters() -> " + e);
                Log.e(TAG, "getPosters(): " + e);
             }
              callback.success(poster);
@@ -298,6 +310,7 @@ public class DataService {
 
          @Override
          public void onCancelled(DatabaseError databaseError) {
+            FirebaseCrash.log(TAG + ": getPosters() -> " + databaseError.getMessage());
             callback.failure(databaseError.getMessage()) ;
          }
       });
@@ -306,6 +319,7 @@ public class DataService {
    public void getPosterTeamMembers(final Poster poster, final Callback callback){
       final ArrayList<IAPStudent> team = new ArrayList<IAPStudent>();
       if(poster.getTeam() == null){
+         FirebaseCrash.log("No members registered in the research: " + poster.getProjectName());
          callback.failure("No members registered in the research: " + poster.getProjectName());
          return;
       }
@@ -326,6 +340,7 @@ public class DataService {
             }
             @Override
             public void failure(String message) {
+               FirebaseCrash.log(TAG + ": getPosterTeamMembers -> " + message);
                callback.failure(message);
             }
          });
@@ -354,6 +369,7 @@ public class DataService {
 
             @Override
             public void failure(String message) {
+               FirebaseCrash.log(TAG + ": getPosterAdvisors() -> " + message);
                callback.failure(message);
             }
          });
@@ -376,6 +392,7 @@ public class DataService {
 
          @Override
          public void onCancelled(DatabaseError databaseError) {
+            FirebaseCrash.log(TAG +": getSponsors() -> " + databaseError.getMessage());
             callback.failure(databaseError.getMessage());
          }
       });
@@ -458,6 +475,7 @@ public class DataService {
          }
          @Override
          public void onCancelled(DatabaseError databaseError) {
+            FirebaseCrash.log(TAG + ": getIAPStudentsOfInterest() -> " + databaseError);
             callback.failure(databaseError.getMessage());
          }
       });
@@ -472,6 +490,7 @@ public class DataService {
                     if (task.isSuccessful()){
                        Log.v(TAG, "setInterestForStudent(): succesfull -> " + id);
                     } else {
+                       FirebaseCrash.log(TAG + "setInterestForStudent(): unsuccesfull -> " + id);
                        Log.v(TAG, "setInterestForStudent(): unsuccesfull -> " + id);
                     }
                  }
@@ -489,6 +508,7 @@ public class DataService {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                            if(!task.isSuccessful()){
+                              FirebaseCrash.log("DataService.class -> updateUserData(): " + task.getException().getMessage());
                               callback.failure("DataService.class -> updateUserData(): " + task.getException().getMessage());
                            }
                            callback.success(user);
@@ -497,7 +517,7 @@ public class DataService {
                 }
                 @Override
                 public void failure(String message) {
-
+                   FirebaseCrash.log(TAG + ": uploadUserResume() -> " +message);
                 }
             });
        }else{
@@ -506,6 +526,7 @@ public class DataService {
                @Override
                public void onComplete(@NonNull Task<Void> task) {
                    if(!task.isSuccessful()){
+                      FirebaseCrash.log("DataService.class -> updateUserData(): " + task.getException().getMessage());
                       callback.failure("DataService.class -> updateUserData(): " + task.getException().getMessage());
                    }
                    callback.success(user);
@@ -531,6 +552,7 @@ public class DataService {
          public void onFailure(@NonNull Exception exception) {
             // Handle unsuccessful uploads
             Log.v(TAG, "uploadUserImage() ->  task failure");
+            FirebaseCrash.log(TAG+  ": uploadUserImage() ->  task failure");
             callback.failure(exception.getMessage());
          }
       }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -664,6 +686,7 @@ public class DataService {
          public void onComplete(@NonNull final Task<AuthResult> task) {
             if(!task.isSuccessful()){
                Log.v(TAG, task.getException().getMessage());
+               FirebaseCrash.log(TAG + "createNewUser() -> " + task.getException().getMessage());
                callback.failure(task.getException().getLocalizedMessage());
                return;
             }

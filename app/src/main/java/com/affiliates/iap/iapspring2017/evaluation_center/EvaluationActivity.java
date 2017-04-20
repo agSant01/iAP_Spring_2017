@@ -8,8 +8,6 @@
 
 package com.affiliates.iap.iapspring2017.evaluation_center;
 
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -19,10 +17,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
-import com.affiliates.iap.iapspring2017.Constants;
-import com.affiliates.iap.iapspring2017.Models.CompanyUser;
 import com.affiliates.iap.iapspring2017.R;
-import com.matthewtamlin.sliding_intro_screen_library.indicators.DotIndicator;
 
 public class EvaluationActivity extends BaseActivity {
     private static final String TAG = "EvaluationActivity";

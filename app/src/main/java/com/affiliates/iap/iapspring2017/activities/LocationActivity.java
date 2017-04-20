@@ -1,5 +1,12 @@
-package com.affiliates.iap.iapspring2017.activities;
+//
+//  ForgotPasswordActivity.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 4/20/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
 
+package com.affiliates.iap.iapspring2017.activities;
 
 import com.affiliates.iap.iapspring2017.R;
 

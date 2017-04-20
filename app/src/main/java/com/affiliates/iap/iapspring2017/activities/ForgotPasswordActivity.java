@@ -1,9 +1,16 @@
+//
+//  ForgotPasswordActivity.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 4/20/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +21,6 @@ import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
-import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;

@@ -284,46 +284,38 @@ public class ProfileEditActivity extends BaseActivity {
         final EditText oldPass = (EditText) dialogView.findViewById(R.id.oldPass);
         final EditText newPass = (EditText) dialogView.findViewById(R.id.password);
         final EditText confirmPass = (EditText) dialogView.findViewById(R.id.confirm_password);
-        final ImageView oldPassShow = (ImageView) dialogView.findViewById(R.id.show_old_pass);
-        final ImageView passShow = (ImageView) dialogView.findViewById(R.id.show_pass);
-        final ImageView confPassShow = (ImageView) dialogView.findViewById(R.id.show_confirm_pass);
+        ImageView oldPassShow = (ImageView) dialogView.findViewById(R.id.show_old_pass);
+        ImageView passShow = (ImageView) dialogView.findViewById(R.id.show_pass);
+        ImageView confPassShow = (ImageView) dialogView.findViewById(R.id.show_confirm_pass);
 
         oldPassShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(oldPass.getTransformationMethod() != null) {
                     oldPass.setTransformationMethod(null);
-                    oldPassShow.setImageResource(R.drawable.ic_hide_pass);
-                } else {
+
+                } else
                     oldPass.setTransformationMethod(new PasswordTransformationMethod());
-                    oldPassShow.setImageResource(R.drawable.ic_show_password);
-                }
             }
         });
 
         passShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(newPass.getTransformationMethod() != null) {
+                if(newPass.getTransformationMethod() != null)
                     newPass.setTransformationMethod(null);
-                    passShow.setImageResource(R.drawable.ic_hide_pass);
-                } else {
+                else
                     newPass.setTransformationMethod(new PasswordTransformationMethod());
-                    passShow.setImageResource(R.drawable.ic_show_password);
-                }
             }
         });
 
         confPassShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(confirmPass.getTransformationMethod() != null) {
+                if(confirmPass.getTransformationMethod() != null)
                     confirmPass.setTransformationMethod(null);
-                    confPassShow.setImageResource(R.drawable.ic_hide_pass);
-                } else {
+                else
                     confirmPass.setTransformationMethod(new PasswordTransformationMethod());
-                    confPassShow.setImageResource(R.drawable.ic_show_password);
-                }
             }
         });
 

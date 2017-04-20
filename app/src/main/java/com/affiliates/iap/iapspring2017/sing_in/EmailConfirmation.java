@@ -9,11 +9,8 @@ import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.MainActivity;
 import com.affiliates.iap.iapspring2017.R;
 
-
 public class EmailConfirmation extends BaseActivity {
     private static final String TAG = "EmailConfirmation";
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

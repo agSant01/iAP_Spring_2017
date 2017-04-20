@@ -1,3 +1,11 @@
+//
+//  AccountType.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 3/28/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
