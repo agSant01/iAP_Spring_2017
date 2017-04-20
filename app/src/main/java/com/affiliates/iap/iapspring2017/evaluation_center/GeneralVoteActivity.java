@@ -43,9 +43,8 @@ public class GeneralVoteActivity extends AppCompatActivity {
 
     private void displaySubmissionDialog(final int type){
         final android.support.v7.app.AlertDialog.Builder dialogBuilder = new android.support.v7.app.AlertDialog.Builder(this);
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_confirm_submission, null);
-        dialogBuilder.setView(dialogView);
-        dialogBuilder.setTitle("Confirm Submission").setPositiveButton("Confirm", null)
+        dialogBuilder.setTitle("Confirm Submission").setMessage("You can only vote for this category once. " +
+                "Are you sure this is your favorite?").setPositiveButton("Confirm", null)
                 .setNegativeButton("Cancel", null);
         submission = dialogBuilder.create();
         submission.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -82,7 +81,6 @@ public class GeneralVoteActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                voteProcess(0);
-
                 Log.v(TAG, "Voted for best Poster");
             }
         });
@@ -123,7 +121,10 @@ public class GeneralVoteActivity extends AppCompatActivity {
         Client c = new Client(getBaseContext());
         if(FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
             if (c.isConnectionAvailable())
-                displaySubmissionDialog(type);
+                if (Constants.getCurrentLoggedInUser().hasVoted(type))
+                    Toast.makeText(getBaseContext(), "Already voted for this category", Toast.LENGTH_SHORT).show();
+                else
+                    displaySubmissionDialog(type);
             else
                 Toast.makeText(getBaseContext(), "No Internet Connection, Please Connect", Toast.LENGTH_SHORT).show();
         }

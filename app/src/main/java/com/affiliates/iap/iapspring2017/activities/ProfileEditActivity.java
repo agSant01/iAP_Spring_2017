@@ -284,37 +284,46 @@ public class ProfileEditActivity extends BaseActivity {
         final EditText oldPass = (EditText) dialogView.findViewById(R.id.oldPass);
         final EditText newPass = (EditText) dialogView.findViewById(R.id.password);
         final EditText confirmPass = (EditText) dialogView.findViewById(R.id.confirm_password);
-        ImageView oldPassShow = (ImageView) dialogView.findViewById(R.id.show_old_pass);
-        ImageView passShow = (ImageView) dialogView.findViewById(R.id.show_pass);
-        ImageView confPassShow = (ImageView) dialogView.findViewById(R.id.show_confirm_pass);
+        final ImageView oldPassShow = (ImageView) dialogView.findViewById(R.id.show_old_pass);
+        final ImageView passShow = (ImageView) dialogView.findViewById(R.id.show_pass);
+        final ImageView confPassShow = (ImageView) dialogView.findViewById(R.id.show_confirm_pass);
 
         oldPassShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(oldPass.getTransformationMethod() != null)
+                if(oldPass.getTransformationMethod() != null) {
                     oldPass.setTransformationMethod(null);
-                else
+                    oldPassShow.setImageResource(R.drawable.ic_hide_pass);
+                } else {
                     oldPass.setTransformationMethod(new PasswordTransformationMethod());
+                    oldPassShow.setImageResource(R.drawable.ic_show_password);
+                }
             }
         });
 
         passShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(newPass.getTransformationMethod() != null)
+                if(newPass.getTransformationMethod() != null) {
                     newPass.setTransformationMethod(null);
-                else
+                    passShow.setImageResource(R.drawable.ic_hide_pass);
+                } else {
                     newPass.setTransformationMethod(new PasswordTransformationMethod());
+                    passShow.setImageResource(R.drawable.ic_show_password);
+                }
             }
         });
 
         confPassShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(confirmPass.getTransformationMethod() != null)
+                if(confirmPass.getTransformationMethod() != null) {
                     confirmPass.setTransformationMethod(null);
-                else
+                    confPassShow.setImageResource(R.drawable.ic_hide_pass);
+                } else {
                     confirmPass.setTransformationMethod(new PasswordTransformationMethod());
+                    confPassShow.setImageResource(R.drawable.ic_show_password);
+                }
             }
         });
 
@@ -418,6 +427,7 @@ public class ProfileEditActivity extends BaseActivity {
                         public void success(User data) {
                             Log.v(TAG, "updateUserData success");
                             hideProgressDialog();
+                            FirebaseAuth.getInstance().getCurrentUser().reload();
                             Constants.setCurrentLogedInUser(user);
                             AlertDialog alertDialog = new AlertDialog.Builder(ProfileEditActivity.this)
                                     .setTitle("Successfully Updated Your Profile")
@@ -462,6 +472,7 @@ public class ProfileEditActivity extends BaseActivity {
                 public void success(User data) {
                     Log.v(TAG, "updateUserData success");
                     hideProgressDialog();
+                    FirebaseAuth.getInstance().getCurrentUser().reload();
                     Constants.setCurrentLogedInUser(user);
                     new AlertDialog.Builder(ProfileEditActivity.this)
                                     .setMessage("Successfully Updated Your Profile")

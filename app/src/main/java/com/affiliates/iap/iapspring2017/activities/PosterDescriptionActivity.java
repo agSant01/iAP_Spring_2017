@@ -8,9 +8,11 @@
 
 package com.affiliates.iap.iapspring2017.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -37,6 +39,10 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.profiles.AdvisorProfile;
 import com.affiliates.iap.iapspring2017.profiles.IAPStudentProfile;
 import com.affiliates.iap.iapspring2017.services.DataService;
+import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.lucasr.twowayview.TwoWayView;
 
@@ -258,16 +264,29 @@ public class PosterDescriptionActivity extends BaseActivity {
     }
 
     private  void setCompanyEvaluation(CompanyUser user){
+        FirebaseAuth.getInstance().getCurrentUser().reload();
         if(!user.hasEvaluated(mPosterData.getPosterID())){
             mVoteButton.setText("Evaluate");
             mVoteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent eval = new Intent(getBaseContext(), EvaluationActivity.class);
-                    eval.putExtra("posterID", mPosterData.getPosterID());
-                    startActivity(eval);
-                    Log.v(TAG, "NO FUNC");
-                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                    if(!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
+                        new AlertDialog.Builder(PosterDescriptionActivity.this)
+                                .setTitle("Email Vertification Required")
+                                .setMessage("You must first verify your email to be able to vote for this project. "
+                                + "Would you like us to resend you the email verification?")
+                                .setPositiveButton("RESEND", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+                                    }
+                                }).setNegativeButton("NO", null).create().show();
+                    } else {
+                        Intent eval = new Intent(getBaseContext(), EvaluationActivity.class);
+                        eval.putExtra("posterID", mPosterData.getPosterID());
+                        startActivity(eval);
+                        Log.v(TAG, "NO FUNC");
+                        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                    }
                 }
             });
         } else {
@@ -284,17 +303,33 @@ public class PosterDescriptionActivity extends BaseActivity {
         }
     }
 
-    private  void setFavoriteEvaluation(final com.affiliates.iap.iapspring2017.Models.User user){
-        mVoteButton.setText("Favorite");
-        mVoteImg.setImageResource(R.drawable.ic_thumb_up_filled_green);
-        if(!(user.hasVoted(0) && user.hasVoted(1))){
-        mVoteButton.setOnClickListener(new View.OnClickListener() {
+    private  void setFavoriteEvaluation(final User user){
+        if(mPosterData.getPosterID().equals("IAP")){
+            mVoteImg.setImageResource(R.drawable.ic_thumb_up_grey);
+            mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
+        } else if(!(user.hasVoted(0) && user.hasVoted(1))){
+            mVoteImg.setImageResource(R.drawable.ic_thumb_up_filled_green);
+            mVoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PosterDescriptionActivity.this, GeneralVoteActivity.class);
-                intent.putExtra("posterID", mPosterData.getPosterID());
-                intent.putExtra("posterName", mPosterData.getProjectName());
-                startActivity(intent);
+                FirebaseAuth.getInstance().getCurrentUser().reload();
+                if(!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
+                    AlertDialog alertDialog = new AlertDialog.Builder(PosterDescriptionActivity.this)
+                            .setTitle("Email Vertification Required")
+                            .setMessage("You must first verify your email to be able to vote for this project. "
+                                    + "Would you like us to resend you the email verification?")
+                            .setPositiveButton("RESEND", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+                                }
+                            }).setNegativeButton("NO", null).create();
+                    alertDialog.show();
+                }else {
+                    Intent intent = new Intent(PosterDescriptionActivity.this, GeneralVoteActivity.class);
+                    intent.putExtra("posterID", mPosterData.getPosterID());
+                    intent.putExtra("posterName", mPosterData.getProjectName());
+                    startActivity(intent);
+                }
             }});
         }
         else {
@@ -333,6 +368,7 @@ public class PosterDescriptionActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        FirebaseAuth.getInstance().getCurrentUser().reload();
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             setCompanyEvaluation((CompanyUser) Constants.getCurrentLoggedInUser());
         } else {

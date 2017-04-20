@@ -24,7 +24,6 @@ import com.affiliates.iap.iapspring2017.SplashScreen;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
-import com.affiliates.iap.iapspring2017.sing_in.RegisterActivity;
 import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
 
 public class NoConnectionActivity extends BaseActivity {

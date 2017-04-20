@@ -64,6 +64,7 @@ public abstract class User implements UserDelegate{
    }
 
    public static void login(String email, String password, final Callback<User> callback) {
+
       FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).
          addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -81,7 +82,6 @@ public abstract class User implements UserDelegate{
                } catch (InvalidAccountTypeExeption e){
                   callback.failure("User.class -> login(): Invalid Account Exeption");
                }
-
             }
          });
    }
