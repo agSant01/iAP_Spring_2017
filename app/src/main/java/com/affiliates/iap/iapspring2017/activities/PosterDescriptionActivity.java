@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.Constants;
@@ -33,10 +34,16 @@ import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.adapters.TeamAdvisorsAdapter;
 import com.affiliates.iap.iapspring2017.adapters.TeamMembersAdapter;
 import com.affiliates.iap.iapspring2017.evaluation_center.EvaluationActivity;
+import com.affiliates.iap.iapspring2017.evaluation_center.GeneralVoteActivity;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.profiles.AdvisorProfile;
 import com.affiliates.iap.iapspring2017.profiles.IAPStudentProfile;
 import com.affiliates.iap.iapspring2017.services.DataService;
+import com.affiliates.iap.iapspring2017.sing_in.LogInOrRegister;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crash.FirebaseCrash;
 
 import org.lucasr.twowayview.TwoWayView;
 
@@ -57,9 +64,12 @@ public class PosterDescriptionActivity extends BaseActivity {
     private ProgressBar mAdvisorProg;
     private ProgressBar mTeamProg;
 
+    private TextView mNoStudentsRegistered;
+    private TextView mNoAdivisorsRegistered;
     private TextView mAbstract;
     private TextView mSeeMore;
     private TextView mTitle;
+    private TextView mCat;
 
     private Button mVoteButton;
     private Button mPoster;
@@ -91,8 +101,27 @@ public class PosterDescriptionActivity extends BaseActivity {
         }
 
         mTitle.setText(mPosterData.getProjectName());
+        String p = "";
+        for(int i = 0; i < mPosterData.getCategories().size()-1; i++){
+            p += mPosterData.getCategories().get(i) + ", ";
+        }
+        p += mPosterData.getCategories().get(mPosterData.getCategories().size()-1);
+        mCat.setText(p);
         seeLess();
+        //update to see if user can vote
+        DataService.sharedInstance().getUserData( Constants.getCurrentLoggedInUser().getUserID(), new Callback<User>() {
+            @Override
+            public void success(User data) {
+                Constants.setCurrentLogedInUser(data);
+                //get the latest status on voted
+                Log.v(TAG, "User updated");
+            }
 
+            @Override
+            public void failure(String message) {
+                FirebaseCrash.log(TAG + ": " + message);
+            }
+        });
         mSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,11 +140,8 @@ public class PosterDescriptionActivity extends BaseActivity {
                 Log.v(TAG, mPosterData.getPosterURL());
                 String url = mPosterData.getPosterURL();
                 if(!url.contains("https://firebasestorage.googleapis.com")){
-                    new AlertDialog.Builder(PosterDescriptionActivity.this)
-                            .setMessage("Poster Not Available")
-                            .setPositiveButton("OK",  new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {}                // do nothing
-                            }).create().show();
+                    Toast.makeText(PosterDescriptionActivity.this,
+                            "Poster Not Available", Toast.LENGTH_SHORT).show();
                 }else{
                     Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(mPosterData.getPosterURL()));
                     startActivity(browser);
@@ -126,12 +152,8 @@ public class PosterDescriptionActivity extends BaseActivity {
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
             setCompanyEvaluation(companyUser);
-        } else if (Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.Advisor){
-            Advisor advisor = (Advisor) Constants.getCurrentLoggedInUser();
-
-        } else if (Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.IAPStudent){
-            IAPStudent iapStudent = (IAPStudent) Constants.getCurrentLoggedInUser();
-
+        } else {
+            setFavoriteEvaluation(Constants.getCurrentLoggedInUser());
         }
 
         DataService.sharedInstance().getPosterTeamMembers(mPosterData, new Callback() {
@@ -144,6 +166,8 @@ public class PosterDescriptionActivity extends BaseActivity {
 
             @Override
             public void failure(String message) {
+                hideProgressBar(mTeamProg);
+                mNoStudentsRegistered.setVisibility(View.VISIBLE);
                 Log.e(TAG,message);
             }
         });
@@ -158,6 +182,8 @@ public class PosterDescriptionActivity extends BaseActivity {
 
             @Override
             public void failure(String message) {
+                hideProgressBar(mAdvisorProg);
+                mNoAdivisorsRegistered.setVisibility(View.VISIBLE);
                 Log.e(TAG, message);
             }
         });
@@ -206,16 +232,19 @@ public class PosterDescriptionActivity extends BaseActivity {
     private void bind(){
         mAdvisorScrollView = (TwoWayView) findViewById(R.id.poster_team_advisors);
         mStudentScrollView = (TwoWayView) findViewById(R.id.poster_team_members);
+        mNoAdivisorsRegistered = (TextView) findViewById(R.id._no_advisors);
+        mNoStudentsRegistered = (TextView) findViewById(R.id._no_students);
         mAdvisorProg = (ProgressBar) findViewById(R.id.advisor_progress);
         mAbstract = (TextView) findViewById(R.id.poster_desc_abstract);
         mTeamProg = (ProgressBar) findViewById(R.id.member_progress);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_poster_desc);
         mVoteButton = (Button) findViewById(R.id.button_evaluate);
         mTitle = (TextView) findViewById(R.id.poster_desc_title);
-        mPosterImg = (ImageView) findViewById(R.id.poster_link);
+        mPosterImg = (ImageView) findViewById(R.id.poster_image);
         mSeeMore = (TextView) findViewById(R.id.seeMoreButton);
-        mVoteImg = (ImageView) findViewById(R.id.poster_vote);
+        mVoteImg = (ImageView) findViewById(R.id.presentation_image);
         mPoster = (Button) findViewById(R.id.button_poster);
+        mCat = (TextView) findViewById(R.id.textView20);
     }
 
     private void setToolBar(){
@@ -235,14 +264,28 @@ public class PosterDescriptionActivity extends BaseActivity {
     }
 
     private  void setCompanyEvaluation(CompanyUser user){
+        FirebaseAuth.getInstance().getCurrentUser().reload();
         if(!user.hasEvaluated(mPosterData.getPosterID())){
             mVoteButton.setText("Evaluate");
             mVoteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent eval = new Intent(getBaseContext(), EvaluationActivity.class);
-                    eval.putExtra("posterID", mPosterData.getPosterID());
-                    startActivity(eval);
+                    if(!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
+                        new AlertDialog.Builder(PosterDescriptionActivity.this)
+                                .setTitle("Email Vertification Required")
+                                .setMessage("You must first verify your email to be able to vote for this project. "
+                                + "Would you like us to resend you the email verification?")
+                                .setPositiveButton("RESEND", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+                                    }
+                                }).setNegativeButton("NO", null).create().show();
+                    } else {
+                        Intent eval = new Intent(getBaseContext(), EvaluationActivity.class);
+                        eval.putExtra("posterID", mPosterData.getPosterID());
+                        startActivity(eval);
+                        overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                    }
                 }
             });
         } else {
@@ -252,11 +295,52 @@ public class PosterDescriptionActivity extends BaseActivity {
             mVoteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    new AlertDialog.Builder(PosterDescriptionActivity.this)
-                            .setMessage("Poster Already Evaluated")
-                            .setPositiveButton("OK",  new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {}                // do nothing
-                            }).create().show();
+                    Toast.makeText(PosterDescriptionActivity.this,
+                            "Poster Already Evaluated", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    private  void setFavoriteEvaluation(final User user){
+        mVoteButton.setText("Favorite");
+        if(mPosterData.getPosterID().equals("IAP")){
+            mVoteImg.setImageResource(R.drawable.ic_thumb_up_grey);
+            mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
+        } else if(!(user.hasVoted(0) && user.hasVoted(1))){
+            mVoteImg.setImageResource(R.drawable.ic_thumb_up_filled_green);
+            mVoteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().getCurrentUser().reload();
+                if(!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
+                    AlertDialog alertDialog = new AlertDialog.Builder(PosterDescriptionActivity.this)
+                            .setTitle("Email Vertification Required")
+                            .setMessage("You must first verify your email to be able to vote for this project. "
+                                    + "Would you like us to resend you the email verification?")
+                            .setPositiveButton("RESEND", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
+                                }
+                            }).setNegativeButton("NO", null).create();
+                    alertDialog.show();
+                }else {
+                    Intent intent = new Intent(PosterDescriptionActivity.this, GeneralVoteActivity.class);
+                    intent.putExtra("posterID", mPosterData.getPosterID());
+                    intent.putExtra("posterName", mPosterData.getProjectName());
+                    startActivity(intent);
+                }
+            }});
+        }
+        else {
+            mVoteImg.setImageResource(R.drawable.ic_thumb_up_grey);
+            mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
+            mVoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v("Mario", "Clicked");
+                    Toast.makeText(getApplicationContext(),
+                            "Sorry, you have already spent your votes", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -266,7 +350,7 @@ public class PosterDescriptionActivity extends BaseActivity {
         if(mPosterData.get_abstract().length() <= 300 ){
             mSeeMore.setVisibility(View.INVISIBLE);
         }
-        mAbstract.setText(mPosterData.get_abstract());
+        mAbstract.setText(mPosterData.get_abstract().equals("NA") ? "Abstract currently unavailable" : mPosterData.get_abstract());
         mSeeMore.setText("See less");
     }
 
@@ -284,10 +368,13 @@ public class PosterDescriptionActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        FirebaseAuth.getInstance().getCurrentUser().reload();
         if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
             setCompanyEvaluation((CompanyUser) Constants.getCurrentLoggedInUser());
+        } else {
+            setFavoriteEvaluation(Constants.getCurrentLoggedInUser());
         }
-        System.out.println("ON RESUME YEAH YEAH");
+        Log.v(TAG, "onResume()");
     }
 
     @Override

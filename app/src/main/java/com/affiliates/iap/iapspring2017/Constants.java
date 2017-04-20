@@ -9,16 +9,21 @@
 package com.affiliates.iap.iapspring2017;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.affiliates.iap.iapspring2017.Models.Event;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.Models.Sponsors;
 import com.affiliates.iap.iapspring2017.Models.User;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class Constants {
    private static User currentLoggedInUser;
@@ -30,6 +35,7 @@ public class Constants {
    private static ArrayList<Event> events;
    private static ArrayList<Sponsors> sponsor;
    private static Map<String, Drawable> sponsorLogos = new HashMap<>();
+   public static JSONObject curentRegisteringUserData;
 
    public static ArrayList<Sponsors> getSponsor() {
       return sponsor;
@@ -98,4 +104,16 @@ public class Constants {
    public static void setUnlikedStudents(ArrayList<IAPStudent> unlikedStudents) {
       Constants.unlikedStudents = unlikedStudents;
    }
+
+   public static void sortEvents(){
+       PriorityQueue<Event> sorted = new PriorityQueue<>();
+       sorted.addAll(events);
+       events = new ArrayList<>();
+      while(!sorted.isEmpty()){
+          events.add(sorted.remove());
+          Log.v("Sorting", events.get(events.size()-1).getStartDate().toString());
+      }
+   }
+
+
 }

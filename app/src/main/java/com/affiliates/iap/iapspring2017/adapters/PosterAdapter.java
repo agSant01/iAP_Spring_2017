@@ -73,6 +73,17 @@ public class PosterAdapter  extends ArrayAdapter<Poster> {
                 viewHolder.mHasEval.setVisibility(View.VISIBLE);
                 viewHolder.check.setVisibility(View.INVISIBLE);
             }
+        }else{
+            if(Constants.getCurrentLoggedInUser().hasVoted(0) && Constants.getCurrentLoggedInUser().hasVoted(1)){
+                viewHolder.mPosterNum.setVisibility(View.INVISIBLE);
+                viewHolder.mHasEval.setVisibility(View.INVISIBLE);
+                viewHolder.check.setVisibility(View.VISIBLE);
+            }
+            else{
+                viewHolder.mPosterNum.setVisibility(View.VISIBLE);
+                viewHolder.mHasEval.setVisibility(View.VISIBLE);
+                viewHolder.check.setVisibility(View.INVISIBLE);
+            }
         }
 
         String m = "";

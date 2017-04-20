@@ -30,10 +30,12 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.code.gson:gson:2.8.0'
     // FireBase
-    compile 'com.google.firebase:firebase-core:10.2.0'
-    compile 'com.google.firebase:firebase-storage:10.2.0'
-    compile 'com.google.firebase:firebase-database:10.2.0'
-    compile 'com.google.firebase:firebase-auth:10.2.0'
+    compile 'com.google.firebase:firebase-core:10.2.1'
+    compile 'com.google.firebase:firebase-storage:10.2.1'
+    compile 'com.google.firebase:firebase-database:10.2.1'
+    compile 'com.google.firebase:firebase-auth:10.2.1'
+    compile 'com.google.firebase:firebase-crash:10.2.1'
+
     // Image Download Manager
     compile 'com.squareup.picasso:picasso:2.5.2'
     // Horizontal scrollview cell library
@@ -44,8 +46,6 @@ dependencies {
     compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
     // Helper Library for introduction screens
     compile 'com.matthew-tamlin:sliding-intro-screen:3.2.0'
-    // Helper library for binding resources to views controllers through annotations
-    compile 'com.jakewharton:butterknife:8.5.1'
     // Helper library for the search bar
     compile 'com.miguelcatalan:materialsearchview:1.4.0'
     // Helper library spinner

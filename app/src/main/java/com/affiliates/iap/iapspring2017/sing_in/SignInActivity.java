@@ -10,29 +10,36 @@ package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.Constants;
-import com.affiliates.iap.iapspring2017.activities.MainActivity;
+import com.affiliates.iap.iapspring2017.MainActivity;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.activities.ForgotPasswordActivity;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
 
 public class SignInActivity extends BaseActivity {
    private static final String TAG = "SignIn";
+   private static final int REQUEST_EXIT = 5;
 
    private AccountAdministration mAdmin;
    private EditText mPasswordField;
    private EditText mEmailField;
    private Client mClient;
    private Button mSubmit;
+   private TextView mForgotPaass;
+   private ImageView mShowPass;
 
    @Override
    public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +50,27 @@ public class SignInActivity extends BaseActivity {
 
       mAdmin = new AccountAdministration(getBaseContext());
       mClient = new Client(getBaseContext());
+
+      mShowPass.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+            if(mPasswordField.getTransformationMethod() != null) {
+               mPasswordField.setTransformationMethod(null);
+               mShowPass.setImageResource(R.drawable.ic_hide_pass);
+            }else{
+               mPasswordField.setTransformationMethod(new PasswordTransformationMethod());
+               mShowPass.setImageResource(R.drawable.ic_show_password);
+            }
+         }
+      });
+
+      mForgotPaass.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View v) {
+            startActivityForResult(new Intent(SignInActivity.this, ForgotPasswordActivity.class), REQUEST_EXIT);
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+         }
+      });
 
       mSubmit.setOnClickListener(
             new View.OnClickListener()  {
@@ -109,6 +137,8 @@ public class SignInActivity extends BaseActivity {
       mPasswordField = (EditText) findViewById(R.id.password_box);
       mEmailField = (EditText) findViewById(R.id.email_box);
       mSubmit = (Button) findViewById(R.id.sign_in_button);
+      mShowPass = (ImageView) findViewById(R.id.show_pass);
+      mForgotPaass = (TextView) findViewById(R.id.forgot_password);
    }
 
    @Override
@@ -116,5 +146,15 @@ public class SignInActivity extends BaseActivity {
       super.onBackPressed();
       overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
       finish();
+   }
+
+   @Override
+   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+      if (requestCode == REQUEST_EXIT) {
+         if (resultCode == RESULT_OK) {
+            this.finish();
+
+         }
+      }
    }
 }

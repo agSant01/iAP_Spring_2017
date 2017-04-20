@@ -14,6 +14,9 @@ import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.R;
 import android.support.v7.widget.Toolbar;
 import com.squareup.picasso.Picasso;
+
+import android.util.TypedValue;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.content.Intent;
@@ -49,7 +52,7 @@ public class AdvisorProfile extends BaseActivity {
         Picasso.with(getBaseContext()).load(in.getStringExtra("photoURL")).placeholder(R.drawable.ic_gender_0)
                 .error(R.drawable.ic_gender_0).into(mCircleImageView);
 
-        mResearchIntent.setText(in.getStringExtra("research"));
+        mResearchIntent.setText(in.getStringExtra("research").equals("NA") ? "To be defined" : in.getStringExtra("research"));
         mEmail.setText(in.getStringExtra("email"));
         mName.setText(in.getStringExtra("name"));
         mDept.setText(in.getStringExtra("dpt"));
@@ -94,13 +97,15 @@ public class AdvisorProfile extends BaseActivity {
     }
 
     private void setAllProyects(){
-        int counter = 0;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.bottomMargin = 11;
         for (String s : getIntent().getStringArrayListExtra("projects")) {
             if (Constants.getPosters().containsKey(s)) {
                 TextView listItem = new TextView(getBaseContext());
-                listItem.setText(++counter + ". " + Constants.getPosters().get(s).getProjectName());
+                listItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                listItem.setText("\u2022 " + Constants.getPosters().get(s).getProjectName());
                 listItem.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                listItem.setPadding(0, 0, 0, 11);
+                listItem.setLayoutParams(params);
                 listItem.setTextColor(getResources().getColor(R.color.appGrey));
                 mProjectsList.addView(listItem);
             }

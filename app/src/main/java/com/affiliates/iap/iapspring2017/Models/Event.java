@@ -11,10 +11,12 @@ package com.affiliates.iap.iapspring2017.Models;
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
 import org.json.JSONObject;
+
+import android.support.annotation.NonNull;
 import android.util.Log;
 import java.util.Date;
 
-public class Event {
+public class Event implements Comparable<Event>{
    private final SimpleDateFormat format;
    private String eventDescription;
    private String eventName;
@@ -65,9 +67,8 @@ public class Event {
       boolean am = false;
       String str = "";
       for (int i = 11; i < s.length()-3; i++){
-         if(i == 11 && s.charAt(i) == '0') {
+         if(i == 11 && (s.charAt(i) == '0' || s.charAt(i+1) == '1' || s.charAt(i+1) == '0')) {
             am = true;
-            continue;
          }
          str += s.charAt(i);
       }
@@ -86,9 +87,8 @@ public class Event {
       String str = "";
       boolean am = false;
       for (int i = 11; i < s.length()-3; i++){
-         if(i == 11 && s.charAt(i) == '0'){
+         if(i == 11 && (s.charAt(i) == '0' || s.charAt(i+1) == '1' || s.charAt(i+1) == '0')) {
             am = true;
-            continue;
          }
          str += s.charAt(i);
       }
@@ -101,4 +101,11 @@ public class Event {
 
       return str;
    }
+
+    @Override
+    public int compareTo(@NonNull Event other) {
+        if(this.startDate.after(other.startDate)) return 1;
+        if(this.startDate.before(other.startDate)) return -1;
+        return 0;
+    }
 }

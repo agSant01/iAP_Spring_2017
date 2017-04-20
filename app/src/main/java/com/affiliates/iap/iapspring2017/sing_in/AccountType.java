@@ -29,7 +29,7 @@ public class AccountType extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Log.v(TAG, "CompanyRep");
-                intent.putExtra("AccountType", "CompanyRep");
+                intent.putExtra("AccountType", "CompanyUser");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
@@ -58,8 +58,8 @@ public class AccountType extends BaseActivity {
        mAdvisor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v(TAG, "Advisors");
-                intent.putExtra("AccountType","Advisors");
+                Log.v(TAG, "Advisor");
+                intent.putExtra("AccountType","Advisor");
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }

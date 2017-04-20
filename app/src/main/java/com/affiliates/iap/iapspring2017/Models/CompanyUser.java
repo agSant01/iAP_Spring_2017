@@ -97,12 +97,23 @@ public class CompanyUser extends User implements UserDelegate {
    public HashMap<String, Object> toMap() {
       return new HashMap<String, Object>(){{
          put("AccountType", "Company");
+         put("Company", companyName);
          put("Name", getName());
          put("Email", getEmail());
          put("PhotoURL", getPhotoURL());
          put("Sex", getGender());
          put("Votes", exportVote());
       }};
+   }
+
+   @Override
+   public boolean hasVoted(int type) {
+      return false; //should never be reached
+   }
+
+   @Override
+   public void vote(OverallVote vote) {
+      //do nothing, should never be reached
    }
 
    public void setVoted(final String projectID){

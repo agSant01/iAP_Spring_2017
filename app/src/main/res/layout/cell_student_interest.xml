@@ -21,9 +21,9 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="8dp"
-        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.03" />
+        app:layout_constraintHorizontal_bias="0.031"
+        android:layout_marginEnd="8dp" />
 
     <TextView
         android:id="@+id/_name"
@@ -47,22 +47,31 @@
         android:layout_marginTop="3dp"
         app:layout_constraintTop_toBottomOf="@+id/_name"
         app:layout_constraintLeft_toRightOf="@+id/profile_image"
-        android:layout_marginLeft="16dp" />
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp" />
 
     <TextView
         android:id="@+id/_project"
-        android:layout_width="210dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="3dp"
-        android:text="iAP"
+        android:paddingEnd="50dp"
+        android:paddingStart="95dp"
+        android:text="lkbhkgbeirrrrrrrrrrrrrrrrrrrrrrrrrrrrrwrrrrrrgabafbab"
         android:textColor="@color/appCyan"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/profile_image"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/_department"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_goneMarginStart="0dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintHorizontal_bias="0.5" />
 
     <ImageView
         android:id="@+id/imageView10"
@@ -76,8 +85,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_chevron_right"
-        tools:layout_editor_absoluteY="10dp"
-        tools:layout_editor_absoluteX="314dp" />
+        android:src="@drawable/ic_chevron_right" />
 
 </android.support.constraint.ConstraintLayout>

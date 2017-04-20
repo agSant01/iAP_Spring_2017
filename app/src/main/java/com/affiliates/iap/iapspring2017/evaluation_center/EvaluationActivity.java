@@ -27,7 +27,6 @@ import com.matthewtamlin.sliding_intro_screen_library.indicators.DotIndicator;
 public class EvaluationActivity extends BaseActivity {
     private static final String TAG = "EvaluationActivity";
 
-    private DotIndicator mDotIndicator;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private Toolbar mToolbar;
@@ -72,6 +71,9 @@ public class EvaluationActivity extends BaseActivity {
 
         mTabLayout = (TabLayout) findViewById(R.id.evaluation);
         mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.getTabAt(0).setText("Poster");
+        mTabLayout.getTabAt(1).setText("Summary");
+        mTabLayout.getTabAt(2).setText("Presentation");
 
         mViewPager.setCurrentItem(1);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -87,16 +89,11 @@ public class EvaluationActivity extends BaseActivity {
                 } else {
                     mTitle.setText("Presentation Evaluation");
                 }
-                mDotIndicator.setSelectedItem(position,true);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {}
         });
-        Intent in = getIntent();
-        String posterID = in.getStringExtra("posterID");
-        CompanyUser companyUser = (CompanyUser) Constants.getCurrentLoggedInUser();
-        //mCompanyVote = companyUser.loadVote(posterID,getBaseContext());
     }
 
     @Override
@@ -120,11 +117,12 @@ public class EvaluationActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
+        finish();
     }
 
     private void bind(){
         mViewPager = (ViewPager) findViewById(R.id.evaluation_container);
-        mDotIndicator = (DotIndicator) findViewById(R.id.dots_indicator);
         mTitle = (TextView) findViewById(R.id.toolbar_title);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
     }

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.affiliates.iap.iapspring2017.activities.MainActivity"
+    tools:context="com.affiliates.iap.iapspring2017.MainActivity"
     app:theme="@style/AppTheme.NoActionBar">
 
     <android.support.design.widget.AppBarLayout
@@ -47,11 +47,11 @@
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:background="@drawable/white_background"
             android:clickable="false"
-            app:tabIndicatorColor="@color/appGreen"
             android:theme="@style/tabAppearance"
+            app:tabIndicatorColor="@color/appGreen"
             app:tabIndicatorHeight="2dp" />
     </android.support.design.widget.AppBarLayout>
 

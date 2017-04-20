@@ -63,6 +63,7 @@ public class ScheduleFragment extends Fragment {
                 public void success(Object data) {
                     Log.v(TAG, "Get events succesfull");
                     Constants.setEvents((ArrayList<Event>) data);
+                    Constants.sortEvents();
                     mEventAdapter = new EventAdapter(getContext(),Constants.getEvents());
 
                     mListView.setAdapter(mEventAdapter);
@@ -77,6 +78,7 @@ public class ScheduleFragment extends Fragment {
                 }
             });
         } else {
+            Constants.sortEvents();
             mEventAdapter = new EventAdapter(getContext(),Constants.getEvents());
 
             mListView.setAdapter(mEventAdapter);

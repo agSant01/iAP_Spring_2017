@@ -37,6 +37,7 @@ import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.Models.User.AccountType;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
+import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -59,6 +60,7 @@ public class ProfileEditActivity extends BaseActivity {
     private static final int READ_REQUEST_CODE_IMAGE = 42;
     private static final int READ_REQUEST_CODE_PDF = 40;
 
+    private Client c;
     private CircleImageView mCircleImageView;
     private ImageView mChangeProfilePhoto;
     private Button mResetPassword;
@@ -74,7 +76,7 @@ public class ProfileEditActivity extends BaseActivity {
      *  If user is an advisor it is used for the webpage
      */
     private EditText mGradDate;
-    private AlertDialog mAlert;
+    private AlertDialog mResetPasswordDialog;
     /**
      *  Only used if user is a company rep.
      */
@@ -91,11 +93,13 @@ public class ProfileEditActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        c = new Client(getBaseContext());
         mAccType = Constants.getCurrentLoggedInUser().getAccountType();
+        Log.v(TAG, mAccType + " " + AccountType.Advisor);
         if(mAccType == AccountType.IAPStudent)
             setContentView(R.layout.activity_iapstudent_profile_edit);
         else if (mAccType == AccountType.Advisor)
-            setContentView(R.layout.activity_advisor_profile);
+            setContentView(R.layout.activity_advisor_profile_edit);
         else if (mAccType == AccountType.CompanyUser)
             setContentView(R.layout.activity_company_profile_edit);
         else
@@ -103,8 +107,10 @@ public class ProfileEditActivity extends BaseActivity {
 
         this.bind();
         setToolbar();
-
-        Picasso.with(getBaseContext()).load(Constants.getCurrentLoggedInUser().getPhotoURL())
+        String path = "NA";
+        if(!Constants.getCurrentLoggedInUser().getPhotoURL().equals(""))
+            path = Constants.getCurrentLoggedInUser().getPhotoURL();
+        Picasso.with(getBaseContext()).load(path)
                 .error(R.drawable.ic_gender_0).placeholder(R.drawable.ic_gender_0)
                 .into(mCircleImageView);
         deptms = new ArrayList<String>(){{
@@ -119,15 +125,14 @@ public class ProfileEditActivity extends BaseActivity {
             add("Mechanical Engineering");
         }};
 
-        mName.setText(!Constants.getCurrentLoggedInUser().getName().contains("NA") ? Constants.getCurrentLoggedInUser().getName() : "");
-        mEmail.setText(Constants.getCurrentLoggedInUser().getEmail());
+        mName.setTextKeepState(!Constants.getCurrentLoggedInUser().getName().contains("NA") ? Constants.getCurrentLoggedInUser().getName() : "");
+        mEmail.setTextKeepState(Constants.getCurrentLoggedInUser().getEmail());
         mResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showResetPasswordDialog();
             }
         });
-
         mChangeProfilePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -198,17 +203,18 @@ public class ProfileEditActivity extends BaseActivity {
     }
 
     private void setIAPStudent(){
+        mGradDate.setFocusable(false);
         final IAPStudent student = (IAPStudent) Constants.getCurrentLoggedInUser();
         if(!student.getDepartment().equals("NA")){
             deptms.remove(student.getDepartment());
             deptms.add(0, student.getDepartment());
             mDepartment.setItems(deptms);
-            mDepartment.setText(student.getDepartment());
+            mDepartment.setTextKeepState(student.getDepartment());
         } else {
             mDepartment.setItems(deptms);
         }
-        mGradDate.setText(!student.getGradDate().equals("NA") ? student.getGradDate() : "");
-        mObjective.setText(!student.getObjective().equals("NA") ? student.getObjective() : "");
+        mGradDate.setTextKeepState(!student.getGradDate().equals("NA") ? student.getGradDate() : "Jun 20, 2017");
+        mObjective.setTextKeepState(!student.getObjective().equals("NA") ? student.getObjective() : "");
         months = new HashMap<String, Integer>(){{
             put("Jan", 0);
             put("Feb", 1);
@@ -224,44 +230,36 @@ public class ProfileEditActivity extends BaseActivity {
             put("Dec", 11);
         }};
 
-        mGradDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mGradDate.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                Log.v(TAG, "JHV");
-                if(hasFocus){
-                    String[] grad = student.getGradDate().split("[, ]+");
-                    Calendar calendar = Calendar.getInstance();
+            public void onClick(View v) {
+                String[] grad = student.getGradDate().split("[, ]+");
+                Calendar calendar = Calendar.getInstance();
+                if(grad.length > 1)
                     calendar.set(Integer.parseInt(grad[2]), months.get(grad[0]), Integer.parseInt(grad[1]));
 
-                    DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-
-                        }
-                    },calendar.get(Calendar.YEAR),
-                            calendar.get(Calendar.MONTH),
-                            calendar.get(Calendar.DAY_OF_MONTH));
-                    datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
-                        @Override
-                        public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                            for(String s : months.keySet()){
-                                if (months.get(s) == monthOfYear){
-                                    mGradDate.setText(s + " " + dayOfMonth + ", " + year);
-                                    break;
-                                }
-                            }
-                        }
-                    });
-                    datePickerDialog.setVersion(DatePickerDialog.Version.VERSION_1);
-                    datePickerDialog.show(getFragmentManager(), "");
-                    v.clearFocus();
-                }
+                DatePickerDialog datePickerDialog = DatePickerDialog.newInstance(new DatePickerDialog.OnDateSetListener() {
+                                                                                     @Override
+                                                                                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+                                                                                         for(String s : months.keySet()){
+                                                                                             if (months.get(s) == monthOfYear){
+                                                                                                 mGradDate.setText(s + " " + dayOfMonth + ", " + year);
+                                                                                                 break;
+                                                                                             }
+                                                                                         }
+                                                                                     }
+                                                                                 },calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.setVersion(DatePickerDialog.Version.VERSION_1);
+                datePickerDialog.show(getFragmentManager(), "");
             }
         });
     }
 
     private void setAvisor(){
         final Advisor advisor = (Advisor) Constants.getCurrentLoggedInUser();
+        mObjective.setHint("Research Intent");
         if(!advisor.getDepartment().equals("NA")){
             deptms.remove(advisor.getDepartment());
             deptms.add(0, advisor.getDepartment());
@@ -283,64 +281,114 @@ public class ProfileEditActivity extends BaseActivity {
     private void showResetPasswordDialog() {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_reset_password, null);
+        final EditText oldPass = (EditText) dialogView.findViewById(R.id.oldPass);
         final EditText newPass = (EditText) dialogView.findViewById(R.id.password);
         final EditText confirmPass = (EditText) dialogView.findViewById(R.id.confirm_password);
-        ImageView passShow = (ImageView) dialogView.findViewById(R.id.show_pass);
-        ImageView confPassShow = (ImageView) dialogView.findViewById(R.id.show_confirm_pass);
+        final ImageView oldPassShow = (ImageView) dialogView.findViewById(R.id.show_old_pass);
+        final ImageView passShow = (ImageView) dialogView.findViewById(R.id.show_pass);
+        final ImageView confPassShow = (ImageView) dialogView.findViewById(R.id.show_confirm_pass);
+
+        oldPassShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(oldPass.getTransformationMethod() != null) {
+                    oldPass.setTransformationMethod(null);
+                    oldPassShow.setImageResource(R.drawable.ic_hide_pass);
+                } else {
+                    oldPass.setTransformationMethod(new PasswordTransformationMethod());
+                    oldPassShow.setImageResource(R.drawable.ic_show_password);
+                }
+            }
+        });
 
         passShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(newPass.getTransformationMethod() != null)
+                if(newPass.getTransformationMethod() != null) {
                     newPass.setTransformationMethod(null);
-                else
+                    passShow.setImageResource(R.drawable.ic_hide_pass);
+                } else {
                     newPass.setTransformationMethod(new PasswordTransformationMethod());
+                    passShow.setImageResource(R.drawable.ic_show_password);
+                }
             }
         });
 
         confPassShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(confirmPass.getTransformationMethod() != null)
+                if(confirmPass.getTransformationMethod() != null) {
                     confirmPass.setTransformationMethod(null);
-                else
+                    confPassShow.setImageResource(R.drawable.ic_hide_pass);
+                } else {
                     confirmPass.setTransformationMethod(new PasswordTransformationMethod());
+                    confPassShow.setImageResource(R.drawable.ic_show_password);
+                }
             }
         });
 
 
 
         dialogBuilder.setView(dialogView);
-        dialogBuilder.setTitle("Reset Password").setPositiveButton("Reset", null)
+        dialogBuilder.setTitle("Reset Password").setPositiveButton("Confirm", null)
                 .setNegativeButton("Cancel", null);
-        mAlert = dialogBuilder.create();
-        mAlert.setOnShowListener(new DialogInterface.OnShowListener() {
+        mResetPasswordDialog = dialogBuilder.create();
+        mResetPasswordDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(final DialogInterface dialog) {
                 Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        resetPassword(newPass.getText().toString(), confirmPass.getText().toString(), new Callback<String>() {
+                        if(!validatePassword(newPass.getText().toString(), confirmPass.getText().toString())){
+                            return;
+                        }
+                        showProgressDialog("Updating password");
+                        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail(),
+                                pass = oldPass.getText().toString();
+                        User.login(email, pass, new Callback<User>() {
                             @Override
-                            public void success(String data) {
-                                Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
-                                dialog.dismiss();
+                            public void success(User data) {
+                                resetPassword(newPass.getText().toString(), confirmPass.getText().toString(), new Callback<String>() {
+                                    @Override
+                                    public void success(String data) {
+                                        hideProgressDialog();
+                                        Toast.makeText(getBaseContext(), data, Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    }
+
+                                    @Override
+                                    public void failure(String message) {
+                                        hideProgressDialog();
+                                        Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+                                    }
+                                });
                             }
 
                             @Override
                             public void failure(String message) {
-                                Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getBaseContext(), "Sorry, that is not your current password", Toast.LENGTH_SHORT).show();
+                                Log.v(TAG, message);
+                                oldPass.selectAll();
+                                oldPass.setSelected(true);
+                                hideProgressDialog();
                             }
                         });
+
+
                     }
                 });
             }
         });
-        mAlert.show();
+        mResetPasswordDialog.show();
     }
 
     private void saveChanges(){
+        if (!c.isConnectionAvailable()){
+            Log.v(TAG, "I");
+            startActivity(new Intent(getBaseContext(), NoConnectionActivity.class));
+            return;
+        }
         showProgressDialog("Uploading Changes");
         final User user = Constants.getCurrentLoggedInUser();
         user.setName(mName.getText().toString().isEmpty() ? "NA" : mName.getText().toString());
@@ -354,7 +402,7 @@ public class ProfileEditActivity extends BaseActivity {
             Advisor advisor = (Advisor) user;
             advisor.setDepartment(mDepartment.getText().toString().isEmpty() ? "Engineering" : mDepartment.getText().toString());
             advisor.setWebPage(mGradDate.getText().toString().isEmpty() ? "https://uprm.edu" : mGradDate.getText().toString());
-            advisor.setResearchIntent(mObjective.getText().toString());
+            advisor.setResearchIntent(mObjective.getText().toString().isEmpty() ? "To be Defined" : mObjective.getText().toString());
         }
 
         if(mImage != null){
@@ -367,8 +415,8 @@ public class ProfileEditActivity extends BaseActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            b.copyPixelsToBuffer(buffer); //Move the byte data to the buffer
-            byte[] array = buffer.array(); //Get the underlying array containing the data.
+            b.copyPixelsToBuffer(buffer); //Move the byte curentRegisteringUserData to the buffer
+            byte[] array = buffer.array(); //Get the underlying array containing the curentRegisteringUserData.
             DataService.sharedInstance().uploadUserImage(user, mImage, new Callback<User>() {
                 @Override
                 public void success(User data) {
@@ -379,19 +427,23 @@ public class ProfileEditActivity extends BaseActivity {
                         public void success(User data) {
                             Log.v(TAG, "updateUserData success");
                             hideProgressDialog();
+                            FirebaseAuth.getInstance().getCurrentUser().reload();
                             Constants.setCurrentLogedInUser(user);
-                            new AlertDialog.Builder(ProfileEditActivity.this)
+                            AlertDialog alertDialog = new AlertDialog.Builder(ProfileEditActivity.this)
                                     .setTitle("Successfully Updated Your Profile")
                                     .setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             finish();
                                         }
-                                    }).create().show();
+                                    }).create();
+                            alertDialog.setCancelable(false);
+                            alertDialog.show();
                         }
 
                         @Override
                         public void failure(String message) {
+                            hideProgressDialog();
                             String title = "Internal Error";
                             message = "An unspecified internal error ocurred. Your changes have not been saved. Please try again.";
                             new AlertDialog.Builder(getBaseContext()).setTitle(title).setMessage(message)
@@ -420,6 +472,7 @@ public class ProfileEditActivity extends BaseActivity {
                 public void success(User data) {
                     Log.v(TAG, "updateUserData success");
                     hideProgressDialog();
+                    FirebaseAuth.getInstance().getCurrentUser().reload();
                     Constants.setCurrentLogedInUser(user);
                     new AlertDialog.Builder(ProfileEditActivity.this)
                                     .setMessage("Successfully Updated Your Profile")
@@ -428,7 +481,7 @@ public class ProfileEditActivity extends BaseActivity {
                                         public void onClick(DialogInterface dialog, int which) {
                                             finish();
                                         }
-                                    }).create().show();
+                                    }).setCancelable(false).create().show();
                 }
 
                 @Override
@@ -451,6 +504,22 @@ public class ProfileEditActivity extends BaseActivity {
         }
     }
 
+    private boolean validatePassword(String newPass, String confPass){
+        if (newPass.isEmpty()) {
+            Toast.makeText(getBaseContext(),"Please, enter password", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (confPass.isEmpty()) {
+            Toast.makeText(getBaseContext(),"Please, confirm password", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (!newPass.equals(confPass)) {
+            Toast.makeText(getBaseContext(),"Sorry, passwords do not match", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
     private void resetPassword(String newPass, String confPass, final Callback callback) {
         if (newPass.isEmpty()) {
             callback.failure("Please, enter password");
@@ -471,13 +540,13 @@ public class ProfileEditActivity extends BaseActivity {
                 if (!task.isSuccessful()) {
                     String msg = task.getException().getMessage();
                     if (msg.contains("WEAK_PASSWORD")) {
-                        callback.failure("Password too short");
+                        callback.failure("New password too short");
                     }else {
                         callback.failure(msg);
                     }
                     return;
                 }
-                callback.success("Password reset successfull");
+                callback.success("Password updated successfully");
             }
         });
     }
@@ -491,7 +560,7 @@ public class ProfileEditActivity extends BaseActivity {
         // file (as opposed to a list of contacts or timezones)
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
-        // Filter to show only images, using the image MIME data type.
+        // Filter to show only images, using the image MIME curentRegisteringUserData type.
         // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
         // To search for all documents available via installed storage providers,
         // it would be "*/*".
@@ -509,7 +578,7 @@ public class ProfileEditActivity extends BaseActivity {
         // file (as opposed to a list of contacts or timezones)
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
-        // Filter to show only images, using the image MIME data type.
+        // Filter to show only images, using the image MIME curentRegisteringUserData type.
         // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
         // To search for all documents available via installed storage providers,
         // it would be "*/*".
@@ -611,7 +680,7 @@ public class ProfileEditActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(ProfileEditActivity.this).setTitle("Unsaved Changes")
-                .setMessage("If you go back all unsaved changes will be lost.")
+                .setMessage("If you go back unsaved changes will be lost.")
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

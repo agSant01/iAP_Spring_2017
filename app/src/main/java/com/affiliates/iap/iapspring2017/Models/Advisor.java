@@ -9,6 +9,7 @@
 package com.affiliates.iap.iapspring2017.Models;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
@@ -40,7 +41,7 @@ public class Advisor extends User implements UserDelegate {
    public Advisor(JSONObject data){
       super(data.optString("Email"), AccountType.Advisor );
       this.projects = parseData(data.optJSONObject("Projects"));
-      this.researchIntent = "NA";
+      this.researchIntent = "To be defined";
       this.voted = new Voted();
       this.department = "NA";
       this.webPage = "NA";
@@ -53,7 +54,7 @@ public class Advisor extends User implements UserDelegate {
       this.researchIntent = data.optString("ResearchIntent");
       this.voted = new Voted(data.optJSONObject("Voted"));
       this.department = data.optString("Department");
-      this.webPage = data.optString("webpage");
+      this.webPage = data.optString("Webpage");
    }
 
    private static Void checkType(AccountType accountType)
@@ -117,7 +118,30 @@ public class Advisor extends User implements UserDelegate {
       }};
    }
 
-   private void setVoted(OverallVote vote) {
+    @Override
+    public boolean hasVoted(int type) {
+        switch (type){
+            case 0:
+                return voted.bestPoster;
+            case 1:
+                return voted.bestPresentation;
+        }
+        return false;
+    }
+
+    @Override
+    public void vote(OverallVote vote) {
+        if (!hasVoted( vote)) {
+            setVoted(vote);
+            Log.v("Voting", "Voted!");
+
+        }
+        else{
+            Log.v("Voting", "Already Voted!");
+        }
+    }
+
+    private void setVoted(OverallVote vote) {
       switch (vote.getVoteType()){
          case BestPoster:
             this.voted.bestPoster = true;
@@ -146,8 +170,9 @@ public class Advisor extends User implements UserDelegate {
 
    private HashMap<String, Object> exportProjects(){
       HashMap<String, Object> p = new HashMap<>();
-      for(int i = 0; i < projects.size(); i++)
-         p.put(projects.get(i), "true");
+       if(projects!=null)
+          for(int i = 0; i < projects.size(); i++)
+             p.put(projects.get(i), true);
       return p;
    }
 

@@ -22,17 +22,14 @@ import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 
 public class PresentationEval extends Fragment{
     private static final String TAG = "PresentationEval";
-    private static int pos;
 
     static MaterialRatingBar mTechOral;
     static MaterialRatingBar mPresOral;
-    static RatingBar mMethodOral;
     static MaterialRatingBar mResOral;
-    private Button mSave;
+    static RatingBar mMethodOral;
     private View mView;
 
     public static PresentationEval newInstance(int ps) {
-        pos = ps;
         return new PresentationEval();
     }
 
@@ -51,13 +48,12 @@ public class PresentationEval extends Fragment{
         mPresOral = (MaterialRatingBar) mView.findViewById(R.id.pres_rating_pres);
         mResOral = (MaterialRatingBar) mView.findViewById(R.id.pres_rating_res);
 
-        mSave = (Button) mView.findViewById(R.id.button4);
-
         mTechOral.setOnRatingChangeListener(new MaterialRatingBar.OnRatingChangeListener() {
             @Override
             public void onRatingChanged(MaterialRatingBar ratingBar, float rating) {
                 Summary.mTechOral.setText((int)rating+"");
                 Summary.calculateTotalOral();
+                Summary.saveVote(getContext());
             }
         });
         mMethodOral.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -65,6 +61,7 @@ public class PresentationEval extends Fragment{
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                 Summary.mMethodOral.setText((int) rating+"");
                 Summary.calculateTotalOral();
+                Summary.saveVote(getContext());
             }
         });
         mPresOral.setOnRatingChangeListener(new MaterialRatingBar.OnRatingChangeListener() {
@@ -72,6 +69,7 @@ public class PresentationEval extends Fragment{
             public void onRatingChanged(MaterialRatingBar ratingBar, float rating) {
                 Summary.mPresOral.setText((int)rating+"");
                 Summary.calculateTotalOral();
+                Summary.saveVote(getContext());
             }
         });
         mResOral.setOnRatingChangeListener(new MaterialRatingBar.OnRatingChangeListener() {
@@ -79,17 +77,10 @@ public class PresentationEval extends Fragment{
             public void onRatingChanged(MaterialRatingBar ratingBar, float rating) {
                 Summary.mResOral.setText((int)rating+"");
                 Summary.calculateTotalOral();
-            }
-        });
-        updateOralRating();
-
-        mSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 Summary.saveVote(getContext());
             }
         });
-
+        updateOralRating();
         return mView;
     }
 

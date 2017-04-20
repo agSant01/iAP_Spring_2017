@@ -28,6 +28,7 @@ import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.adapters.StudentsInterestAdapter;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.profiles.IAPStudentProfile;
+import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -38,6 +39,7 @@ import java.util.HashMap;
 public class StudentsOfInterestActivity extends BaseActivity {
     private static final String TAG = "StudentsOfInterest";
 
+    private Client client;
     private FloatingActionMenu mFloatingActionMenu;
     private FloatingActionButton mFloatingButtonInt;
     private FloatingActionButton mFloatingButtonUnd;
@@ -55,12 +57,13 @@ public class StudentsOfInterestActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout._listview_activity);
-
         bind();
         setToolbar();
         setFloatingMenu();
         setProgressBar();
         showProgressBar(mProgressBar);
+        client = new Client(getBaseContext());
+
 
         mToolBarText.setText("Interested");
         if ( Constants.getLikedStudents() == null ){
@@ -88,6 +91,10 @@ public class StudentsOfInterestActivity extends BaseActivity {
         mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if(!client.isConnectionAvailable()){
+                    startActivity(new Intent(getBaseContext(), NoConnectionActivity.class));
+                    return true;
+                }
                 final IAPStudent student = (IAPStudent) mListView.getItemAtPosition(position);
                 final ArrayList<String> a = new ArrayList<String>(){{
                     add("Interested");
@@ -169,24 +176,16 @@ public class StudentsOfInterestActivity extends BaseActivity {
     private void setListView(String status){
         if (mStudentAdapter == null) {
             mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), new ArrayList<IAPStudent>());
-
         }
+        mStudentAdapter.clear();
         switch (status){
             case "Interested":
-//                mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), Constants.getLikedStudents());
-
-                mStudentAdapter.clear();
                 mStudentAdapter.addAll(Constants.getLikedStudents());
                 break;
             case "Not Interested":
-//                mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), Constants.getUnlikedStudents());
-//
-                mStudentAdapter.clear();
                 mStudentAdapter.addAll(Constants.getUnlikedStudents());
                 break;
             case "Undecided":
-//               mStudentAdapter = new StudentsInterestAdapter(getBaseContext(), Constants.getUndecidedStudents());
-                mStudentAdapter.clear();
                 mStudentAdapter.addAll(Constants.getUndecidedStudents());
                 break;
         }
@@ -195,6 +194,10 @@ public class StudentsOfInterestActivity extends BaseActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(!client.isConnectionAvailable()){
+                    startActivity(new Intent(getBaseContext(), NoConnectionActivity.class));
+                    return;
+                }
                 IAPStudent student = mStudentAdapter.getItem(position);
                 Intent in = new Intent(StudentsOfInterestActivity.this, IAPStudentProfile.class);
                 in.putStringArrayListExtra("projects", student.getProjectNames());

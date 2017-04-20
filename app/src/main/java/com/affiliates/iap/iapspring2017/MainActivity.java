@@ -6,7 +6,7 @@
 //  Copyright © 2017 IAP Conference UPRM. All rights reserved.
 //
 
-package com.affiliates.iap.iapspring2017.activities;
+package com.affiliates.iap.iapspring2017;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,15 +20,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
-import com.affiliates.iap.iapspring2017.BaseActivity;
-import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Poster;
-import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.CustomViewPager;
 import com.affiliates.iap.iapspring2017.tabs.PostersFragment;
 import com.affiliates.iap.iapspring2017.tabs.TabManager;

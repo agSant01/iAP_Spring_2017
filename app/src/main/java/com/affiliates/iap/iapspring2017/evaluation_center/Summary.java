@@ -9,16 +9,19 @@
 package com.affiliates.iap.iapspring2017.evaluation_center;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.CompanyUser;
@@ -26,6 +29,7 @@ import com.affiliates.iap.iapspring2017.Models.CompanyVote;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
+import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.gson.Gson;
 
@@ -73,7 +77,7 @@ public class Summary extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstance) {
         View view = inflater.inflate(R.layout.evaluation_summary, container, false);
-
+        final Client client = new Client(getContext());
         mProjectName = (TextView) view.findViewById(R.id.evaluation_summary_project_name);
 
         mTechPoster = (TextView) view.findViewById(R.id.sumary_tech_poster);
@@ -88,7 +92,6 @@ public class Summary extends Fragment{
         mResOral = (TextView) view.findViewById(R.id.sumary_res_oral);
         mTotalOral = (TextView) view.findViewById(R.id.sumary_total_oral);
 
-        mCancel = (Button) view.findViewById(R.id.button2);
         mSubmit = (Button) view.findViewById(R.id.button3);
 
         Intent in = getActivity().getIntent();
@@ -114,31 +117,42 @@ public class Summary extends Fragment{
         mPresOral.setText(mCompanyVote.getPresentationScore().presentation+"");
         mTotalOral.setText(mCompanyVote.getPresentationTotal()+"");
 
-        mCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().onBackPressed();
-            }
-        });
-
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveVote(getContext());
-                DataService.sharedInstance().submitCompanyEval(mCompanyVote, new Callback() {
-                    @Override
-                    public void success(Object data) {
-                        Log.v(TAG, "Evaluation submissson was good!");
-                        companyUser.setVoted(mPosterID);
-                        mCompanyVote.removeVoteFromMemory(getContext());
-                        getActivity().finish();
-                    }
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Confirm Evaluation")
+                        .setMessage("Are you sure you want to submit this evaluation?")
+                        .setPositiveButton("CONFIRM",  new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, int which) {
+                                if(!client.isConnectionAvailable()){
+                                    Toast.makeText(getContext(), "Connection error, make sure you are connected",Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                                ((EvaluationActivity) getActivity()).showProgressDialog("Submitting Evaluation");
+                                DataService.sharedInstance().submitCompanyEval(mCompanyVote,
+                                        new Callback<Object>() {
+                                    @Override
+                                    public void success(Object data) {
+                                        Log.v(TAG, "Evaluation submissson was good!");
+                                        ((CompanyUser) Constants.getCurrentLoggedInUser()).setVoted(mPosterID);
+                                        mCompanyVote.removeVoteFromMemory(getContext());
+                                        ((EvaluationActivity) getActivity()).hideProgressDialog();
+                                        Toast.makeText(getContext(), "Submission succesful",Toast.LENGTH_SHORT).show();
+                                        getActivity().onBackPressed();
+                                    }
 
-                    @Override
-                    public void failure(String message) {
-                        Log.v(TAG, message);
-                    }
-                });
+                                    @Override
+                                    public void failure(String message) {
+                                        Log.v(TAG, message);
+                                        ((EvaluationActivity) getActivity()).hideProgressDialog();
+                                        Toast.makeText(getContext(), "Error on submission, try again shortly",Toast.LENGTH_SHORT).show();
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+                        }).setNegativeButton("Cancel", null).create().show();
             }
         });
         return view;
