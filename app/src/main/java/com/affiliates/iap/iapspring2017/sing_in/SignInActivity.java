@@ -109,8 +109,6 @@ public class SignInActivity extends BaseActivity {
    @Override
    public void onBackPressed() {
       super.onBackPressed();
-      overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
-      finish();
    }
 
    @Override

@@ -54,8 +54,8 @@ public class AdvisorProfile extends BaseActivity {
 
         mResearchIntent.setText(in.getStringExtra("research").equals("NA") ? "To be defined" : in.getStringExtra("research"));
         mEmail.setText(in.getStringExtra("email"));
-        mName.setText(in.getStringExtra("name"));
-        mDept.setText(in.getStringExtra("dpt"));
+        mName.setText(in.getStringExtra("name").length()<5 ? "Name not specified" : in.getStringExtra("name"));
+        mDept.setText(in.getStringExtra("dpt").equals("NA") ? "Department not specified" : in.getStringExtra("dpt"));
     }
 
     private void bind(){
@@ -85,6 +85,10 @@ public class AdvisorProfile extends BaseActivity {
     }
 
     private void setWebsite(){
+        if(getIntent().getStringExtra("website").equals("NA")){
+            mWebsite.setText("Website not specified");
+            return;
+        }
         mWebsite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,6 +103,16 @@ public class AdvisorProfile extends BaseActivity {
     private void setAllProyects(){
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.bottomMargin = 11;
+        if(getIntent().getStringArrayListExtra("projects") == null){
+            TextView listItem = new TextView(getBaseContext());
+            listItem.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+            listItem.setText("No projects registered for this advisor");
+            listItem.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+            listItem.setLayoutParams(params);
+            listItem.setTextColor(getResources().getColor(R.color.appGrey));
+            mProjectsList.addView(listItem);
+            return;
+        }
         for (String s : getIntent().getStringArrayListExtra("projects")) {
             if (Constants.getPosters().containsKey(s)) {
                 TextView listItem = new TextView(getBaseContext());

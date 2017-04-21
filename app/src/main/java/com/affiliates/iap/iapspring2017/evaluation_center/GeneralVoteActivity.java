@@ -159,6 +159,8 @@ public class GeneralVoteActivity extends AppCompatActivity {
                 @Override
                 public void success(Vote data) {
                     Log.v(TAG, "Voting completed");
+                    Toast.makeText(getApplicationContext(),
+                            "Submission successful", Toast.LENGTH_SHORT).show();
                     onBackPressed();
                 }
 

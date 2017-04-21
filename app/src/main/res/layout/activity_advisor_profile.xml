@@ -64,10 +64,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintVertical_bias="0.0">
 
                 <View
@@ -90,8 +90,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginLeft="48dp"
-                    android:layout_marginRight="48dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     app:layout_constraintHorizontal_bias="0.503"
@@ -220,7 +220,7 @@
 
                 <LinearLayout
                     android:id="@+id/project_list"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:layout_marginLeft="16dp"
@@ -233,6 +233,7 @@
                     android:orientation="vertical"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view13">
@@ -243,21 +244,17 @@
                     android:id="@+id/textView12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="38dp"
+                    android:layout_marginTop="26dp"
                     android:text="Projects"
                     android:textColor="@color/appGreen"
                     android:textSize="18sp"
-                    app:layout_constraintBottom_toTopOf="@+id/project_list"
-                    app:layout_constraintHorizontal_bias="0.501"
+                    app:layout_constraintTop_toBottomOf="@+id/tableLayout2"
+                    android:layout_marginLeft="8dp"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/profile_advisor_research"
-                    app:layout_constraintVertical_bias="0.0" />
+                    android:layout_marginRight="8dp"
+                    app:layout_constraintRight_toRightOf="parent" />
 
                 <View
                     android:id="@+id/view3"
@@ -298,28 +295,29 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="26dp"
+                    android:layout_marginTop="24dp"
                     android:text="Research Intent"
                     android:textColor="@color/appGreen"
                     android:textSize="18sp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tableLayout2" />
+                    app:layout_constraintTop_toBottomOf="@+id/project_list" />
 
                 <TextView
                     android:id="@+id/profile_advisor_research"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
 
+                    android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="17dp"
                     android:gravity="center"
                     android:text="Coop, kfgeingcoignoreingoeigielralfghrenlgcogrhergouevrhgvlirngoiryoibyvowiutyworiutcnoirnytoiurytuwirytboqiwutroiuuvuwtowitnwruytlnurcyntourytconreatovetoertboqryntoqerytoveubybvbbbbbbbbbbbbbbbbbbbbtlqoyrtoeryntpocaryitportmritmmpwoiumwnwqtyqvwiwoietcnrwutybqvow4qutyertqgoevygboe"
                     android:textAlignment="center"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/view3" />

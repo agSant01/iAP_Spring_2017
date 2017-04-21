@@ -201,7 +201,7 @@
                         android:layout_height="80dp"
                         android:layout_gravity="center"
                         android:layout_weight="0"
-                        app:srcCompat="@drawable/ic_thumb_up_filled_green" />
+                        app:srcCompat="@drawable/ic_oral_presentation" />
 
                     <Space
                         android:layout_width="match_parent"
