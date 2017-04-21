@@ -122,7 +122,7 @@ public class DataService {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot){
             if (!dataSnapshot.hasChildren()) {
-               FirebaseCrash.log(TAG + ": No user ID Registered " + id );
+               FirebaseCrash.log(TAG + ": No user ID Registered ");
                Log.e(TAG, "No user ID Registered " + id );
                callback.failure("No user ID Registered " + id);
                return;
@@ -155,7 +155,7 @@ public class DataService {
                Log.e(TAG, "DataService -> getUserData() / switch()", e);
                e.printStackTrace();
             }
-            FirebaseCrash.log("No user ID Registered" + id);
+            FirebaseCrash.log("No user ID Registered");
             callback.failure("No user ID Registered");
          }
          @Override
@@ -490,7 +490,7 @@ public class DataService {
                     if (task.isSuccessful()){
                        Log.v(TAG, "setInterestForStudent(): succesfull -> " + id);
                     } else {
-                       FirebaseCrash.log(TAG + "setInterestForStudent(): unsuccesfull -> " + id);
+                       FirebaseCrash.log(TAG + "setInterestForStudent(): unsuccesfull ");
                        Log.v(TAG, "setInterestForStudent(): unsuccesfull -> " + id);
                     }
                  }
@@ -830,7 +830,6 @@ public class DataService {
 
         for(i = 0; i < k.length-1; i++)
             str += k[i] + "_";
-        FirebaseCrash.log(TAG + "parseEmailToKey(): " + str + k[i]);
         return str + k[i];
     }
 

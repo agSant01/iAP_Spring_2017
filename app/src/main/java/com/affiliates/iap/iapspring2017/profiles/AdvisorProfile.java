@@ -54,8 +54,8 @@ public class AdvisorProfile extends BaseActivity {
 
         mResearchIntent.setText(in.getStringExtra("research").equals("NA") ? "To be defined" : in.getStringExtra("research"));
         mEmail.setText(in.getStringExtra("email"));
-        mName.setText(in.getStringExtra("name"));
-        mDept.setText(in.getStringExtra("dpt"));
+        mName.setText(in.getStringExtra("name").length()<5 ? "Name not specified" : in.getStringExtra("name"));
+        mDept.setText(in.getStringExtra("dpt").equals("NA") ? "Department not specified" : in.getStringExtra("dpt"));
     }
 
     private void bind(){
@@ -85,6 +85,10 @@ public class AdvisorProfile extends BaseActivity {
     }
 
     private void setWebsite(){
+        if(getIntent().getStringExtra("website").equals("NA")){
+            mWebsite.setText("Website not specified");
+            return;
+        }
         mWebsite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

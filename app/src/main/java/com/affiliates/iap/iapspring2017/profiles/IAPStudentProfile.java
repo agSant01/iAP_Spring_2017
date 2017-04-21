@@ -76,11 +76,11 @@ public class IAPStudentProfile extends BaseActivity {
         }
 
         mProyectName.setText(projects);
-        mGradDate.setText(in.getStringExtra("gradDate").equals("NA") ? "Not defined" : in.getStringExtra("gradDate"));
+        mGradDate.setText(in.getStringExtra("gradDate").equals("NA") ? "Graduation date not defined" : in.getStringExtra("gradDate"));
         mEmail.setText(in.getStringExtra("email"));
         mName.setText(in.getStringExtra("name"));
-        mDept.setText(in.getStringExtra("dpt").equals("NA") ? "Not defined" : in.getStringExtra("dpt"));
-        mBio.setText(in.getStringExtra("bio").equals("NA") ? "Not defined" : in.getStringExtra("bio"));
+        mDept.setText(in.getStringExtra("dpt").equals("NA") ? "Department not defined" : in.getStringExtra("dpt"));
+        mBio.setText(in.getStringExtra("bio").equals("NA") ? "Objective not defined" : in.getStringExtra("bio"));
         setResume();
 
         Log.v(TAG, "TIPO: " + Constants.getCurrentLoggedInUser().getAccountType().toString());
