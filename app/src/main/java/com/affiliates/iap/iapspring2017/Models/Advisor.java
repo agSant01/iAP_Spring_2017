@@ -169,8 +169,9 @@ public class Advisor extends User implements UserDelegate {
    private HashMap<String, Object> exportProjects(){
       HashMap<String, Object> p = new HashMap<>();
        if(projects!=null)
-          for(int i = 0; i < projects.size(); i++)
-             p.put(projects.get(i), p);
+          for(int i = 0; i < projects.size(); i++) {
+              p.put(projects.get(i), true);
+          }
       return p;
    }
 
