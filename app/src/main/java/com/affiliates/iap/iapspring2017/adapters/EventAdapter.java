@@ -9,16 +9,24 @@
 package com.affiliates.iap.iapspring2017.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Event;
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.interfaces.Callback;
+import com.affiliates.iap.iapspring2017.services.DataService;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
@@ -57,6 +65,21 @@ public class EventAdapter extends ArrayAdapter<Event> implements StickyListHeade
         String time = event.getStartTime() + " - " + event.getEndTime();
         viewHolder.mTime.setText(time);
         viewHolder.mTitle.setText(event.getEventName());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2017,3, 26, 13, 34,34);
+        Date date = calendar.getTime();
+
+        if(Constants.currentEvent == position){
+            Log.v("IN", event.getEventName());
+            viewHolder.mTitle.setText(event.getEventName());
+            viewHolder.mTitle.setTextAppearance(getContext(),R.style.currentEvent);
+        } else {
+            viewHolder.mTitle.setTextColor(this.getContext().getResources().getColorStateList(R.color.appGrey));
+            viewHolder.mTime.setText(time);
+            viewHolder.mTitle.setTextAppearance(getContext(),R.style.notEvent);
+            viewHolder.mTitle.setText(event.getEventName());
+        }
         return convertView;
     }
 

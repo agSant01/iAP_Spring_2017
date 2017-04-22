@@ -13,9 +13,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
+import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.interfaces.Callback;
+import com.affiliates.iap.iapspring2017.services.DataService;
 
 public class AccountType extends BaseActivity {
     private static final String TAG = "AccountType";
@@ -31,15 +35,11 @@ public class AccountType extends BaseActivity {
         setContentView(R.layout.activity_account_type);
         bind();
 
-        final Intent intent = new Intent(AccountType.this, EnterEmail.class);
-
          mCompany.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.v(TAG, "CompanyRep");
-                intent.putExtra("AccountType", "CompanyUser");
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                verify(User.AccountType.CompanyUser);
             }
         });
 
@@ -47,9 +47,7 @@ public class AccountType extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Log.v(TAG, "IAPStudent");
-                intent.putExtra("AccountType", "IAPStudent");
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                verify(User.AccountType.IAPStudent);
             }
         });
 
@@ -57,9 +55,7 @@ public class AccountType extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Log.v(TAG, "UPRMAccount");
-                intent.putExtra("AccountType","UPRMAccount");
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                verify(User.AccountType.UPRMAccount);
             }
         });
 
@@ -67,9 +63,7 @@ public class AccountType extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Log.v(TAG, "Advisor");
-                intent.putExtra("AccountType","Advisor");
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                verify(User.AccountType.Advisor);
             }
         });
     }
@@ -79,6 +73,50 @@ public class AccountType extends BaseActivity {
         mIAPStudent = (TextView) findViewById(R.id.iapStudentButton);
         mCompany = (TextView) findViewById(R.id.companyButton);
         mAdvisor = (TextView) findViewById(R.id.advisorButton);
+    }
+
+    private void verify(final User.AccountType accountType){
+        showProgressDialog("Validating Email");
+        final Intent intent = new Intent(AccountType.this, PasswordActivity.class);
+        final String email = getIntent().getStringExtra("Email");
+        intent.putExtra("AccountType", accountType.toString());
+        Log.v(TAG, email);
+        intent.putExtra("Email", email);
+
+        if(accountType != User.AccountType.UPRMAccount){
+            DataService.sharedInstance().verifyUser(accountType, email , new Callback<User>() {
+                @Override
+                public void success(User data) {
+                    hideProgressDialog();
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+                    finish();
+                }
+
+                @Override
+                public void failure(String message) {
+                    hideProgressDialog();
+                    String acc = "";
+                    switch (accountType){
+                        case CompanyUser:
+                            acc = "company";
+                            break;
+                        case Advisor:
+                            acc = "advisor";
+                            break;
+                        case IAPStudent:
+                            acc = "IAP student";
+                            break;
+                    }
+                    Toast.makeText(getApplicationContext(), "Sorry, email not registered for " + acc, Toast.LENGTH_LONG).show();
+                    onBackPressed();
+                }
+            });
+        } else {
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
+            finish();
+        }
     }
 
     @Override

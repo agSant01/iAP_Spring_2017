@@ -193,7 +193,7 @@ public class MainActivity extends BaseActivity {
       mTabLayout.getTabAt(1).setIcon(null);
       mTabLayout.getTabAt(2).setIcon(null);
 
-      mTabLayout.getTabAt(2).setText("Department");
+      mTabLayout.getTabAt(2).setText("Subject");
       mTabLayout.getTabAt(1).setText("Keyword");
       mTabLayout.getTabAt(0).setText("Name");
 

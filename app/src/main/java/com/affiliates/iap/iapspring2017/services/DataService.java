@@ -8,9 +8,13 @@
 
 package com.affiliates.iap.iapspring2017.services;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.View;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Advisor;
@@ -51,6 +55,10 @@ import com.google.firebase.storage.UploadTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.ObjectOutputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -332,7 +340,7 @@ public class DataService {
             public void success(User user) {
                System.out.println(TAG + team.size() + "  " + poster.getTeam().size());
                if (user instanceof IAPStudent) {
-                   Log.v(TAG, "getTeam()// dispach.poll()"+dispatch.poll());;
+                  Log.v(TAG, "getTeam()// dispach.poll()"+dispatch.poll());;
                   team.add((IAPStudent) user);
                   if (dispatch.isEmpty())
                      callback.success(team);
@@ -340,8 +348,9 @@ public class DataService {
             }
             @Override
             public void failure(String message) {
+               dispatch.poll();
+               Log.e(TAG, "getPosterTeamMembers() ->" +message );
                FirebaseCrash.log(TAG + ": getPosterTeamMembers -> " + message);
-               callback.failure(message);
             }
          });
       }
@@ -370,6 +379,7 @@ public class DataService {
             @Override
             public void failure(String message) {
                FirebaseCrash.log(TAG + ": getPosterAdvisors() -> " + message);
+               dispatch.poll();
                callback.failure(message);
             }
          });
@@ -461,6 +471,7 @@ public class DataService {
                      }
                      @Override
                      public void failure(String message) {
+                        diapatch.poll();
                         Log.e(TAG, message);
                      }
                   });
@@ -504,7 +515,8 @@ public class DataService {
                 public void success(User data) {
                     Log.v(TAG, "uploadUserResume() succesfull");
                     usersRef().child(Constants.getCurrentLoggedInUser().getUserID())
-                            .updateChildren(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            .updateChildren(user.toMap())
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                            if(!task.isSuccessful()){
@@ -526,7 +538,6 @@ public class DataService {
                @Override
                public void onComplete(@NonNull Task<Void> task) {
                    if(!task.isSuccessful()){
-                      FirebaseCrash.log("DataService.class -> updateUserData(): " + task.getException().getMessage());
                       callback.failure("DataService.class -> updateUserData(): " + task.getException().getMessage());
                    }
                    callback.success(user);
@@ -535,7 +546,7 @@ public class DataService {
        }
    }
 
-   public void uploadUserImage(final User user, final Uri uri, final Callback<User> callback){
+   public void uploadUserImage(final User user, byte[] bytes, final Callback<User> callback){
       Log.v(TAG, "uploadUserImage()");
       // Create file metadata including the content type
       StorageMetadata metadata = new StorageMetadata.Builder()
@@ -546,7 +557,9 @@ public class DataService {
       StorageReference s = FirebaseStorage.getInstance().getReference()
               .child("ProfilePictures").child(user.getUserID()+"_ProfileImage.png");
       Log.v(TAG, "uploadUserImage()+ storageRef");
-      UploadTask uploadTask = s.putFile(uri,metadata);
+
+      UploadTask uploadTask = s.putBytes(bytes ,metadata);
+
       uploadTask.addOnFailureListener(new OnFailureListener() {
          @Override
          public void onFailure(@NonNull Exception exception) {
@@ -559,7 +572,7 @@ public class DataService {
          @Override
          public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
             // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-            Log.v(TAG, "uploadUserImage() ->  task success");
+            Log.v(TAG, "uploadUserImage() ->  task success: " + taskSnapshot.getTotalByteCount());
             Uri downloadUrl = taskSnapshot.getDownloadUrl();
             Constants.getCurrentLoggedInUser().setPhotoURL(downloadUrl.toString());
             callback.success(user);
@@ -607,9 +620,11 @@ public class DataService {
                        @Override
                        public void onDataChange(DataSnapshot dataSnapshot) {
                           if (dataSnapshot.exists()) {
-                             JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
-                              Constants.curentRegisteringUserData = json.optJSONObject(parseEmailToKey(email));
-                             Advisor advisor = new Advisor(json.optJSONObject(parseEmailToKey(email)));
+                              JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
+                              String key = json.keys().next();
+                             Log.v("KEY", key);
+                             Constants.curentRegisteringUserData = json.optJSONObject(key);
+                             Advisor advisor = new Advisor(json.optJSONObject(key));
                              Log.v(TAG, "Advisor Valid");
                              callback.success(advisor);
                           } else {
@@ -656,8 +671,9 @@ public class DataService {
                public void onDataChange(DataSnapshot dataSnapshot) {
                   if (dataSnapshot.exists()) {
                      JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
-                      Constants.curentRegisteringUserData = json.optJSONObject(parseEmailToKey(email));
-                      CompanyUser companyUser = new CompanyUser(json.optJSONObject(parseEmailToKey(email)));
+                     String key = json.keys().next();
+                      Constants.curentRegisteringUserData = json.optJSONObject(key);
+                      CompanyUser companyUser = new CompanyUser(json.optJSONObject(key));
                      Log.v(TAG, "Company User Valid");
                      callback.success(companyUser);
                   } else {
@@ -680,32 +696,31 @@ public class DataService {
       }
    }
 
-   public void createNewUser(final User user, String password, final FirebaseAnalytics fbAnalytics, final Callback<String> callback){
-      FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.getEmail(), password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+   public void createNewUser(final User user, String password, final Callback<String> callback){
+      FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.getEmail(), password)
+              .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
          @Override
          public void onComplete(@NonNull final Task<AuthResult> task) {
-            if(!task.isSuccessful()){
+            if (!task.isSuccessful()) {
                Log.v(TAG, task.getException().getMessage());
                FirebaseCrash.log(TAG + "createNewUser() -> " + task.getException().getMessage());
                callback.failure(task.getException().getLocalizedMessage());
                return;
-            }
-            final FirebaseUser firebaseUser = task.getResult().getUser();
-            user.setID(firebaseUser.getUid());
-            updateUserData(user, null, new Callback<User>() {
-               @Override
-               public void success(User data) {
-                  fbAnalytics.setUserProperty("Sex", user.getGender());
-                  fbAnalytics.setUserProperty("AccountType", user.getAccountType().toString());
-                  firebaseUser.sendEmailVerification().addOnFailureListener(new OnFailureListener() {
-                     @Override
-                     public void onFailure(@NonNull Exception e) {
-                        callback.failure(e.getMessage());
-                     }
-                  });
+            } else {
+               final FirebaseUser firebaseUser = task.getResult().getUser();
+               user.setID(firebaseUser.getUid());
+               updateUserData(user, null, new Callback<User>() {
+                  @Override
+                  public void success(User data) {
+                     firebaseUser.sendEmailVerification().addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                           callback.failure(e.getMessage());
+                        }
+                     });
 
-                  if(user.getAccountType().equals(User.AccountType.Advisor)){
-                     addAdvisorToProjects((Advisor) user, new Callback<String>() {
+                     if (user.getAccountType().equals(User.AccountType.Advisor)) {
+                        addAdvisorToProjects((Advisor) user, new Callback<String>() {
                            @Override
                            public void success(String data) {
                               Log.v(TAG, data);
@@ -714,47 +729,34 @@ public class DataService {
 
                            @Override
                            public void failure(String message) {
-
-                               Log.e(TAG, message);
+                              Log.e(TAG, message);
                            }
                         });
-                  } else if (user.getAccountType().equals(User.AccountType.CompanyUser)){
-                     addCompanyRepToSponsor((CompanyUser) user, new Callback<String>() {
-                        @Override
-                        public void success(String data) {
-                           Log.v(TAG, data);
-                           callback.success("CompanyUser account created successfully");
-                        }
+                     } else if (user.getAccountType().equals(User.AccountType.IAPStudent)) {
+                        addIAPStudentToProjects((IAPStudent) user, new Callback<String>() {
+                           @Override
+                           public void success(String data) {
+                              Log.v(TAG, data);
+                              callback.success("IAPStudent account created successfully");
+                           }
 
-                        @Override
-                        public void failure(String message) {
-                           Log.e(TAG, message);
-                        }
-                     });
-                  } else if (user.getAccountType().equals(User.AccountType.IAPStudent)) {
-                     addIAPStudentToProjects((IAPStudent) user, new Callback<String>() {
-                        @Override
-                        public void success(String data) {
-                           Log.v(TAG, data);
-                           callback.success("IAPStudent account created successfully");
-                        }
-
-                        @Override
-                        public void failure(String message) {
-                           Log.e(TAG, message);
-                        }
-                     });
-                  } else {
-                     callback.success("UPRMAccount created successfully");
+                           @Override
+                           public void failure(String message) {
+                              Log.e(TAG, message);
+                           }
+                        });
+                     } else {
+                        callback.success("UPRMAccount created successfully");
+                     }
                   }
-               }
 
-               @Override
-               public void failure(String message) {
-                  Log.e(TAG, message);
-                  callback.equals(message);
-               }
-            });
+                  @Override
+                  public void failure(String message) {
+                     Log.e(TAG, message);
+                     callback.failure(message);
+                  }
+               });
+            }
          }
       });
    }
@@ -769,9 +771,9 @@ public class DataService {
             }}).addOnCompleteListener(new OnCompleteListener<Void>() {
                @Override
                public void onComplete(@NonNull Task<Void> task) {
+                  dispatch.poll();
                   if (!task.isSuccessful())
                      callback.failure("addAdvisorToProjects(): " +task.getException().getMessage());
-                  dispatch.poll();
                   if(dispatch.isEmpty())
                      callback.success("Advisor added to all projects successful");
                }
@@ -794,10 +796,10 @@ public class DataService {
          }}).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+               dispatch.poll();
                if (!task.isSuccessful()) {
                   callback.failure("addIAPStudentToProjects(): " + task.getException().getMessage());
                }
-               dispatch.poll();
                if(dispatch.isEmpty())
                   callback.success("Student added to all projects successful");
             }
@@ -805,21 +807,6 @@ public class DataService {
       }
    }
 
-   private void addCompanyRepToSponsor(final CompanyUser represntative, final Callback<String> callback){
-      sponsorsRef().child(represntative.getCompanyName()).child("Representatives")
-              .updateChildren(new HashMap<String, Object>() {{
-                 put(represntative.getUserID(), true);
-              }}).addOnCompleteListener(new OnCompleteListener<Void>() {
-         @Override
-         public void onComplete(@NonNull Task<Void> task) {
-            if(task.isSuccessful()){
-               callback.success("Representative added to sponsor successful");
-            } else {
-               callback.failure("addCompanyRepToSponsor(): " + task.getException().getMessage());
-            }
-         }
-      });
-   }
 
 
     public static String parseEmailToKey(String email){
@@ -842,5 +829,52 @@ public class DataService {
         ntr += key.substring(split+2);
         return ntr.replaceAll("[1234567890]+", "");
     }
+
+
+    private HashMap<String, Object> m(){
+       return new HashMap<String,Object>(){{
+          put("ProjectID", "snsdo");
+          put("TEXT", "sfjvnfnbdfob");
+       }};
+    }
+
+   public static int calculateInSampleSize(
+           BitmapFactory.Options options, int reqWidth, int reqHeight) {
+      // Raw height and width of image
+      final int height = options.outHeight;
+      final int width = options.outWidth;
+      int inSampleSize = 1;
+
+      if (height > reqHeight || width > reqWidth) {
+
+         final int halfHeight = height / 2;
+         final int halfWidth = width / 2;
+
+         // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+         // height and width larger than the requested height and width.
+         while ((halfHeight / inSampleSize) >= reqHeight
+                 && (halfWidth / inSampleSize) >= reqWidth) {
+            inSampleSize *= 2;
+         }
+      }
+
+      return inSampleSize;
+   }
+
+   public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
+                                                        int reqWidth, int reqHeight) {
+
+      // First decode with inJustDecodeBounds=true to check dimensions
+      final BitmapFactory.Options options = new BitmapFactory.Options();
+      options.inJustDecodeBounds = true;
+      BitmapFactory.decodeResource(res, resId, options);
+
+      // Calculate inSampleSize
+      options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+      // Decode bitmap with inSampleSize set
+      options.inJustDecodeBounds = false;
+      return BitmapFactory.decodeResource(res, resId, options);
+   }
 
 }

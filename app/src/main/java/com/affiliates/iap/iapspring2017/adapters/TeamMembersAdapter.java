@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.R;
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -51,7 +52,7 @@ public class TeamMembersAdapter extends ArrayAdapter<IAPStudent> {
 
         Picasso.with(getContext()).load(iapStudent.getPhotoURL()).placeholder(R.drawable.ic_gender_0)
                 .error(R.drawable.ic_gender_0).into(holder.mImage);
-        holder.mTextView.setText(iapStudent.getName().equals("NA") ? "Not specified" : iapStudent.getName());
+        holder.mTextView.setText(iapStudent.getName().equals("NA") ? "Name not specified" : iapStudent.getName());
         return convertView;
     }
 }

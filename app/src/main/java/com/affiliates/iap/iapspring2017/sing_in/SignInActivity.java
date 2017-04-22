@@ -8,29 +8,21 @@
 
 package com.affiliates.iap.iapspring2017.sing_in;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.CustomViewPager;
 import com.affiliates.iap.iapspring2017.sing_in.intro_screens.IntroScreensManager;
-import com.affiliates.iap.iapspring2017.services.AccountAdministration;
-import com.affiliates.iap.iapspring2017.services.Client;
-import com.matthewtamlin.sliding_intro_screen_library.indicators.Dot;
 import com.matthewtamlin.sliding_intro_screen_library.indicators.DotIndicator;
 
 public class SignInActivity extends BaseActivity {
    private static final String TAG = "SignIn";
-   private static final int REQUEST_EXIT = 5;
 
    public CustomViewPager mViewPager;
    private IntroScreensManager mSectionsPagerAdapter;
@@ -80,6 +72,11 @@ public class SignInActivity extends BaseActivity {
                mDotIndicator.setSelectedItem(position, true);
                next.setVisibility(View.VISIBLE);
                skip.setVisibility(View.VISIBLE);
+               next.setText("Next");
+               if (position == 4 ){
+                  skip.setVisibility(View.INVISIBLE);
+                  next.setText("Sign In");
+               }
             } else{
                next.setVisibility(View.INVISIBLE);
                skip.setVisibility(View.INVISIBLE);
@@ -90,14 +87,13 @@ public class SignInActivity extends BaseActivity {
          @Override
          public void onPageScrollStateChanged(int state) {}
       });
-
-      if (getIntent().getStringExtra("splash").equals("second")){
-         Log.v(TAG, "second");
-         mViewPager.setCurrentItem(5);
-         mDotIndicator.setSelectedItem(4,true);
-         mViewPager.setPagingEnabled(false);
-      }
-
+      if(getIntent().getStringExtra("splash")!=null)
+         if (getIntent().getStringExtra("splash").equals("second")){
+            Log.v(TAG, "second");
+            mViewPager.setCurrentItem(5);
+            mDotIndicator.setSelectedItem(4,true);
+            mViewPager.setPagingEnabled(false);
+         }
    }
 
    private void bind(){
@@ -111,12 +107,4 @@ public class SignInActivity extends BaseActivity {
       super.onBackPressed();
    }
 
-   @Override
-   protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-      if (requestCode == REQUEST_EXIT) {
-         if (resultCode == RESULT_OK) {
-            this.finish();
-         }
-      }
-   }
 }

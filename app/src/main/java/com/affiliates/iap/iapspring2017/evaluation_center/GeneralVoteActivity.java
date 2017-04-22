@@ -75,6 +75,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
         posterImage = (ImageView) findViewById(R.id.poster_image);
         if (Constants.getCurrentLoggedInUser().hasVoted(0)) {
             bestPoster.setBackgroundResource(R.drawable.button_oval_shape_grey);
+            bestPoster.setText("Voted");
             posterImage.setImageResource(R.drawable.ic_poster_icon);
         }
 
@@ -90,6 +91,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
         bestPresentation = (Button) findViewById(R.id.button_presentation);
         if (Constants.getCurrentLoggedInUser().hasVoted(1)) {
             bestPresentation.setBackgroundResource(R.drawable.button_oval_shape_grey);
+            bestPresentation.setText("Voted");
             presentationImage.setImageResource(R.drawable.ic_thumb_up_grey);
         }
         bestPresentation.setOnClickListener(new View.OnClickListener() {

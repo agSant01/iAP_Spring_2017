@@ -52,10 +52,10 @@ public abstract class User implements UserDelegate{
    User(String email, AccountType accountType){
       this.accountType = accountType;
       this.photoURL = "NA";
-      this.userID = "";
-      this.gender = "";
+      this.userID = "NA";
+      this.gender = "NA";
       this.email = email;
-      this.name = "";
+      this.name = "NA";
       Log.v(TAG, email);
    }
 

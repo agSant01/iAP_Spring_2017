@@ -180,13 +180,22 @@ public class StudentsOfInterestActivity extends BaseActivity {
         mStudentAdapter.clear();
         switch (status){
             case "Interested":
-                mStudentAdapter.addAll(Constants.getLikedStudents());
+                if (Constants.getLikedStudents() == null)
+                    mStudentAdapter.addAll(new ArrayList<IAPStudent>());
+                else
+                    mStudentAdapter.addAll(Constants.getLikedStudents());
                 break;
             case "Not Interested":
-                mStudentAdapter.addAll(Constants.getUnlikedStudents());
+                if (Constants.getUnlikedStudents() == null)
+                    mStudentAdapter.addAll(new ArrayList<IAPStudent>());
+                else
+                    mStudentAdapter.addAll(Constants.getUnlikedStudents());
                 break;
             case "Undecided":
-                mStudentAdapter.addAll(Constants.getUndecidedStudents());
+                if (Constants.getUndecidedStudents() == null)
+                    mStudentAdapter.addAll(new ArrayList<IAPStudent>());
+                else
+                    mStudentAdapter.addAll(Constants.getUndecidedStudents());
                 break;
         }
         mListView.setAdapter(mStudentAdapter);

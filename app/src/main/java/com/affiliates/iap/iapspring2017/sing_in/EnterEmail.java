@@ -2,16 +2,16 @@ package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
-import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.interfaces.Callback;
-import com.affiliates.iap.iapspring2017.services.DataService;
+import com.affiliates.iap.iapspring2017.activities.ForgotPasswordActivity;
+import com.affiliates.iap.iapspring2017.services.Client;
 
 public class EnterEmail extends BaseActivity {
     private static final String TAG = "EnterEmail";
@@ -25,6 +25,7 @@ public class EnterEmail extends BaseActivity {
         setContentView(R.layout.activity_email);
         bind();
 
+        final Client client = new Client(this);
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,9 +37,14 @@ public class EnterEmail extends BaseActivity {
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showProgressDialog("Validating Email");
                 String email = mEmail.getText().toString();
-                final String type = getIntent().getStringExtra("AccountType");
+                if (!client.isConnectionAvailable()){
+                    new AlertDialog.Builder(EnterEmail.this)
+                            .setTitle("Network error")
+                            .setMessage("Please connect to network befoore attempting to sign in.")
+                            .setPositiveButton("Dismiss", null).create().show();
+                    return;
+                }
                 if (email.length() == 0){
                     hideProgressDialog();
                     Toast.makeText(getApplicationContext(), "Please, enter your email", Toast.LENGTH_SHORT).show();
@@ -49,35 +55,10 @@ public class EnterEmail extends BaseActivity {
                     return;
                 }
 
-                final Intent in = new Intent(EnterEmail.this, PasswordActivity.class);
+                final Intent in = new Intent(EnterEmail.this, AccountType.class);
                 in.putExtra("Email", email);
-                in.putExtra("AccountType", type);
-
-                if(type.equals(User.AccountType.UPRMAccount.toString())){
-                    hideProgressDialog();
-                    startActivity(in);
-                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                } else {
-                    final String key = DataService.parseEmailToKey(email);
-                    DataService.sharedInstance().verifyUser(User.AccountType.valueOf(type), email, new Callback<User>() {
-                        @Override
-                        public void success(User data) {
-                            hideProgressDialog();
-                            in.putExtra("key", key);
-                            if(type.equals("IAPStudent"))
-                                in.putExtra("name", DataService.keyToName(key));
-                            startActivity(in);
-                            overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                            finish();
-                        }
-
-                        @Override
-                        public void failure(String message) {
-                            hideProgressDialog();
-                            Toast.makeText(getApplicationContext(), "Sorry, email not registered", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+                startActivity(in);
+                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             }
         });
     }

@@ -26,7 +26,6 @@ public class PasswordActivity extends BaseActivity {
     private static boolean done;
     private static final String TAG = "PasswordActivity";
     private AccountAdministration mAdmin;
-    private FirebaseAuth mFirebaseAuth;
     private EditText mPassword;
     private EditText mConfirm;
     private Button mBack;
@@ -37,9 +36,10 @@ public class PasswordActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
         mAdmin = new AccountAdministration(getBaseContext());
-        mFirebaseAuth = FirebaseAuth.getInstance();
         bind();
         final String email = getIntent().getStringExtra("Email");
+        final String accType  = getIntent().getStringExtra("AccountType");
+        Log.v(TAG, email + " " + accType);
 
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,15 +53,19 @@ public class PasswordActivity extends BaseActivity {
             public void onClick(View v) {
                 int error = validatePassword(mPassword.getText().toString(), mConfirm.getText().toString());
                 if( error == 0  ) {
-                    registerUser(email, mPassword.getText().toString(), getIntent().getStringExtra("AccountType"));
-                } else if( error == 1 ) {
+                    registerUser(email, mPassword.getText().toString(),accType);
+                } else if (mPassword.getText().toString().length() == 0){
+                    Toast.makeText(getApplicationContext(), "Please enter a password", Toast.LENGTH_SHORT).show();
+                }else if (mConfirm.getText().toString().length() == 0){
+                    Toast.makeText(getApplicationContext(), "Please confirm password", Toast.LENGTH_SHORT).show();
+                }  else if( error == 1 ) {
                     Toast.makeText(getApplicationContext(), "Passwords don't match, please try again", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "Sorry, password must have at least 6 characters", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
+        mPassword.requestFocus();
     }
 
     private void registerUser(final String email, final String password, final String accType) {
@@ -87,13 +91,11 @@ public class PasswordActivity extends BaseActivity {
         DataService.sharedInstance().createNewUser(
                 user,
                 password,
-                FirebaseAnalytics.getInstance(PasswordActivity.this),
                 new Callback<String>() {
                     @Override
                     public void success(String data) {
                         Log.v(TAG, "User registration successful");
                         PasswordActivity.done = true;
-                        FirebaseAuth.getInstance().getCurrentUser().sendEmailVerification();
                         User.login(email, password, new Callback<User>() {
                             @Override
                             public void success(User data) {

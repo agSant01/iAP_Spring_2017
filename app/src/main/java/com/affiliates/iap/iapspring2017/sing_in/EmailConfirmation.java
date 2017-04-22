@@ -31,9 +31,5 @@ public class EmailConfirmation extends BaseActivity {
 
     @Override
     public void onBackPressed(){
-//        Intent in = new Intent(EmailConfirmation.this, SignInActivity.class);
-//        startActivity(in);
-//        overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
-//        finish();
     }
 }

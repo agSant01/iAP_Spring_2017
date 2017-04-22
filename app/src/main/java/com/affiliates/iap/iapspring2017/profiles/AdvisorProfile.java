@@ -12,8 +12,9 @@ import com.affiliates.iap.iapspring2017.BaseActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.R;
-import android.support.v7.widget.Toolbar;
 import com.squareup.picasso.Picasso;
+
+import android.support.v7.widget.Toolbar;
 
 import android.util.TypedValue;
 import android.view.ViewGroup;
@@ -54,7 +55,7 @@ public class AdvisorProfile extends BaseActivity {
 
         mResearchIntent.setText(in.getStringExtra("research").equals("NA") ? "To be defined" : in.getStringExtra("research"));
         mEmail.setText(in.getStringExtra("email"));
-        mName.setText(in.getStringExtra("name").length()<5 ? "Name not specified" : in.getStringExtra("name"));
+        mName.setText(in.getStringExtra("name").equals("NA") ? "Name not specified" : in.getStringExtra("name"));
         mDept.setText(in.getStringExtra("dpt").equals("NA") ? "Department not specified" : in.getStringExtra("dpt"));
     }
 

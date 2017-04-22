@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -109,7 +110,7 @@ public class MoreFragment extends Fragment {
 
         Picasso.with(getContext()).load(url).placeholder(R.drawable.ic_gender_0)
                 .error(R.drawable.ic_gender_0).into(mCircleImageView);
-        mUserName.setText(Constants.getCurrentLoggedInUser().getName());
+        mUserName.setText(Constants.getCurrentLoggedInUser().getName().equals("NA") ? "Please specify name" : Constants.getCurrentLoggedInUser().getName());
         mEmail.setText(Constants.getCurrentLoggedInUser().getEmail());
         mProjects.setText(projects);
 
@@ -224,7 +225,8 @@ public class MoreFragment extends Fragment {
             mTester = Constants.getCurrentLoggedInUser().getPhotoURL();
             Picasso.with(getContext()).load(mTester).placeholder(R.drawable.ic_gender_0)
                     .error(R.drawable.ic_gender_0).into(mCircleImageView);
+            Log.v(TAG,Constants.getCurrentLoggedInUser().getName());
         }
-
+        mUserName.setText(Constants.getCurrentLoggedInUser().getName().equals("NA") ? "Please specify name" :  Constants.getCurrentLoggedInUser().getName());
     }
 }

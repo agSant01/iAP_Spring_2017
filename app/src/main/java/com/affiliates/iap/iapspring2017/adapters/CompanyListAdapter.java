@@ -23,7 +23,6 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class CompanyListAdapter extends ArrayAdapter<Sponsors> {
     public CompanyListAdapter( Context context, ArrayList<Sponsors> list) {
@@ -50,18 +49,19 @@ public class CompanyListAdapter extends ArrayAdapter<Sponsors> {
             Log.v("URL: ", url);
         }
 
-        if(!Constants.getSponsorLogos().containsKey(getItem(position).getCompanyID())){
+        if(!Constants.getSponsorLogos().containsKey(getItem(position).getCompanyID()))
             Picasso.with(getContext()).load(url).placeholder(R.drawable.ic_loading_company).into(viewHolder.companyLogo, new Callback() {
                 @Override
                 public void onSuccess() {
                     Constants.getSponsorLogos().put(getItem(position)
-                            .getCompanyID(),viewHolder.companyLogo.getDrawable());
+                            .getCompanyID(), viewHolder.companyLogo.getDrawable());
                 }
 
                 @Override
-                public void onError() {}
+                public void onError() {
+                }
             });
-        } else {
+        else {
             viewHolder.companyLogo.setImageDrawable(
                     Constants.getSponsorLogos().
                             get(getItem(position).getCompanyID()));

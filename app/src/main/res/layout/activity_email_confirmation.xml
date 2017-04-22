@@ -30,20 +30,22 @@
     <TextView
         android:id="@+id/emailConfirmationLabel"
         android:layout_width="263dp"
-        android:layout_height="54dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
-        android:text="Now check your email!"
+        android:text="Verification Email Sent!"
         android:textAlignment="center"
         android:textColor="@color/appGreen"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
+        app:layout_constraintHorizontal_bias="0.512"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.459" />
 
     <Button
         android:id="@+id/doneButton"
@@ -66,6 +68,20 @@
         app:layout_constraintTop_toBottomOf="@+id/emailConfirmationLabel"
         app:layout_constraintVertical_bias="0.8" />
 
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textAlignment="center"
+        android:textSize="11sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailConfirmationLabel"
+        tools:text="Please verify your email. By verifying your email you will be able to vote for the projects and reset your password if you need to." />
 
 
 </android.support.constraint.ConstraintLayout>

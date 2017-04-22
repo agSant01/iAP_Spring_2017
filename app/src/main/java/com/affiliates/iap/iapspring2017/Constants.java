@@ -16,17 +16,18 @@ import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.Models.Sponsors;
 import com.affiliates.iap.iapspring2017.Models.User;
-import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
 public class Constants {
    private static User currentLoggedInUser;
+   public static int currentEvent;
    private static HashMap<String, Poster> posters;
    private static ArrayList<Poster> sortedPosters;
    private static ArrayList<IAPStudent> likedStudents;
@@ -108,12 +109,19 @@ public class Constants {
    public static void sortEvents(){
        PriorityQueue<Event> sorted = new PriorityQueue<>();
        sorted.addAll(events);
-       events = new ArrayList<>();
+      Date date = new Date();
+      events = new ArrayList<>();
+      int c = 0;
+      Constants.currentEvent = -1;
       while(!sorted.isEmpty()){
-          events.add(sorted.remove());
-          Log.v("Sorting", events.get(events.size()-1).getStartDate().toString());
+         Event event = sorted.remove();
+         if(date.after(event.getStartDate()) && date.before(event.getEndDate())){
+            Constants.currentEvent = c;
+            Log.v("Constants" , event.getEventName());
+         }
+         c++;
+         events.add(event);
+         Log.v("Sorting", events.get(events.size()-1).getStartDate().toString());
       }
    }
-
-
 }

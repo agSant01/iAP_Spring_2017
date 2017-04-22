@@ -31,7 +31,6 @@ import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.picasso.Picasso;
 
@@ -78,7 +77,7 @@ public class IAPStudentProfile extends BaseActivity {
         mProyectName.setText(projects);
         mGradDate.setText(in.getStringExtra("gradDate").equals("NA") ? "Graduation date not defined" : in.getStringExtra("gradDate"));
         mEmail.setText(in.getStringExtra("email"));
-        mName.setText(in.getStringExtra("name"));
+        mName.setText(in.getStringExtra("name").equals("NA") ? "Name not specified" : in.getStringExtra("name"));
         mDept.setText(in.getStringExtra("dpt").equals("NA") ? "Department not defined" : in.getStringExtra("dpt"));
         mBio.setText(in.getStringExtra("bio").equals("NA") ? "Objective not defined" : in.getStringExtra("bio"));
         setResume();
@@ -255,18 +254,20 @@ public class IAPStudentProfile extends BaseActivity {
     }
 
     private void setResume(){
+        final String url = getIntent().getStringExtra("resume");
+        if(!url.contains("https://firebasestorage.googleapis.com")){
+            mResume.setBackgroundResource(R.drawable.button_oval_shape_grey);
+        }
         mResume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = getIntent().getStringExtra("resume");
-                if(!url.contains("https://firebasestorage.googleapis.com"))
-                    new AlertDialog.Builder(v.getContext())
+                if (!url.contains("https://firebasestorage.googleapis.com")){
+                    new AlertDialog.Builder(IAPStudentProfile.this)
                             .setMessage("Resume not Available")
-                            .setPositiveButton("OK",  new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }                // do nothing
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {}
                             }).show();
-                else {
+                } else {
                     Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(browser);
                 }
