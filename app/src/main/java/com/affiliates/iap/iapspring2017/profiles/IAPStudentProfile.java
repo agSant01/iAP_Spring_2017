@@ -31,7 +31,6 @@ import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.crash.FirebaseCrash;
 import com.squareup.picasso.Picasso;
 

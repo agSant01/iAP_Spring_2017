@@ -305,6 +305,15 @@ public class PosterDescriptionActivity extends BaseActivity {
             mVoteImg.setImageResource(R.drawable.ic_thumb_up_grey);
             mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
             mVoteButton.setText("Disabled");
+            mVoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(PosterDescriptionActivity.this)
+                            .setTitle("Disabled")
+                            .setMessage("This poster is not available for voting in this category. Sorry for the inconvenience")
+                            .setPositiveButton("Dismiss", null).create().show();
+                }
+            });
         } else if(!(user.hasVoted(0) && user.hasVoted(1))){
             mVoteImg.setImageResource(R.drawable.ic_thumb_up_filled_green);
             mVoteButton.setOnClickListener(new View.OnClickListener() {

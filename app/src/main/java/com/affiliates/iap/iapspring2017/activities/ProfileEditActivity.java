@@ -39,6 +39,9 @@ import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -46,12 +49,10 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.squareup.picasso.Picasso;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -330,8 +331,6 @@ public class ProfileEditActivity extends BaseActivity {
             }
         });
 
-
-
         dialogBuilder.setView(dialogView);
         dialogBuilder.setTitle("Reset Password").setPositiveButton("Confirm", null)
                 .setNegativeButton("Cancel", null);
@@ -377,8 +376,6 @@ public class ProfileEditActivity extends BaseActivity {
                                 hideProgressDialog();
                             }
                         });
-
-
                     }
                 });
             }
@@ -409,55 +406,66 @@ public class ProfileEditActivity extends BaseActivity {
         }
 
         if(mImage != null){
-            DataService.sharedInstance().uploadUserImage(user, mImage, new Callback<User>() {
-                @Override
-                public void success(User data) {
-                    mImage = null;
-                    Log.v(TAG, "uploadUserImage success");
-                    DataService.sharedInstance().updateUserData(user, mPDF, new Callback<User>() {
+            Glide.with(this)
+                    .load(mImage)
+                    .asBitmap()
+                    .into(new SimpleTarget<Bitmap>() {
                         @Override
-                        public void success(User data) {
-                            Log.v(TAG, "updateUserData success");
-                            hideProgressDialog();
-                            FirebaseAuth.getInstance().getCurrentUser().reload();
-                            Constants.setCurrentLogedInUser(user);
-                            AlertDialog alertDialog = new AlertDialog.Builder(ProfileEditActivity.this)
-                                    .setTitle("Successfully Updated Your Profile")
-                                    .setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            finish();
-                                        }
-                                    }).create();
-                            alertDialog.setCancelable(false);
-                            alertDialog.show();
-                        }
-
-                        @Override
-                        public void failure(String message) {
-                            hideProgressDialog();
-                            String title = "Internal Error";
-                            message = "An unspecified internal error ocurred. Your changes have not been saved. Please try again.";
-                            new AlertDialog.Builder(getBaseContext()).setTitle(title).setMessage(message)
-                                    .setPositiveButton("RETRY", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            saveChanges();
-                                        }
-                                    }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                            resource = scaleDown(resource, 256);
+                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                            resource.compress(Bitmap.CompressFormat.PNG, 10, outputStream);
+                            DataService.sharedInstance().uploadUserImage(user, outputStream.toByteArray(), new Callback<User>() {
                                 @Override
-                                public void onClick(DialogInterface dialog, int which) {}
-                            }).create().show();
+                                public void success(User data) {
+                                    mImage = null;
+                                    Log.v(TAG, "uploadUserImage success");
+                                    DataService.sharedInstance().updateUserData(user, mPDF, new Callback<User>() {
+                                        @Override
+                                        public void success(User data) {
+                                            Log.v(TAG, "updateUserData success");
+                                            hideProgressDialog();
+                                            FirebaseAuth.getInstance().getCurrentUser().reload();
+                                            Constants.setCurrentLogedInUser(user);
+                                            AlertDialog alertDialog = new AlertDialog.Builder(ProfileEditActivity.this)
+                                                    .setTitle("Successfully Updated Your Profile")
+                                                    .setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            finish();
+                                                        }
+                                                    }).create();
+                                            alertDialog.setCancelable(false);
+                                            alertDialog.show();
+                                        }
+
+                                        @Override
+                                        public void failure(String message) {
+                                            hideProgressDialog();
+                                            String title = "Internal Error";
+                                            message = "An unspecified internal error ocurred. Your changes have not been saved. Please try again.";
+                                            new AlertDialog.Builder(getBaseContext()).setTitle(title).setMessage(message)
+                                                    .setPositiveButton("RETRY", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            saveChanges();
+                                                        }
+                                                    }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {}
+                                            }).create().show();
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void failure(String message) {
+                                    hideProgressDialog();
+                                    updatePhotoFailed(message);
+                                }
+                            });
                         }
                     });
-                }
-
-                @Override
-                public void failure(String message) {
-                    hideProgressDialog();
-                    updatePhotoFailed(message);
-                }
-            });
         } else {
             DataService.sharedInstance().updateUserData(user, mPDF, new Callback<User>() {
                 @Override
@@ -619,15 +627,6 @@ public class ProfileEditActivity extends BaseActivity {
         }
     }
 
-    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
-        ParcelFileDescriptor parcelFileDescriptor =
-                getContentResolver().openFileDescriptor(uri, "r");
-        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
-        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
-        parcelFileDescriptor.close();
-        return scaleDown(image, 2048);
-    }
-
     public static Bitmap scaleDown(Bitmap realImage, float maxImageSize) {
         float ratio = Math.min(
                 maxImageSize / realImage.getWidth(),
@@ -640,7 +639,6 @@ public class ProfileEditActivity extends BaseActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent resultData) {
-
         // The ACTION_OPEN_DOCUMENT intent was sent with the request code
         // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
         // response to some other intent, and the code below shouldn't run at all.
@@ -653,11 +651,7 @@ public class ProfileEditActivity extends BaseActivity {
             if (resultData != null) {
                 mImage = resultData.getData();
                 Log.i(TAG, "Uri: " + resultData.getData());
-                try {
-                    mCircleImageView.setImageBitmap(getBitmapFromUri(mImage));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Glide.with(getBaseContext()).load(mImage).sizeMultiplier((float) 1).centerCrop().into(mCircleImageView);
             }
         } else if (requestCode == READ_REQUEST_CODE_PDF && resultCode == Activity.RESULT_OK) {
             if (resultData != null) {
@@ -668,42 +662,6 @@ public class ProfileEditActivity extends BaseActivity {
             }
         }
     }
-
-    private Bitmap decodeImage(Uri uri) {
-        Bitmap b = null;
-        try {
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-            BitmapFactory.decodeStream(inputStream, null, o);
-            inputStream.close();
-
-            float sc = 0.0f;
-            int scale = 1;
-            //if image height is greater than width
-            if (o.outHeight > o.outWidth) {
-                sc = o.outHeight / 256;
-                scale = Math.round(sc);
-            }
-            //if image width is greater than height
-            else {
-                sc = o.outWidth / 256;
-                scale = Math.round(sc);
-            }
-
-            // Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            inputStream = getContentResolver().openInputStream(uri);
-            b = BitmapFactory.decodeStream(inputStream, null, o2);
-            Log.v(TAG, "TET -> " + b.getByteCount() );
-            inputStream.close();
-        } catch (IOException e) {
-            Log.e(TAG, "ERROR EN decodeImage()" + e.getMessage() + "  "+ e.getLocalizedMessage() + "   " +e.toString()  );
-        }
-        return b;
-    }
-
 
     @Override
     public void onBackPressed() {

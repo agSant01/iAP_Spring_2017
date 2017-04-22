@@ -8,28 +8,18 @@
 
 package com.affiliates.iap.iapspring2017.sing_in;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
-import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.CustomViewPager;
 import com.affiliates.iap.iapspring2017.sing_in.intro_screens.IntroScreensManager;
-import com.affiliates.iap.iapspring2017.services.AccountAdministration;
-import com.affiliates.iap.iapspring2017.services.Client;
-import com.matthewtamlin.sliding_intro_screen_library.indicators.Dot;
 import com.matthewtamlin.sliding_intro_screen_library.indicators.DotIndicator;
-import com.squareup.picasso.Picasso;
 
 public class SignInActivity extends BaseActivity {
    private static final String TAG = "SignIn";

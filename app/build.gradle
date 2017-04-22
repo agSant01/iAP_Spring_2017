@@ -40,6 +40,7 @@ dependencies {
 
     // Image Download Manager
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     // Horizontal scrollview cell library
     compile 'org.lucasr.twowayview:twowayview:0.1.4'
     // Circle imageview for profile pictures

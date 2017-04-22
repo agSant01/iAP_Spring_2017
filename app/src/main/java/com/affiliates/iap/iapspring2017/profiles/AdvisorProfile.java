@@ -12,8 +12,9 @@ import com.affiliates.iap.iapspring2017.BaseActivity;
 import de.hdodenhof.circleimageview.CircleImageView;
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.R;
-import android.support.v7.widget.Toolbar;
 import com.squareup.picasso.Picasso;
+
+import android.support.v7.widget.Toolbar;
 
 import android.util.TypedValue;
 import android.view.ViewGroup;
