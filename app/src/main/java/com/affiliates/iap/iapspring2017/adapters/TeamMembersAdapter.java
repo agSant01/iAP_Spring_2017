@@ -51,7 +51,7 @@ public class TeamMembersAdapter extends ArrayAdapter<IAPStudent> {
 
         Picasso.with(getContext()).load(iapStudent.getPhotoURL()).placeholder(R.drawable.ic_gender_0)
                 .error(R.drawable.ic_gender_0).into(holder.mImage);
-        holder.mTextView.setText(iapStudent.getName().equals("NA") ? "Not specified" : iapStudent.getName());
+        holder.mTextView.setText(iapStudent.getName().equals("NA") ? "Name not specified" : iapStudent.getName());
         return convertView;
     }
 }

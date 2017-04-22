@@ -304,6 +304,7 @@ public class PosterDescriptionActivity extends BaseActivity {
         if(mPosterData.getPosterID().equals("IAP")){
             mVoteImg.setImageResource(R.drawable.ic_thumb_up_grey);
             mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
+            mVoteButton.setText("Disabled");
         } else if(!(user.hasVoted(0) && user.hasVoted(1))){
             mVoteImg.setImageResource(R.drawable.ic_thumb_up_filled_green);
             mVoteButton.setOnClickListener(new View.OnClickListener() {
@@ -333,6 +334,7 @@ public class PosterDescriptionActivity extends BaseActivity {
         }
         else {
             mVoteImg.setImageResource(R.drawable.ic_thumb_up_grey);
+            mVoteButton.setText("Favorited");
             mVoteButton.setBackgroundResource(R.drawable.button_oval_shape_grey);
             mVoteButton.setOnClickListener(new View.OnClickListener() {
                 @Override

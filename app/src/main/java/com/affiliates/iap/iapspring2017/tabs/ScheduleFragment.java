@@ -8,8 +8,10 @@
 
 package com.affiliates.iap.iapspring2017.tabs;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,10 +68,10 @@ public class ScheduleFragment extends Fragment {
                     Log.v(TAG, "Get events succesfull");
                     Constants.setEvents(data);
                     Constants.sortEvents();
-                    mEventAdapter = new EventAdapter(getContext(),Constants.getEvents());
-
+                    mEventAdapter = new EventAdapter(getActivity(), Constants.getEvents());
                     mListView.setAdapter(mEventAdapter);
-
+                    mListView.setSelection(Constants.currentEvent);
+                    Log.v(TAG, "Schedule " + Constants.currentEvent);
                     mPB.startAnimation(fadeOutAnimation);
                     mPB.setVisibility(ProgressBar.INVISIBLE);
                 }
@@ -81,13 +83,27 @@ public class ScheduleFragment extends Fragment {
             });
         } else {
             Constants.sortEvents();
-            mEventAdapter = new EventAdapter(getContext(),Constants.getEvents());
-
+            mEventAdapter = new EventAdapter(getContext(), Constants.getEvents());
             mListView.setAdapter(mEventAdapter);
-
+            mListView.setSelection(Constants.currentEvent);
+            Log.v(TAG, "ITEM " + Constants.currentEvent);
             mPB.startAnimation(fadeOutAnimation);
             mPB.setVisibility(ProgressBar.INVISIBLE);
         }
         return mRootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(mListView != null)
+            mListView.smoothScrollToPosition(Constants.currentEvent);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(mListView != null)
+            mListView.smoothScrollToPosition(Constants.currentEvent);
     }
 }

@@ -39,11 +39,10 @@ public class Advisor extends User implements UserDelegate {
    public Advisor(JSONObject data){
       super(data.optString("Email"), AccountType.Advisor );
       this.projects = parseData(data.optJSONObject("Projects"));
-      this.researchIntent = "To be defined";
+      this.researchIntent = "NA";
       this.voted = new Voted();
       this.department = "NA";
       this.webPage = "NA";
-
    }
 
    private Advisor(Void d, JSONObject data, AccountType accountType, String id) throws JSONException{
@@ -102,18 +101,18 @@ public class Advisor extends User implements UserDelegate {
 
    @Override
    public HashMap<String, Object> toMap() {
-      return new HashMap<String, Object>(){{
-         put("AccountType", "Advisor");
-         put("Name", getName());
-         put("Email", getEmail());
-         put("PhotoURL", getPhotoURL());
-         put("Sex", getGender());
-         put("Department", department);
-         put("ResearchIntent", researchIntent);
-         put("Webpage", webPage);
-         put("Projects", exportProjects());
-         put("Voted", exportVoted());
-      }};
+     return new HashMap<String, Object>(){{
+        put("AccountType", "Advisor");
+        put("Name", getName());
+        put("Email", getEmail());
+        put("PhotoURL", getPhotoURL());
+        put("Sex", getGender());
+        put("Department", department);
+        put("ResearchIntent", researchIntent);
+        put("Webpage", webPage);
+        put("Projects", exportProjects());
+        put("Voted", exportVoted());
+     }};
    }
 
     @Override
@@ -170,7 +169,7 @@ public class Advisor extends User implements UserDelegate {
       HashMap<String, Object> p = new HashMap<>();
        if(projects!=null)
           for(int i = 0; i < projects.size(); i++)
-             p.put(projects.get(i), p);
+             p.put(projects.get(i), true);
       return p;
    }
 

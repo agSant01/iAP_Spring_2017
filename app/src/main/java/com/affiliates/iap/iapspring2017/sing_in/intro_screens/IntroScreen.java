@@ -34,7 +34,7 @@ public class IntroScreen extends Fragment {
                         "User Profile Edit"};
     String[] mDesc = {"The main page of the app displays a list of all projects participating in IAP",
                         "You can view the project, abstract, team members, and advisors by tapping any project on the project list.",
-                        "If you are an IAP student team member of a submitted project, an advisor to be submitted projects or an event guest you will be able to vote for your favorite poster and oral presentation.",
+                        "If you are an IAP student team member of a submitted project, an advisor to submitted projects or an event guest you will be able to vote for your favorite poster and oral presentation.",
                         "If you are a company representative, instead of voting for your favorite you will be able to evaluate each project based on a specified evaluation criteria for posters and oral presentation.",
                         "You can change some of your user profile information in the edit button on the More tab."
 

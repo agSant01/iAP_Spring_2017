@@ -51,7 +51,7 @@ public class TeamAdvisorsAdapter extends ArrayAdapter<Advisor> {
 
         Picasso.with(getContext()).load(advisor.getPhotoURL()).placeholder(R.drawable.ic_gender_0)
                 .error(R.drawable.ic_gender_0).into(holder.mImage);
-        holder.mTextView.setText(advisor.getName().length()<5 ? "Not specified" : advisor.getName());
+        holder.mTextView.setText(advisor.getName().length()<5 ? "Name not specified" : advisor.getName());
         return convertView;
     }
 }

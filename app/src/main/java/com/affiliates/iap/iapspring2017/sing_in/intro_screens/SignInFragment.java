@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,12 +26,15 @@ import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.sing_in.AccountType;
+import com.affiliates.iap.iapspring2017.sing_in.EnterEmail;
 import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 public class SignInFragment extends Fragment{
-    private static final String TAG = "SignIn";
-
-    private static final int REQUEST_EXIT = 5;
+    private static final String TAG = "SignInFragment";
 
     private AccountAdministration mAdmin;
     private EditText mPasswordField;
@@ -63,7 +67,8 @@ public class SignInFragment extends Fragment{
         mRegister.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
-            Intent intent = new Intent(getActivity(), AccountType.class);
+           /// Intent intent = new Intent(getActivity(), AccountType.class);
+            Intent intent = new Intent(getActivity(), EnterEmail.class);
             startActivity(intent);
             getActivity().overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
          }
@@ -85,7 +90,7 @@ public class SignInFragment extends Fragment{
       mForgotPaass.setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
-            startActivityForResult(new Intent(getActivity(), ForgotPasswordActivity.class), REQUEST_EXIT);
+            startActivity(new Intent(getActivity(), ForgotPasswordActivity.class));
             getActivity().overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
          }
       });
@@ -96,15 +101,14 @@ public class SignInFragment extends Fragment{
                public void onClick(View view) {
                   String email = mEmailField.getText().toString();
                   String password = mPasswordField.getText().toString();
-                  if(!mClient.isConnectionAvailable()){
-                     try {
-                        Thread.sleep(100);
-                     } catch (InterruptedException e) {
-                        e.printStackTrace();
-                     }
-                      ((SignInActivity) getActivity()).hideProgressDialog();
-                     Toast.makeText(getContext(), "Connection Failed", Toast.LENGTH_SHORT).show();
-                  }else if (email.length() > 0 && password.length() > 0 ){
+                  if(!mClient.isConnectionAvailable()) {
+                      new AlertDialog.Builder(getActivity())
+                              .setTitle("Network error")
+                              .setMessage("Please connect to network befoore attempting to sign in.")
+                              .setPositiveButton("Dismiss", null).create().show();
+                      return;
+                  }
+                  if (email.length() > 0 && password.length() > 0 ){
                      System.out.println( "DATA: " + email +"   " + password);
                       ((SignInActivity) getActivity()).showProgressDialog();
 
@@ -125,19 +129,36 @@ public class SignInFragment extends Fragment{
 
                         @Override
                         public void failure(String message) {
-                           String s = "";
                            if(message.contains("password is invalid")){
-                              s = "Incorrect Password";
+                               new AlertDialog.Builder(getActivity())
+                                       .setTitle("Wrong Password")
+                                       .setMessage("Please enter the correct password.")
+                                       .setPositiveButton("Dismiss", null).create().show();
                            } else if (message.contains("There is no user record corresponding to this identifier.")){
-                              s = "Incorrect Email";
+                               new AlertDialog.Builder(getActivity())
+                                       .setTitle("User Not Found")
+                                       .setMessage("There is no user record corresponding to this email. Please register.")
+                                       .setPositiveButton("Dismiss", null).create().show();
                            } else if (message.contains("badly formatted")){
-                              s = "Invalid Email";
-                           } else{
+                               Log.e(TAG, message);
+                               new AlertDialog.Builder(getActivity())
+                                       .setTitle("Invalid Email")
+                                       .setMessage("Please enter a valid email.")
+                                       .setPositiveButton("Dismiss", null).create().show();
+                           } else if (message.contains("Network Error")){
+                                new AlertDialog.Builder(getActivity())
+                                        .setTitle("Network error")
+                                        .setMessage("Please connect to network befoore attempting to sign in.")
+                                        .setPositiveButton("Dismiss", null).create().show();
+                            } else{
+                               new AlertDialog.Builder(getActivity())
+                                       .setTitle("Unspecified Error")
+                                       .setMessage(message)
+                                       .setPositiveButton("Dismiss", null).create().show();
                               Log.v(TAG, message);
                            }
-                            ((SignInActivity)getActivity()).hideProgressDialog();
+                           ((SignInActivity)getActivity()).hideProgressDialog();
                            Log.e(TAG, message);
-                           Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
                         }
                      });
                   }else if (email.length() == 0 && password.length() == 0) {

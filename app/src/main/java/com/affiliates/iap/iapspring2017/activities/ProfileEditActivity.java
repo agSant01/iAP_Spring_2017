@@ -47,7 +47,10 @@ import com.squareup.picasso.Picasso;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -284,38 +287,46 @@ public class ProfileEditActivity extends BaseActivity {
         final EditText oldPass = (EditText) dialogView.findViewById(R.id.oldPass);
         final EditText newPass = (EditText) dialogView.findViewById(R.id.password);
         final EditText confirmPass = (EditText) dialogView.findViewById(R.id.confirm_password);
-        ImageView oldPassShow = (ImageView) dialogView.findViewById(R.id.show_old_pass);
-        ImageView passShow = (ImageView) dialogView.findViewById(R.id.show_pass);
-        ImageView confPassShow = (ImageView) dialogView.findViewById(R.id.show_confirm_pass);
+        final ImageView oldPassShow = (ImageView) dialogView.findViewById(R.id.show_old_pass);
+        final ImageView passShow = (ImageView) dialogView.findViewById(R.id.show_pass);
+        final ImageView confPassShow = (ImageView) dialogView.findViewById(R.id.show_confirm_pass);
 
         oldPassShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(oldPass.getTransformationMethod() != null) {
+                if (oldPass.getTransformationMethod() != null) {
                     oldPass.setTransformationMethod(null);
-
-                } else
+                    oldPassShow.setImageResource(R.drawable.ic_hide_pass);
+                } else{
                     oldPass.setTransformationMethod(new PasswordTransformationMethod());
+                    oldPassShow.setImageResource(R.drawable.ic_show_password);
+                }
             }
         });
 
         passShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(newPass.getTransformationMethod() != null)
+                if(newPass.getTransformationMethod() != null) {
                     newPass.setTransformationMethod(null);
-                else
+                    passShow.setImageResource(R.drawable.ic_hide_pass);
+                }else {
                     newPass.setTransformationMethod(new PasswordTransformationMethod());
+                    passShow.setImageResource(R.drawable.ic_show_password);
+                }
             }
         });
 
         confPassShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(confirmPass.getTransformationMethod() != null)
+                if(confirmPass.getTransformationMethod() != null){
                     confirmPass.setTransformationMethod(null);
-                else
+                    confPassShow.setImageResource(R.drawable.ic_hide_pass);
+                }else{
                     confirmPass.setTransformationMethod(new PasswordTransformationMethod());
+                    confPassShow.setImageResource(R.drawable.ic_show_password);
+                }
             }
         });
 
@@ -398,17 +409,6 @@ public class ProfileEditActivity extends BaseActivity {
         }
 
         if(mImage != null){
-            //b is the Bitmap
-            Bitmap b = null;
-            ByteBuffer buffer = null;
-            try {
-                b = getBitmapFromUri(mImage);
-                buffer = ByteBuffer.allocate(b.getByteCount());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            b.copyPixelsToBuffer(buffer); //Move the byte curentRegisteringUserData to the buffer
-            byte[] array = buffer.array(); //Get the underlying array containing the curentRegisteringUserData.
             DataService.sharedInstance().uploadUserImage(user, mImage, new Callback<User>() {
                 @Override
                 public void success(User data) {
@@ -439,15 +439,15 @@ public class ProfileEditActivity extends BaseActivity {
                             String title = "Internal Error";
                             message = "An unspecified internal error ocurred. Your changes have not been saved. Please try again.";
                             new AlertDialog.Builder(getBaseContext()).setTitle(title).setMessage(message)
-                                   .setPositiveButton("RETRY", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        saveChanges();
-                                    }
-                                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {}
-                                }).create().show();
+                                    .setPositiveButton("RETRY", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            saveChanges();
+                                        }
+                                    }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {}
+                            }).create().show();
                         }
                     });
                 }
@@ -467,13 +467,13 @@ public class ProfileEditActivity extends BaseActivity {
                     FirebaseAuth.getInstance().getCurrentUser().reload();
                     Constants.setCurrentLogedInUser(user);
                     new AlertDialog.Builder(ProfileEditActivity.this)
-                                    .setMessage("Successfully Updated Your Profile")
-                                    .setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            finish();
-                                        }
-                                    }).setCancelable(false).create().show();
+                            .setMessage("Successfully Updated Your Profile")
+                            .setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            }).setCancelable(false).create().show();
                 }
 
                 @Override
@@ -669,18 +669,54 @@ public class ProfileEditActivity extends BaseActivity {
         }
     }
 
+    private Bitmap decodeImage(Uri uri) {
+        Bitmap b = null;
+        try {
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            BitmapFactory.decodeStream(inputStream, null, o);
+            inputStream.close();
+
+            float sc = 0.0f;
+            int scale = 1;
+            //if image height is greater than width
+            if (o.outHeight > o.outWidth) {
+                sc = o.outHeight / 256;
+                scale = Math.round(sc);
+            }
+            //if image width is greater than height
+            else {
+                sc = o.outWidth / 256;
+                scale = Math.round(sc);
+            }
+
+            // Decode with inSampleSize
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            inputStream = getContentResolver().openInputStream(uri);
+            b = BitmapFactory.decodeStream(inputStream, null, o2);
+            Log.v(TAG, "TET -> " + b.getByteCount() );
+            inputStream.close();
+        } catch (IOException e) {
+            Log.e(TAG, "ERROR EN decodeImage()" + e.getMessage() + "  "+ e.getLocalizedMessage() + "   " +e.toString()  );
+        }
+        return b;
+    }
+
+
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(ProfileEditActivity.this).setTitle("Unsaved Changes")
                 .setMessage("If you go back unsaved changes will be lost.")
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ProfileEditActivity.super.onBackPressed();
-                }
-            }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {}
-            }).create().show();
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ProfileEditActivity.super.onBackPressed();
+                    }
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {}
+        }).create().show();
     }
 }

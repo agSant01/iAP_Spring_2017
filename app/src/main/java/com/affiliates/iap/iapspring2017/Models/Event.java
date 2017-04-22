@@ -14,6 +14,9 @@ import org.json.JSONObject;
 
 import android.support.annotation.NonNull;
 import android.util.Log;
+
+import com.affiliates.iap.iapspring2017.services.DataService;
+
 import java.util.Date;
 
 public class Event implements Comparable<Event>{
@@ -49,6 +52,8 @@ public class Event implements Comparable<Event>{
       return startDate;
    }
 
+   public Date getEndDate() {return endDate;}
+
    public String getStartTime(){
       String s = format.format(startDate);
       boolean am = false;
@@ -66,6 +71,8 @@ public class Event implements Comparable<Event>{
          str += "pm";
          str = Integer.toString( Integer.parseInt( str.substring(0,2) ) - 12) + str.substring(2);
       }
+      if(str.charAt(0) == '0')
+         return str.substring(1);
       return str;
    }
 
@@ -85,6 +92,8 @@ public class Event implements Comparable<Event>{
          str += "pm";
          str = Integer.toString( Integer.parseInt( str.substring(0,2) ) - 12) + str.substring(2);
       }
+      if(str.charAt(0) == '0')
+         return str.substring(1);
       return str;
    }
 

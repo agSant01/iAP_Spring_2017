@@ -11,6 +11,7 @@ package com.affiliates.iap.iapspring2017.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,9 +50,16 @@ public class ForgotPasswordActivity extends BaseActivity{
             @Override
             public void onClick(View v) {
                 if (!client.isConnectionAvailable()){
-                    startActivity(new Intent(ForgotPasswordActivity.this, NoConnectionActivity.class));
+                    new AlertDialog.Builder(ForgotPasswordActivity.this)
+                            .setTitle("Network error")
+                            .setMessage("Please connect to network befoore attempting to sign in.")
+                            .setPositiveButton("Dismiss", null).create().show();
+                } else if(mEmail.getText().length() == 0) {
+                    Toast.makeText(getBaseContext(),
+                            "Please, enter your email",
+                            Toast.LENGTH_SHORT).show();
                     return;
-                }else if (mEmail.getText().toString().length() > 0){
+                } else if (mEmail.getText().toString().length() > 0){
                     showProgressDialog("Sending email");
                     FirebaseAuth.getInstance()
                             .sendPasswordResetEmail(mEmail.getText().toString())
@@ -61,7 +69,6 @@ public class ForgotPasswordActivity extends BaseActivity{
                                     hideProgressDialog();
                                     if(task.isSuccessful()){
                                         setResult(RESULT_OK);
-                                        startActivity(new Intent(ForgotPasswordActivity.this, SignInActivity.class));
                                         onBackPressed();
                                     } else {
                                         String s = "";

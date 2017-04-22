@@ -36,13 +36,16 @@ public class SplashScreen extends Activity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                String id = aa.getUserID();
                 if(!client.isConnectionAvailable()){
-                    Intent in = new Intent(SplashScreen.this , NoConnectionActivity.class);
-                    in.putExtra("splash", "splash");
+                    Intent in = new Intent(SplashScreen.this , SignInActivity.class);
+                    if (id != null && !id.equals(""))
+                        in.putExtra("splash", "second");
+                    else
+                        in.putExtra("splash","first");
                     startActivity(in);
                     finish();
                 } else {
-                    String id = aa.getUserID();
                     if(id != null && !id.equals("")){
                         if(id.equals("second")){
                             Log.v(TAG,"No user signed in.");

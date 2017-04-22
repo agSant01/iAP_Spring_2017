@@ -38,7 +38,7 @@
         <item name="windowNoTitle">true</item>
 
         <item name="colorPrimary">@color/appGreen</item>
-        <item name="colorPrimaryDark">@color/appGreen</item>
+        <item name="colorPrimaryDark">@color/appTest</item>
         <item name="colorAccent">@color/appGreen</item>
 
         <item name="colorControlActivated">@color/appGreen</item>
@@ -63,6 +63,18 @@
 
     <style name="TwoWayView">
         <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="currentEvent" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/appGreen</item>
+    </style>
+
+    <style name="notEvent">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/appGrey</item>
     </style>
 
 </resources>

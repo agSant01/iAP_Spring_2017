@@ -86,7 +86,7 @@
                         android:layout_marginTop="0dp"
                         android:paddingEnd="48dp"
                         android:text="juan.pueblo0@upr.edu"
-                        android:textSize="15sp"
+                        android:textSize="14sp"
                         app:layout_constraintLeft_toRightOf="@+id/imageView7"
                         app:layout_constraintTop_toBottomOf="@+id/view" />
                 </TableRow>
@@ -117,7 +117,7 @@
                         android:layout_marginTop="0dp"
                         android:paddingEnd="48dp"
                         android:text="May 2020"
-                        android:textSize="15sp"
+                        android:textSize="14sp"
                         app:layout_constraintLeft_toRightOf="@+id/imageView8"
                         app:layout_constraintTop_toBottomOf="@+id/profile_iap_deptm" />
                 </TableRow>
