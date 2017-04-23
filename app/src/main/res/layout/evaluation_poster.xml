@@ -9,26 +9,136 @@
     tools:layout_editor_absoluteX="0dp">
 
     <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp">
+
+        <ImageView
+            android:id="@+id/plus_tech_poster"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="0dp"
+            android:paddingStart="18dp"
+            app:layout_constraintBottom_toTopOf="@+id/view1"
+            app:layout_constraintRight_toRightOf="@+id/poster_rating_tech"
+            app:layout_constraintTop_toTopOf="@+id/tx1"
+            app:srcCompat="@drawable/plus_icon" />
+
+        <ImageView
+            android:id="@+id/minus_tech_poster"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="0dp"
+            android:paddingEnd="18dp"
+            app:layout_constraintBottom_toTopOf="@+id/view1"
+            app:layout_constraintLeft_toLeftOf="@+id/poster_rating_tech"
+            app:layout_constraintTop_toTopOf="@+id/tx1"
+            app:srcCompat="@drawable/minus_icon" />
+
+        <ImageView
+            android:id="@+id/plus_pres_poster"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="0dp"
+            android:paddingStart="18dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tx2"
+            app:layout_constraintRight_toRightOf="@+id/poster_rating_pres"
+            app:layout_constraintTop_toTopOf="@+id/tx2"
+            app:layout_constraintVertical_bias="0.5"
+            app:srcCompat="@drawable/plus_icon" />
+
+        <ImageView
+            android:id="@+id/minnus_pres_poster"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="0dp"
+            android:paddingEnd="18dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tx2"
+            app:layout_constraintLeft_toLeftOf="@+id/poster_rating_pres"
+            app:layout_constraintTop_toTopOf="@+id/tx2"
+            app:layout_constraintVertical_bias="0.5"
+            app:srcCompat="@drawable/minus_icon" />
+
+        <ImageView
+            android:id="@+id/minus_meth_poster"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="0dp"
+            android:paddingEnd="18dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tx3"
+            app:layout_constraintLeft_toLeftOf="@+id/poster_rating_method"
+            app:layout_constraintTop_toTopOf="@+id/tx3"
+            app:srcCompat="@drawable/minus_icon" />
+
+        <ImageView
+            android:id="@+id/plus_meth_poster"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="0dp"
+            android:paddingStart="18dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tx3"
+            app:layout_constraintRight_toRightOf="@+id/poster_rating_method"
+            app:layout_constraintTop_toTopOf="@+id/tx3"
+            app:srcCompat="@drawable/plus_icon" />
+
+        <ImageView
+            android:id="@+id/minus_rd_poster"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="0dp"
+            android:padding="10dp"
+            android:paddingEnd="18dp"
+            android:paddingStart="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/view9"
+            app:layout_constraintLeft_toLeftOf="@+id/poster_rating_res"
+            app:layout_constraintTop_toTopOf="@+id/tx4"
+            app:srcCompat="@drawable/minus_icon" />
+
+        <ImageView
+            android:id="@+id/plus_rd_poster"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="0dp"
+            android:padding="5dp"
+            android:paddingEnd="0dp"
+            android:paddingStart="18dp"
+            app:layout_constraintBottom_toTopOf="@+id/view9"
+            app:layout_constraintRight_toRightOf="@+id/poster_rating_res"
+            app:layout_constraintTop_toTopOf="@+id/tx4"
+            app:srcCompat="@drawable/plus_icon" />
 
         <View
             android:id="@+id/view2"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="5dp"
             android:background="@android:color/darker_gray"
@@ -38,14 +148,16 @@
 
         <me.zhanghai.android.materialratingbar.MaterialRatingBar
             android:id="@+id/poster_rating_tech"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
 
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
             android:stepSize="1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -69,14 +181,16 @@
 
         <me.zhanghai.android.materialratingbar.MaterialRatingBar
             android:id="@+id/poster_rating_pres"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
 
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
             android:stepSize="1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -84,11 +198,11 @@
 
         <View
             android:id="@+id/view10"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="5dp"
             android:background="@android:color/darker_gray"
@@ -115,11 +229,11 @@
 
         <View
             android:id="@+id/view1"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="5dp"
             android:background="@android:color/darker_gray"
@@ -146,11 +260,11 @@
 
         <View
             android:id="@+id/view9"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="5dp"
             android:background="@android:color/darker_gray"
@@ -160,8 +274,8 @@
 
         <me.zhanghai.android.materialratingbar.MaterialRatingBar
             android:id="@+id/poster_rating_res"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
 
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
@@ -169,6 +283,8 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
             android:stepSize="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.505"
@@ -179,14 +295,16 @@
 
         <me.zhanghai.android.materialratingbar.MaterialRatingBar
             android:id="@+id/poster_rating_method"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
 
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
             android:stepSize="1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

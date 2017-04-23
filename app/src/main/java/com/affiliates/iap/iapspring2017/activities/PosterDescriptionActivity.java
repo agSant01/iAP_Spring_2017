@@ -292,8 +292,11 @@ public class PosterDescriptionActivity extends BaseActivity {
             mVoteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(PosterDescriptionActivity.this,
-                            "Poster Already Evaluated", Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(PosterDescriptionActivity.this)
+                            .setTitle("Poster Alerady Evaluated")
+                            .setMessage("You can only evaluate a poster only once")
+                            .setPositiveButton("Dismiss", null)
+                            .create().show();
                 }
             });
         }

@@ -2,10 +2,12 @@ package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
@@ -28,6 +30,8 @@ public class PasswordActivity extends BaseActivity {
     private AccountAdministration mAdmin;
     private EditText mPassword;
     private EditText mConfirm;
+    private ImageView passShow;
+    private ImageView confShow;
     private Button mBack;
     private Button mNext;
 
@@ -66,6 +70,34 @@ public class PasswordActivity extends BaseActivity {
             }
         });
         mPassword.requestFocus();
+
+
+        passShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mPassword.getTransformationMethod() != null) {
+                    mPassword.setTransformationMethod(null);
+                    passShow.setImageResource(R.drawable.ic_hide_pass);
+                }else {
+                    mPassword.setTransformationMethod(new PasswordTransformationMethod());
+                    passShow.setImageResource(R.drawable.ic_show_password);
+                }
+            }
+        });
+
+
+        confShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mConfirm.getTransformationMethod() != null) {
+                    mConfirm.setTransformationMethod(null);
+                    confShow.setImageResource(R.drawable.ic_hide_pass);
+                }else {
+                    mConfirm.setTransformationMethod(new PasswordTransformationMethod());
+                    confShow.setImageResource(R.drawable.ic_show_password);
+                }
+            }
+        });
     }
 
     private void registerUser(final String email, final String password, final String accType) {
@@ -133,6 +165,8 @@ public class PasswordActivity extends BaseActivity {
         mConfirm = (EditText) findViewById(R.id.edit_confirm_password);
         mBack = (Button) findViewById(R.id.backButton);
         mNext = (Button) findViewById(R.id.nextButton);
+        passShow = (ImageView) findViewById(R.id.imageView18);
+        confShow = (ImageView) findViewById(R.id.imageView21);
     }
 
     public int validatePassword(String pass, String confirm){

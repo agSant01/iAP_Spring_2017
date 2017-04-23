@@ -117,6 +117,21 @@ public class Summary extends Fragment{
             @Override
             public void onClick(View v) {
                 saveVote(getContext());
+                if (! (mCompanyVote.getMethodologyScore().poster > 0
+                        && mCompanyVote.getMethodologyScore().presentation > 0
+                        && mCompanyVote.getTechnicalScore().poster > 0
+                        && mCompanyVote.getTechnicalScore().presentation > 0
+                        && mCompanyVote.getPresentationScore().poster > 0
+                        && mCompanyVote.getPresentationScore().presentation > 0
+                        && mCompanyVote.getResultsScore().poster > 0
+                        && mCompanyVote.getResultsScore().presentation > 0)){
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Incomplete Evaluation")
+                            .setMessage("To sumbit this evaluation, all scores must be between 1 and 5.")
+                            .setPositiveButton("Dismiss", null).create().show();
+                    return;
+                }
+
                 new AlertDialog.Builder(getContext())
                         .setTitle("Confirm Evaluation")
                         .setMessage("Are you sure you want to submit this evaluation?")

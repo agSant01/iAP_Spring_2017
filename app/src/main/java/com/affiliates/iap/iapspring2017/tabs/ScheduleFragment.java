@@ -96,14 +96,30 @@ public class ScheduleFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(mListView != null)
+        if(mListView != null) {
+            mEventAdapter = new EventAdapter(getContext(), Constants.getEvents());
+            Constants.sortEvents();
             mListView.smoothScrollToPosition(Constants.currentEvent);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if(mListView != null)
+        if(mListView != null) {
+            mEventAdapter = new EventAdapter(getContext(), Constants.getEvents());
+            Constants.sortEvents();
             mListView.smoothScrollToPosition(Constants.currentEvent);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mListView != null) {
+            mEventAdapter = new EventAdapter(getContext(), Constants.getEvents());
+            Constants.sortEvents();
+            mListView.smoothScrollToPosition(Constants.currentEvent);
+        }
     }
 }

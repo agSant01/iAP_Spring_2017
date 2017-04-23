@@ -20,6 +20,7 @@ import com.affiliates.iap.iapspring2017.Models.User;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -108,10 +109,16 @@ public class Constants {
 
    public static void sortEvents(){
        PriorityQueue<Event> sorted = new PriorityQueue<>();
-       sorted.addAll(events);
+       sorted.addAll(events == null ? new ArrayList<Event>() : events);
       Date date = new Date();
       events = new ArrayList<>();
+
+//      Calendar ca = Calendar.getInstance();
+//      ca.set(2017,3,26,12,45,34);
+//      date = ca.getTime();
+
       int c = 0;
+      Log.v("DATE", date.toString());
       Constants.currentEvent = -1;
       while(!sorted.isEmpty()){
          Event event = sorted.remove();

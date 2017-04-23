@@ -170,6 +170,7 @@ public class Advisor extends User implements UserDelegate {
        if(projects!=null)
           for(int i = 0; i < projects.size(); i++)
              p.put(projects.get(i), true);
+
       return p;
    }
 

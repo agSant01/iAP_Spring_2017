@@ -69,7 +69,8 @@ public class Event implements Comparable<Event>{
          str += "am";
       else {
          str += "pm";
-         str = Integer.toString( Integer.parseInt( str.substring(0,2) ) - 12) + str.substring(2);
+         if(!str.substring(0,2).equals("12"))
+            str = Integer.toString( Integer.parseInt( str.substring(0,2) ) - 12) + str.substring(2);
       }
       if(str.charAt(0) == '0')
          return str.substring(1);
@@ -90,7 +91,8 @@ public class Event implements Comparable<Event>{
          str += "am";
       else {
          str += "pm";
-         str = Integer.toString( Integer.parseInt( str.substring(0,2) ) - 12) + str.substring(2);
+         if(!str.substring(0,2).equals("12"))
+            str = Integer.toString( Integer.parseInt( str.substring(0,2) ) - 12) + str.substring(2);
       }
       if(str.charAt(0) == '0')
          return str.substring(1);

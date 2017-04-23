@@ -65,17 +65,11 @@ public class EventAdapter extends ArrayAdapter<Event> implements StickyListHeade
         String time = event.getStartTime() + " - " + event.getEndTime();
         viewHolder.mTime.setText(time);
         viewHolder.mTitle.setText(event.getEventName());
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2017,3, 26, 13, 34,34);
-        Date date = calendar.getTime();
-
         if(Constants.currentEvent == position){
             Log.v("IN", event.getEventName());
             viewHolder.mTitle.setText(event.getEventName());
             viewHolder.mTitle.setTextAppearance(getContext(),R.style.currentEvent);
         } else {
-            viewHolder.mTitle.setTextColor(this.getContext().getResources().getColorStateList(R.color.appGrey));
             viewHolder.mTime.setText(time);
             viewHolder.mTitle.setTextAppearance(getContext(),R.style.notEvent);
             viewHolder.mTitle.setText(event.getEventName());

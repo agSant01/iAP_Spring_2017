@@ -54,7 +54,7 @@ public class StudentsInterestAdapter extends ArrayAdapter<IAPStudent> {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Picasso.with(getContext()).load(iapStudent.getPhotoURL()).centerCrop()
+        Picasso.with(getContext()).load(iapStudent.getPhotoURL())
                 .placeholder(R.drawable.ic_gender_0).error(R.drawable.ic_gender_0).into(holder.mProfilePic);
         holder.mName.setText(iapStudent.getName());
         holder.mDepartment.setText(iapStudent.getDepartment());

@@ -463,6 +463,7 @@ public class DataService {
                            undecided.add((IAPStudent) data);
                         }
                         if(diapatch.isEmpty()){
+                           Log.v(TAG, "getStudInterest sec");
                            interest.put("liked", liked);
                            interest.put("unliked", unLiked);
                            interest.put("undecided", undecided);

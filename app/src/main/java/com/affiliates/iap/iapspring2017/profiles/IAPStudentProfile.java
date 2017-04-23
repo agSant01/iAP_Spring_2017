@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +56,11 @@ public class IAPStudentProfile extends BaseActivity {
     private TextView mDept;
     private TextView mBio;
     private Toast mToast;
+    private TableLayout mAllThings;
+    private ProgressBar pb;
+    private TextView mobjective;
+    private View mView1, mView2;
+    private IAPStudent student;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,53 +68,65 @@ public class IAPStudentProfile extends BaseActivity {
         setContentView(R.layout.activity_iapstudent_profile);
         bind();                 // private method to bind all the resources to the controller
 
-        Intent in = getIntent();
+        final Intent in = getIntent();
         setToolBar();
-
-        Picasso.with(getBaseContext()).load(in.getStringExtra("photoURL")).placeholder(R.drawable.ic_gender_0)
-                .error(R.drawable.ic_gender_0).into(mCircleImageView);
-
-        String projects = "";
-        ArrayList<String> arr = in.getStringArrayListExtra("projects");
-        int i;
-        for(i = 0; i < arr.size(); i++){
-            projects += "\u2022 " + arr.get(i) + "\n";
-        }
-
-        mProyectName.setText(projects);
-        mGradDate.setText(in.getStringExtra("gradDate").equals("NA") ? "Graduation date not defined" : in.getStringExtra("gradDate"));
-        mEmail.setText(in.getStringExtra("email"));
-        mName.setText(in.getStringExtra("name").equals("NA") ? "Name not specified" : in.getStringExtra("name"));
-        mDept.setText(in.getStringExtra("dpt").equals("NA") ? "Department not defined" : in.getStringExtra("dpt"));
-        mBio.setText(in.getStringExtra("bio").equals("NA") ? "Objective not defined" : in.getStringExtra("bio"));
-        setResume();
-
-        Log.v(TAG, "TIPO: " + Constants.getCurrentLoggedInUser().getAccountType().toString());
-        if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
-            if(Constants.getUndecidedStudents() == null
-                    || Constants.getUnlikedStudents() == null
-                    || Constants.getLikedStudents() == null ){
-                Log.v(TAG, "Entro!");
-                DataService.sharedInstance().getIAPStudentsOfInterest(new Callback<HashMap<String, ArrayList<IAPStudent>>>() {
-                    @Override
-                    public void success(HashMap<String, ArrayList<IAPStudent>> data) {
-                        Log.v(TAG, "Get Successfull");
-                        Constants.setUndecidedStudents(data.get("undecided"));
-                        Constants.setLikedStudents(data.get("liked"));
-                        Constants.setUnlikedStudents(data.get("unliked"));
+        showProgressBar(pb);
+        DataService.sharedInstance().getUserData(in.getStringExtra("id"), new Callback<User>() {
+            @Override
+            public void success(User data) {
+                student = (IAPStudent) data;
+                Log.v(TAG, "TIPO: " + Constants.getCurrentLoggedInUser().getAccountType().toString());
+                if(Constants.getCurrentLoggedInUser().getAccountType() == User.AccountType.CompanyUser){
+                    if(Constants.getUndecidedStudents() == null
+                            || Constants.getUnlikedStudents() == null
+                            || Constants.getLikedStudents() == null ){
+                        Log.v(TAG, "Entro!");
+                        DataService.sharedInstance().getIAPStudentsOfInterest(new Callback<HashMap<String, ArrayList<IAPStudent>>>() {
+                            @Override
+                            public void success(HashMap<String, ArrayList<IAPStudent>> data) {
+                                Log.v(TAG, "Get Successfull");
+                                Constants.setUndecidedStudents(data.get("undecided"));
+                                Constants.setLikedStudents(data.get("liked"));
+                                Constants.setUnlikedStudents(data.get("unliked"));
+                                Log.v(TAG, data.get("undecided").size() + " " + data.get("liked").size() + " "+ data.get("unliked").size() + "");
+                                setInterestOptions();
+                            }
+                            @Override
+                            public void failure(String message) {
+                                FirebaseCrash.log(TAG + ": " + message);
+                                Log.e(TAG, message);
+                            }
+                        });
+                    } else {
                         setInterestOptions();
-                        Log.v(TAG, data.get("undecided").size() + " " + data.get("liked").size() + " "+ data.get("unliked").size() + "");
                     }
-                    @Override
-                    public void failure(String message) {
-                        FirebaseCrash.log(TAG + ": " + message);
-                        Log.e(TAG, message);
-                    }
-                });
-            } else {
-                setInterestOptions();
+                }
+
+                Picasso.with(getBaseContext()).load(in.getStringExtra("photoURL")).placeholder(R.drawable.ic_gender_0)
+                        .error(R.drawable.ic_gender_0).into(mCircleImageView);
+                String projects = "";
+                ArrayList<String> arr = in.getStringArrayListExtra("projects");
+                int i;
+                for(i = 0; i < arr.size(); i++){
+                    projects += "\u2022 " + arr.get(i) + "\n";
+                }
+                mProyectName.setText(projects);
+                mGradDate.setText(in.getStringExtra("gradDate").equals("NA") ? "Graduation date not defined" : in.getStringExtra("gradDate"));
+                mEmail.setText(in.getStringExtra("email"));
+                mName.setText(in.getStringExtra("name").equals("NA") ? "Name not specified" : in.getStringExtra("name"));
+                mDept.setText(in.getStringExtra("dpt").equals("NA") ? "Department not defined" : in.getStringExtra("dpt"));
+                mBio.setText(in.getStringExtra("bio").equals("NA") ? "Objective not defined" : in.getStringExtra("bio"));
+                setResume();
+
+                hideProgressBar(pb);
+                setVisibility(true);
             }
-        }
+
+            @Override
+            public void failure(String message) {
+
+            }
+        });
     }
 
     private void bind(){
@@ -121,6 +140,28 @@ public class IAPStudentProfile extends BaseActivity {
         mResume = (Button) findViewById(R.id.profile_iap_resume);
         mDept = (TextView) findViewById(R.id.profile_iap_deptm);
         mName = (TextView) findViewById(R.id.profile_iap_name);
+        mAllThings = (TableLayout) findViewById(R.id.tableLayout5);
+        mView1 = findViewById(R.id.view);
+        mView2 = findViewById(R.id.view3);
+        mobjective = (TextView) findViewById(R.id.textView10);
+        pb = (ProgressBar) findViewById(R.id.progressBar2);
+        setVisibility(false);
+    }
+
+    private void setVisibility(boolean state){
+        mCircleImageView.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
+        mProyectName.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
+        mLinearLayout.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
+        mGradDate.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
+        mBio.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
+        mEmail.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
+        mResume.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
+        mDept.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
+        mName.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
+        mAllThings.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
+        mView1.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
+        mView2.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
+        mobjective.setVisibility(state ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void setToolBar(){
@@ -157,17 +198,28 @@ public class IAPStudentProfile extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if(companyUser.isUnliked(getIntent().getStringExtra("id"))) return;
-                ArrayList<IAPStudent> arr;
+                final ArrayList<IAPStudent> arr;
                 if(companyUser.isLiked(getIntent().getStringExtra("id"))){
                     if ( Constants.getLikedStudents() == null )
                         Constants.setLikedStudents(new ArrayList<IAPStudent>());
                     arr = Constants.getLikedStudents();
                     mLike.setImageResource(R.drawable.ic_thumb_up_unfilled);
-                } else {
+                } else if(companyUser.isUndecided(getIntent().getStringExtra("id"))) {
                     if ( Constants.getUndecidedStudents() == null)
                         Constants.setUndecidedStudents(new ArrayList<IAPStudent>());
                     arr = Constants.getUndecidedStudents();
                     mUndecided.setImageResource(R.drawable.ic_thumbs_undecided_unfilled);
+                } else {
+                    if ( Constants.getUnlikedStudents() == null)
+                        Constants.setUnlikedStudents(new ArrayList<IAPStudent>());
+                    Constants.getUnlikedStudents().add(student);
+                    DataService.sharedInstance().setInterestForStudent(in.getStringExtra("id"), "Unlike");
+                    mUnlike.setImageResource(R.drawable.ic_thumb_down_filled_green);
+                    if (mToast != null)
+                        mToast.cancel();
+                    mToast = Toast.makeText(getBaseContext(), "Set as Not Interested", Toast.LENGTH_SHORT);
+                    mToast.show();
+                    return;
                 }
                 for (int i = 0; i < arr.size(); i++)
                     if(arr.get(i).getUserID().equals(in.getStringExtra("id"))) {
@@ -177,9 +229,9 @@ public class IAPStudentProfile extends BaseActivity {
                     }
                 DataService.sharedInstance().setInterestForStudent(in.getStringExtra("id"), "Unlike");
                 mUnlike.setImageResource(R.drawable.ic_thumb_down_filled_green);
-                if(mToast != null)
+                if (mToast != null)
                     mToast.cancel();
-                mToast = Toast.makeText(getBaseContext(),"Set as Not Interested",Toast.LENGTH_SHORT);
+                mToast = Toast.makeText(getBaseContext(), "Set as Not Interested", Toast.LENGTH_SHORT);
                 mToast.show();
             }
         });
@@ -188,19 +240,30 @@ public class IAPStudentProfile extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if(companyUser.isLiked(getIntent().getStringExtra("id"))) return;
-                ArrayList<IAPStudent> arr;
+                final ArrayList<IAPStudent> arr;
                 if(companyUser.isUnliked(getIntent().getStringExtra("id"))){
                     Log.v(TAG, "Select: Unlik");
                     if ( Constants.getUnlikedStudents() == null )
                         Constants.setUnlikedStudents(new ArrayList<IAPStudent>());
                     arr = Constants.getUnlikedStudents();
                     mUnlike.setImageResource(R.drawable.ic_thumb_down_unfilled);
-                } else {
+                } else if (companyUser.isUndecided(getIntent().getStringExtra("id"))){
                     Log.v(TAG, "Select: Undecieds");
                     if ( Constants.getUndecidedStudents() == null)
                         Constants.setUndecidedStudents(new ArrayList<IAPStudent>());
                     arr = Constants.getUndecidedStudents();
                     mUndecided.setImageResource(R.drawable.ic_thumbs_undecided_unfilled);
+                } else {
+                    if ( Constants.getLikedStudents() == null)
+                        Constants.setLikedStudents(new ArrayList<IAPStudent>());
+                    Constants.getLikedStudents().add(student);
+                    DataService.sharedInstance().setInterestForStudent(in.getStringExtra("id"), "Like");
+                    mLike.setImageResource(R.drawable.ic_thumb_up_filled_green);
+                    if(mToast != null)
+                        mToast.cancel();
+                    mToast = Toast.makeText(getBaseContext(),"Set as Interested",Toast.LENGTH_SHORT);
+                    mToast.show();
+                    return;
                 }
                 for (int i = 0; i < arr.size(); i++)
                     if(arr.get(i).getUserID().contains(in.getStringExtra("id"))) {
@@ -222,26 +285,41 @@ public class IAPStudentProfile extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if(companyUser.isUndecided(getIntent().getStringExtra("id"))) return;
-                ArrayList<IAPStudent> arr;
+                final ArrayList<IAPStudent> arr;
+                Log.e(TAG, "UN");
                 if(companyUser.isUnliked(getIntent().getStringExtra("id"))){
                     if ( Constants.getUnlikedStudents() == null )
                         Constants.setUnlikedStudents(new ArrayList<IAPStudent>());
                     arr = Constants.getUnlikedStudents();
                     mUnlike.setImageResource(R.drawable.ic_thumb_down_unfilled);
-                } else {
+                } else if (companyUser.isLiked(getIntent().getStringExtra("id"))){
                     if ( Constants.getLikedStudents() == null)
                         Constants.setLikedStudents(new ArrayList<IAPStudent>());
                     arr = Constants.getLikedStudents();
                     mLike.setImageResource(R.drawable.ic_thumb_up_unfilled);
+                } else {
+                    Log.e(TAG, "NONE");
+                    if ( Constants.getUndecidedStudents() == null)
+                        Constants.setUndecidedStudents(new ArrayList<IAPStudent>());
+                    Constants.getUndecidedStudents().add(student);
+                    DataService.sharedInstance().setInterestForStudent(in.getStringExtra("id"), "Undecided");
+                    mUndecided.setImageResource(R.drawable.ic_thumbs_undecided_filled_green);
+                    if(mToast != null)
+                        mToast.cancel();
+                    mToast = Toast.makeText(getBaseContext(),"Set as Undecided",Toast.LENGTH_SHORT);
+                    mToast.show();
+                    return;
                 }
+
                 for (int i = 0; i < arr.size(); i++)
                     if(arr.get(i).getUserID().contains(in.getStringExtra("id"))) {
                         Log.v(TAG,arr.get(i).getUserID());
                         Constants.getUndecidedStudents().add(arr.remove(i));
                         break;
                     }
-                DataService.sharedInstance().setInterestForStudent(in.getStringExtra("id"), "Undecided");
+                Log.e(TAG, "CORRECT");
                 mUndecided.setImageResource(R.drawable.ic_thumbs_undecided_filled_green);
+                DataService.sharedInstance().setInterestForStudent(in.getStringExtra("id"), "Undecided");
                 if(mToast != null)
                     mToast.cancel();
                 mToast = Toast.makeText(getBaseContext(),"Set as Undecided",Toast.LENGTH_SHORT);

@@ -263,7 +263,7 @@ public class ProfileEditActivity extends BaseActivity {
 
     private void setAvisor(){
         final Advisor advisor = (Advisor) Constants.getCurrentLoggedInUser();
-        mObjective.setHint("Research Intent");
+        mObjective.setHint("Research Interest");
         if(!advisor.getDepartment().equals("NA")){
             deptms.remove(advisor.getDepartment());
             deptms.add(0, advisor.getDepartment());

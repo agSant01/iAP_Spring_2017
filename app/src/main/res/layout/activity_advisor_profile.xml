@@ -296,7 +296,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="24dp"
-                    android:text="Research Intent"
+                    android:text="Research Interest"
                     android:textColor="@color/appGreen"
                     android:textSize="18sp"
                     app:layout_constraintLeft_toLeftOf="parent"
