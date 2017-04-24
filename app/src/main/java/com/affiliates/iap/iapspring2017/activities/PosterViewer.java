@@ -1,6 +1,8 @@
 package com.affiliates.iap.iapspring2017.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
