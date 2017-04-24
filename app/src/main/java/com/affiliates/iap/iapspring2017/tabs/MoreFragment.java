@@ -28,6 +28,7 @@ import com.affiliates.iap.iapspring2017.activities.CompanyListActivity;
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.activities.FeedBackActivity;
 import com.affiliates.iap.iapspring2017.activities.LocationActivity;
 import com.affiliates.iap.iapspring2017.activities.NoConnectionActivity;
 import com.affiliates.iap.iapspring2017.activities.ProfileEditActivity;
@@ -52,6 +53,7 @@ public class MoreFragment extends Fragment {
     private TextView mProjects;
     private TextView mStudInt;
     private TextView mEmail;
+    private TextView mFeedBack;
     private TextView mLocation;
     private Button mSignOut;
     private View mRootView;
@@ -172,6 +174,18 @@ public class MoreFragment extends Fragment {
             }
         });
 
+        mFeedBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!client.isConnectionAvailable()){
+                    startActivity(new Intent(getActivity().getBaseContext(), NoConnectionActivity.class));
+                    return;
+                }
+                Intent in = new Intent(getActivity(), FeedBackActivity.class);
+                startActivity(in);
+            }
+        });
+
         mSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,6 +230,7 @@ public class MoreFragment extends Fragment {
         mProjects = (TextView) mRootView.findViewById(R.id._project);
         mUserName = (TextView) mRootView.findViewById(R.id._name);
         mLocation = (TextView) mRootView.findViewById(R.id.more_location);
+        mFeedBack = (TextView) mRootView.findViewById(R.id.more_feedback);
     }
 
     @Override

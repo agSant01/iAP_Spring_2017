@@ -60,6 +60,9 @@ dependencies {
     // Helper library sticky header list view
     compile 'se.emilsjolander:stickylistheaders:2.6.0'
 
+    compile 'com.github.barteksc:android-pdf-viewer:2.5.1'
+    compile 'commons-io:commons-io:+'
+
     testCompile 'junit:junit:4.12'
 }
 

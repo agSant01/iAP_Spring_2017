@@ -1,22 +1,16 @@
 package com.affiliates.iap.iapspring2017.activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.R;
 import com.github.barteksc.pdfviewer.PDFView;
@@ -52,7 +46,10 @@ public class PosterViewer extends AppCompatActivity implements OnLoadCompleteLis
         pdfView = (PDFView) findViewById(R.id.pdfView);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_poster);
         download = (Button) findViewById(R.id.download_button);
-        mToolbar.setTitle(getIntent().getStringExtra("name"));
+        DownloadFile df = null;
+        final String url = getIntent().getStringExtra("url");
+        String posterName = getIntent().getStringExtra("name");
+        mToolbar.setTitle(posterName);
         ((TextView) mToolbar.findViewById(R.id.title)).setText("Poster");
         progressBar.setEnabled(true);
         progressBar.setVisibility(ProgressBar.VISIBLE);
@@ -62,7 +59,7 @@ public class PosterViewer extends AppCompatActivity implements OnLoadCompleteLis
 
     private void loadFile(){
         DownloadFile df = null;
-        String url = getIntent().getStringExtra("url");
+        final String url = getIntent().getStringExtra("url");
         String posterName = getIntent().getStringExtra("name")+".pdf";
         posterFile = new File(getFilesDir(), posterName);
         if(posterFile.exists()) {
@@ -80,9 +77,17 @@ public class PosterViewer extends AppCompatActivity implements OnLoadCompleteLis
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getBaseContext(), "Downloading", Toast.LENGTH_SHORT).show();
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getIntent().getStringExtra("url")));
-                startActivity(browserIntent);
+//                try {
+//                    DownloadFile df = new DownloadFile(new URL(getIntent().getStringExtra("url")), name);
+//                    df.execute();
+//                    Toast.makeText(getBaseContext(), "Downloading", Toast.LENGTH_SHORT).show();
+//                    ((Button) findViewById(R.id.download_button)).setEnabled(false);
+//                    download.setBackgroundResource(R.drawable.button_oval_shape_grey);
+//                } catch (MalformedURLException e) {
+//                    Log.v("PDF", e.getMessage());
+//                }
+                Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(browser);
             }
         });
     }

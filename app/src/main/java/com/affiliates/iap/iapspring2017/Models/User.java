@@ -156,6 +156,10 @@ public abstract class User implements UserDelegate{
       this.userID = id;
    }
 
+   public void setGender(String gender) {
+      this.gender = gender;
+   }
+
    public abstract boolean hasVoted(int type);
    public abstract void vote(OverallVote vote);
 

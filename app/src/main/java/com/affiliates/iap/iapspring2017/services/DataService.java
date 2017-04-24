@@ -125,6 +125,10 @@ public class DataService {
       return mainRef().child("UsersOfInterest");
    }
 
+   private DatabaseReference feedBackRef() {
+      return mainRef().child("ProjectFeedback");
+   }
+
    public void getUserData(final String id, final Callback<User> callback) throws InvalidAccountTypeExeption{
       usersRef().child(id).addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
@@ -876,6 +880,22 @@ public class DataService {
       // Decode bitmap with inSampleSize set
       options.inJustDecodeBounds = false;
       return BitmapFactory.decodeResource(res, resId, options);
+   }
+
+   public void submitFeedback(final String subject, final String sug, final Callback<String> callback){
+      feedBackRef().push().updateChildren(new HashMap<String, Object>(){{
+         put("Subject", subject);
+         put("Text",  sug);
+      }}).addOnCompleteListener(new OnCompleteListener<Void>() {
+         @Override
+         public void onComplete(@NonNull Task<Void> task) {
+            if (task.isSuccessful()){
+               callback.success("Succes");
+               return;
+            }
+            callback.failure("error sending feedback");
+         }
+      });
    }
 
 }

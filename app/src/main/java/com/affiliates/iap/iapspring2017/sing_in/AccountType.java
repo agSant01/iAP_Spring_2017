@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
+import com.affiliates.iap.iapspring2017.Constants;
+import com.affiliates.iap.iapspring2017.Models.UPRMAccount;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
@@ -113,6 +115,7 @@ public class AccountType extends BaseActivity {
                 }
             });
         } else {
+            hideProgressDialog();
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
             finish();

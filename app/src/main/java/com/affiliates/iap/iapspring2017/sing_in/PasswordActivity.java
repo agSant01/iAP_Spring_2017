@@ -57,7 +57,12 @@ public class PasswordActivity extends BaseActivity {
             public void onClick(View v) {
                 int error = validatePassword(mPassword.getText().toString(), mConfirm.getText().toString());
                 if( error == 0  ) {
-                    registerUser(email, mPassword.getText().toString(),accType);
+                    final Intent in = new Intent(PasswordActivity.this, NameAndGender.class);
+                    in.putExtra("email", email);
+                    in.putExtra("accType", accType);
+                    in.putExtra("password", mPassword.getText().toString());
+                    startActivity(in);
+                    overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
                 } else if (mPassword.getText().toString().length() == 0){
                     Toast.makeText(getApplicationContext(), "Please enter a password", Toast.LENGTH_SHORT).show();
                 }else if (mConfirm.getText().toString().length() == 0){
@@ -98,66 +103,6 @@ public class PasswordActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    private void registerUser(final String email, final String password, final String accType) {
-        showProgressDialog("Creating Account");
-        final User user;
-        switch (accType){
-            case "CompanyUser":
-                user = new CompanyUser(Constants.curentRegisteringUserData);
-                break;
-            case "IAPStudent":
-                user = new IAPStudent(Constants.curentRegisteringUserData);
-                break;
-            case "Advisor":
-                user = new Advisor(Constants.curentRegisteringUserData);
-                break;
-            default:
-                user = new UPRMAccount(email);
-                break;
-        }
-
-        Log.v(TAG,"Password: "+password);
-        Log.v(TAG,"Email: " + user);
-        DataService.sharedInstance().createNewUser(
-                user,
-                password,
-                new Callback<String>() {
-                    @Override
-                    public void success(String data) {
-                        Log.v(TAG, "User registration successful");
-                        PasswordActivity.done = true;
-                        User.login(email, password, new Callback<User>() {
-                            @Override
-                            public void success(User data) {
-                                hideProgressDialog();
-                                Constants.setCurrentLogedInUser(user);
-                                mAdmin.saveUserID(user.getUserID());
-                                System.out.println("DATA -> " + Constants.getCurrentLoggedInUser().getName());
-                                Intent in = new Intent(PasswordActivity.this, EmailConfirmation.class);
-                                hideProgressDialog();
-                                startActivity(in);
-                                overridePendingTransition(R.anim.slide_in, R.anim.slide_out);
-                                finishAffinity();
-                            }
-                            @Override
-                            public void failure(String message) {
-                                Log.v(TAG, "User.login() -> " + message);
-                            }
-                        });
-                    }
-                    @Override
-                    public void failure(String message) {
-                        Log.v(TAG, message);
-                        hideProgressDialog();
-                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(PasswordActivity.this, AccountType.class));
-                        overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
-                        finish();
-                    }
-                }
-        );
     }
 
     private void bind(){
