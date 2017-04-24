@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
@@ -40,79 +41,67 @@
             android:label="Posters"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashScreen"/>
+            android:theme="@style/SplashScreen" />
         <activity
             android:name=".activities.LocationActivity"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".activities.ForgotPasswordActivity"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".profiles.IAPStudentProfile"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".profiles.AdvisorProfile"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".evaluation_center.EvaluationActivity"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".activities.CompanyListActivity"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".activities.StudentsOfInterestActivity"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".activities.ProfileEditActivity"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".sing_in.EnterEmail"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen" />
         <activity
             android:name=".sing_in.AccountType"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen" />
         <activity
             android:name=".sing_in.EmailConfirmation"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen" />
         <activity
             android:name=".sing_in.PasswordActivity"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen" />
         <activity
             android:name=".evaluation_center.GeneralVoteActivity"
-            android:theme="@style/SplashScreen"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen" />
         <activity
-        android:name=".activities.NoConnectionActivity"
-        android:theme="@style/SplashScreen"
-        android:screenOrientation="portrait"/>
+            android:name=".activities.NoConnectionActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen" />
+        <activity
+            android:name=".activities.PosterViewer"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen" />
     </application>
 
 </manifest>

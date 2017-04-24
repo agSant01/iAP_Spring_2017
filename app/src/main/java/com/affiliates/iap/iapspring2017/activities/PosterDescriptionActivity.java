@@ -140,8 +140,12 @@ public class PosterDescriptionActivity extends BaseActivity {
                     Toast.makeText(PosterDescriptionActivity.this,
                             "Poster Not Available", Toast.LENGTH_SHORT).show();
                 }else{
-                    Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(mPosterData.getPosterURL()));
-                    startActivity(browser);
+                    Intent in = new Intent(PosterDescriptionActivity.this, PosterViewer.class);
+                    in.putExtra("url", mPosterData.getPosterURL());
+                    in.putExtra("name", mPosterData.getProjectName());
+                    startActivity(in);
+//                    Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(mPosterData.getPosterURL()));
+//                    startActivity(browser);
                 }
             }
         });
