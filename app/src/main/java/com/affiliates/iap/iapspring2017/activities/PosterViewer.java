@@ -1,7 +1,9 @@
 package com.affiliates.iap.iapspring2017.activities;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
@@ -34,26 +36,15 @@ public class PosterViewer extends AppCompatActivity implements OnLoadCompleteLis
     private Button download;
     private Toolbar mToolbar;
     private ProgressBar progressBar;
-    public static final String READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
-    public static final int PERMISSION_CODE = 42042;
+    private File posterFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_poster_viewer);
-        int permissionCheck = ContextCompat.checkSelfPermission(this,
-                READ_EXTERNAL_STORAGE);
-
-        if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{READ_EXTERNAL_STORAGE},
-                    PERMISSION_CODE
-            );
-
-        }
         bind();
         setToolBar();
+        loadFile();
     }
 
     private void bind(){
@@ -61,22 +52,25 @@ public class PosterViewer extends AppCompatActivity implements OnLoadCompleteLis
         pdfView = (PDFView) findViewById(R.id.pdfView);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_poster);
         download = (Button) findViewById(R.id.download_button);
-        DownloadFile df = null;
-        String url = getIntent().getStringExtra("url");
-        String posterName = getIntent().getStringExtra("name");
-        mToolbar.setTitle(posterName);
+        mToolbar.setTitle(getIntent().getStringExtra("name"));
         ((TextView) mToolbar.findViewById(R.id.title)).setText("Poster");
-        File f = new File(Environment.getExternalStoragePublicDirectory("pdf"), posterName);
         progressBar.setEnabled(true);
         progressBar.setVisibility(ProgressBar.VISIBLE);
-        if(f.exists()) {
-            displayFromFile(f);
-            download.setEnabled(false);
-            download.setBackgroundResource(R.drawable.button_oval_shape_grey);
+
+
+    }
+
+    private void loadFile(){
+        DownloadFile df = null;
+        String url = getIntent().getStringExtra("url");
+        String posterName = getIntent().getStringExtra("name")+".pdf";
+        posterFile = new File(getFilesDir(), posterName);
+        if(posterFile.exists()) {
+            displayFromFile(posterFile);
         }
         else {
             try {
-                df = new DownloadFile(new URL(url), "iapLast");
+                df = new DownloadFile(new URL(url), posterName);
                 df.execute();
             } catch (MalformedURLException e) {
                 Log.v("PDF", e.getMessage());
@@ -86,18 +80,11 @@ public class PosterViewer extends AppCompatActivity implements OnLoadCompleteLis
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    DownloadFile df = new DownloadFile(new URL(getIntent().getStringExtra("url")), name);
-                    df.execute();
-                    Toast.makeText(getBaseContext(), "Downloading", Toast.LENGTH_SHORT).show();
-                    ((Button) findViewById(R.id.download_button)).setEnabled(false);
-                    download.setBackgroundResource(R.drawable.button_oval_shape_grey);
-                } catch (MalformedURLException e) {
-                    Log.v("PDF", e.getMessage());
-                }
+                Toast.makeText(getBaseContext(), "Downloading", Toast.LENGTH_SHORT).show();
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getIntent().getStringExtra("url")));
+                startActivity(browserIntent);
             }
         });
-
     }
 
     private void setToolBar(){
@@ -133,17 +120,17 @@ public class PosterViewer extends AppCompatActivity implements OnLoadCompleteLis
     }
 
     public File download(URL url, String name){
-        File f = new File(Environment.getExternalStoragePublicDirectory("pdf"), name);
+        posterFile = new File(getFilesDir(), name);
         try {
-            FileUtils.copyURLToFile(url, f);
+            FileUtils.copyURLToFile(url, posterFile);
         } catch (IOException e) {
             Log.v("PDF", e.getMessage());
         }
-        Log.v("PDF", name + " Downloaded in " + f.getPath());
-        return f;
+        Log.v("PDF", name + " Downloaded in " + posterFile.getPath());
+        return posterFile;
     }
 
-    private class DownloadFile extends AsyncTask<String, String, String>{
+    private class DownloadFile extends AsyncTask<Void, Void, Void>{
         URL url;
         File f;
         String name;
@@ -153,25 +140,19 @@ public class PosterViewer extends AppCompatActivity implements OnLoadCompleteLis
             this.name = name;
         }
 
-        @Override
-        protected String doInBackground(String... params) {
-           f = download(url, name);
-            return "Downloaded";
-
-        }
-
         public File getFile(){
             return f;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            if(!name.contains("iapLast")){
-                Toast.makeText(getBaseContext(), "Downloaded", Toast.LENGTH_SHORT).show();
-            }
-            else{
-                displayFromFile(f);
-            }
+        protected void onPostExecute(Void s) {
+            displayFromFile(posterFile);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            download(url, name);
+            return null;
         }
     }
 
