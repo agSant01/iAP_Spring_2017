@@ -1,8 +1,6 @@
 package com.affiliates.iap.iapspring2017.activities;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -48,11 +46,9 @@ public class PosterViewer extends AppCompatActivity implements OnLoadCompleteLis
         pdfView = (PDFView) findViewById(R.id.pdfView);
         mToolbar = (Toolbar) findViewById(R.id.toolbar_poster);
         download = (Button) findViewById(R.id.download_button);
-        DownloadFile df = null;
-        final String url = getIntent().getStringExtra("url");
         String posterName = getIntent().getStringExtra("name");
         mToolbar.setTitle(posterName);
-        ((TextView) mToolbar.findViewById(R.id.title)).setText("Poster");
+        ((TextView) mToolbar.findViewById(R.id.title)).setText(posterName == null ? "Poster" : posterName);
         progressBar.setEnabled(true);
         progressBar.setVisibility(ProgressBar.VISIBLE);
 
@@ -63,31 +59,15 @@ public class PosterViewer extends AppCompatActivity implements OnLoadCompleteLis
         DownloadFile df = null;
         final String url = getIntent().getStringExtra("url");
         String posterName = getIntent().getStringExtra("name")+".pdf";
-        posterFile = new File(getFilesDir(), posterName);
-        if(posterFile.exists()) {
-            displayFromFile(posterFile);
+        try {
+            df = new DownloadFile(new URL(url), posterName);
+            df.execute();
+        } catch (MalformedURLException e) {
+            Log.v("PDF", e.getMessage());
         }
-        else {
-            try {
-                df = new DownloadFile(new URL(url), posterName);
-                df.execute();
-            } catch (MalformedURLException e) {
-                Log.v("PDF", e.getMessage());
-            }
-        }
-        final String name = posterName;
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                try {
-//                    DownloadFile df = new DownloadFile(new URL(getIntent().getStringExtra("url")), name);
-//                    df.execute();
-//                    Toast.makeText(getBaseContext(), "Downloading", Toast.LENGTH_SHORT).show();
-//                    ((Button) findViewById(R.id.download_button)).setEnabled(false);
-//                    download.setBackgroundResource(R.drawable.button_oval_shape_grey);
-//                } catch (MalformedURLException e) {
-//                    Log.v("PDF", e.getMessage());
-//                }
                 Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(browser);
             }

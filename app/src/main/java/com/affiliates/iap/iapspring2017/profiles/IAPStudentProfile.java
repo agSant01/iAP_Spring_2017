@@ -31,6 +31,8 @@ import com.affiliates.iap.iapspring2017.Models.CompanyUser;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.activities.PosterDescriptionActivity;
+import com.affiliates.iap.iapspring2017.activities.PosterViewer;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.firebase.crash.FirebaseCrash;
@@ -111,11 +113,11 @@ public class IAPStudentProfile extends BaseActivity {
                     projects += "\u2022 " + arr.get(i) + "\n";
                 }
                 mProyectName.setText(projects);
-                mGradDate.setText(in.getStringExtra("gradDate").equals("NA") ? "Graduation date not defined" : in.getStringExtra("gradDate"));
+                mGradDate.setText(in.getStringExtra("gradDate").equals("NA") ? "Graduation date not specified" : in.getStringExtra("gradDate"));
                 mEmail.setText(in.getStringExtra("email"));
                 mName.setText(in.getStringExtra("name").equals("NA") ? "Name not specified" : in.getStringExtra("name"));
-                mDept.setText(in.getStringExtra("dpt").equals("NA") ? "Department not defined" : in.getStringExtra("dpt"));
-                mBio.setText(in.getStringExtra("bio").equals("NA") ? "Objective not defined" : in.getStringExtra("bio"));
+                mDept.setText(in.getStringExtra("dpt").equals("NA") ? "Department not specified" : in.getStringExtra("dpt"));
+                mBio.setText(in.getStringExtra("bio").equals("NA") ? "Objective not specified" : in.getStringExtra("bio"));
                 setResume();
 
                 hideProgressBar(pb);
@@ -341,13 +343,13 @@ public class IAPStudentProfile extends BaseActivity {
             public void onClick(View v) {
                 if (!url.contains("https://firebasestorage.googleapis.com")){
                     new AlertDialog.Builder(IAPStudentProfile.this)
-                            .setMessage("Resume not Available")
-                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {}
-                            }).show();
+                            .setTitle("Resume Not Available")
+                            .setPositiveButton("Dismiss", null).show();
                 } else {
-                    Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                    startActivity(browser);
+                    Intent in = new Intent(IAPStudentProfile.this, PosterViewer.class);
+                    in.putExtra("url", student.getResumeURL());
+                    in.putExtra("name", student.getName());
+                    startActivity(in);
                 }
             }
         });

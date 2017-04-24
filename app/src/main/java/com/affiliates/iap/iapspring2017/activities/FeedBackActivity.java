@@ -31,14 +31,16 @@ public class FeedBackActivity extends BaseActivity {
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showProgressDialog("Sending Feedback");
                 DataService.sharedInstance().submitFeedback(mSubject.getText().toString(), mSugestion.getText().toString(), new Callback<String>() {
                     @Override
                     public void success(String data) {
+                        hideProgressDialog();
                         new AlertDialog.Builder(FeedBackActivity.this)
-                                .setTitle(data)
-                                .setMessage("Feedback was sumbited")
+                                .setTitle("Success")
+                                .setMessage("Feedback was submitted")
                                 .setCancelable(false)
-                                .setPositiveButton("Dismis", new DialogInterface.OnClickListener() {
+                                .setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         onBackPressed();
@@ -48,10 +50,11 @@ public class FeedBackActivity extends BaseActivity {
 
                     @Override
                     public void failure(String message) {
+                        hideProgressDialog();
                         new AlertDialog.Builder(FeedBackActivity.this)
                                 .setTitle("Error")
                                 .setMessage("Error sending feedback, check network connection")
-                                .setPositiveButton("Dismis", null).create().show();
+                                .setPositiveButton("Dismiss", null).create().show();
                     }
                 });
             }
@@ -83,7 +86,6 @@ public class FeedBackActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
         finish();
     }
 }

@@ -137,15 +137,14 @@ public class PosterDescriptionActivity extends BaseActivity {
                 Log.v(TAG, mPosterData.getPosterURL());
                 String url = mPosterData.getPosterURL();
                 if(!url.contains("https://firebasestorage.googleapis.com")){
-                    Toast.makeText(PosterDescriptionActivity.this,
-                            "Poster Not Available", Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(PosterDescriptionActivity.this)
+                            .setTitle("Poster Not Available")
+                            .setPositiveButton("Dismiss", null).create().show();
                 }else{
                     Intent in = new Intent(PosterDescriptionActivity.this, PosterViewer.class);
+                    Log.v(TAG, mPosterData.getPosterURL());
                     in.putExtra("url", mPosterData.getPosterURL());
-                    in.putExtra("name", mPosterData.getProjectName());
                     startActivity(in);
-//                    Intent browser = new Intent(Intent.ACTION_VIEW, Uri.parse(mPosterData.getPosterURL()));
-//                    startActivity(browser);
                 }
             }
         });
@@ -156,7 +155,6 @@ public class PosterDescriptionActivity extends BaseActivity {
         } else {
             setFavoriteEvaluation(Constants.getCurrentLoggedInUser());
         }
-
         DataService.sharedInstance().getPosterTeamMembers(mPosterData, new Callback() {
             @Override
             public void success(final Object data) {
@@ -356,8 +354,10 @@ public class PosterDescriptionActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Log.v("Mario", "Clicked");
-                    Toast.makeText(getApplicationContext(),
-                            "Sorry, you have already spent your votes", Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(PosterDescriptionActivity.this)
+                            .setTitle("Unable to Vote")
+                            .setMessage("Sorry, you have already spent your votes")
+                            .setPositiveButton("Dismiss", null).create().show();
                 }
             });
         }

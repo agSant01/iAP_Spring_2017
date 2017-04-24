@@ -33,7 +33,7 @@
                 android:layout_gravity="center"
                 android:text="Location"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="22sp" />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 

@@ -161,16 +161,14 @@ public class ProfileEditActivity extends BaseActivity {
         mSaveChanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(ProfileEditActivity.this).setMessage("Save Changes")
+                new AlertDialog.Builder(ProfileEditActivity.this)
+                        .setTitle("Save Changes")
                         .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 saveChanges();
                             }
-                        }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {}
-                }).create().show();
+                        }).setNegativeButton("CANCEL", null).create().show();
             }
         });
     }
@@ -475,7 +473,7 @@ public class ProfileEditActivity extends BaseActivity {
                     FirebaseAuth.getInstance().getCurrentUser().reload();
                     Constants.setCurrentLogedInUser(user);
                     new AlertDialog.Builder(ProfileEditActivity.this)
-                            .setMessage("Successfully Updated Your Profile")
+                            .setTitle("Successfully Updated Your Profile")
                             .setPositiveButton("CONFIRM", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {

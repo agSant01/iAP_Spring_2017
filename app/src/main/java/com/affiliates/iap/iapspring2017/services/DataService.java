@@ -329,65 +329,94 @@ public class DataService {
    }
 
    public void getPosterTeamMembers(final Poster poster, final Callback callback){
-      final ArrayList<IAPStudent> team = new ArrayList<IAPStudent>();
-      if(poster.getTeam() == null){
-         FirebaseCrash.log("No members registered in the research: " + poster.getProjectName());
-         callback.failure("No members registered in the research: " + poster.getProjectName());
-         return;
-      }
-      final Queue<String> dispatch = new ArrayDeque<String>();
-      for (int i = 0; i < poster.getTeam().size(); i++){
-         dispatch.add(poster.getTeam().get(i));
-          Log.v(TAG, "getTeam()// dispach.add()"+dispatch.element());
-         getUserData(poster.getTeam().get(i), new Callback<User>() {
-            @Override
-            public void success(User user) {
-               System.out.println(TAG + team.size() + "  " + poster.getTeam().size());
-               if (user instanceof IAPStudent) {
-                  Log.v(TAG, "getTeam()// dispach.poll()"+dispatch.poll());;
-                  team.add((IAPStudent) user);
-                  if (dispatch.isEmpty())
-                     callback.success(team);
-               }
-            }
-            @Override
-            public void failure(String message) {
-               dispatch.poll();
-               Log.e(TAG, "getPosterTeamMembers() ->" +message );
-               FirebaseCrash.log(TAG + ": getPosterTeamMembers -> " + message);
-            }
-         });
-      }
+      postersRef().child(poster.getPosterID()).child("TeamMembers")
+              .addListenerForSingleValueEvent(new ValueEventListener() {
+                 @Override
+                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (!dataSnapshot.exists() || !dataSnapshot.hasChildren()){
+                       callback.failure("Empty");
+                       return;
+                    }
+                    JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
+                     Log.e(TAG, json.toString());
+                    Iterator<String> ids = json.keys();
+                    final Queue<String> dispatch = new ArrayDeque<String>();
+                    final ArrayList<IAPStudent> team = new ArrayList<>();
+                    while (ids.hasNext()){
+                       String id  = ids.next();
+                       dispatch.add(id);
+                       getUserData(id, new Callback<User>() {
+                          @Override
+                          public void success(User user) {
+                             if (user instanceof IAPStudent){
+                                dispatch.poll();
+                                team.add((IAPStudent) user);
+                                if(dispatch.isEmpty()) {
+                                   callback.success(team);
+                                }
+                             }
+                          }
+
+                          @Override
+                          public void failure(String message) {
+                             FirebaseCrash.log(TAG + ": getPosterTeamMembers() -> " + message);
+                             dispatch.poll();
+                             callback.failure(message);
+                          }
+                       });
+                    }
+
+                 }
+
+                 @Override
+                 public void onCancelled(DatabaseError databaseError) {
+
+                 }
+              });
    }
 
    public void getPosterAdvisorMembers(final Poster poster, final Callback<ArrayList<Advisor>> callback){
-      final ArrayList<Advisor> advisors = new ArrayList<>();
-      if(poster.getAdvisors() == null){
-         callback.failure("No advisors registered in the research: " + poster.getProjectName());
-         return;
-      }
-      final Queue<String> dispatch = new ArrayDeque<String>();
-      for (String id : poster.getAdvisors()){
-         dispatch.add(id);
-         getUserData(id, new Callback<User>() {
-            @Override
-            public void success(User user) {
-               if (user instanceof Advisor){
-                  dispatch.poll();
-                  advisors.add((Advisor) user);
-                  if(dispatch.isEmpty())
-                     callback.success(advisors);
-               }
-            }
+      postersRef().child(poster.getPosterID())
+              .child("Advisors")
+              .addListenerForSingleValueEvent(new ValueEventListener() {
+                 @Override
+                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (!dataSnapshot.exists() || !dataSnapshot.hasChildren()) {
+                       callback.failure("Emptty");
+                       return;
+                    }
+                    JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
+                    Iterator<String> ids = json.keys();
+                    final Queue<String> dispatch = new ArrayDeque<String>();
+                    final ArrayList<Advisor> advisors = new ArrayList<>();
+                     while (ids.hasNext()){
+                        String id  = ids.next();
+                        dispatch.add(id);
+                        getUserData(id, new Callback<User>() {
+                           @Override
+                           public void success(User user) {
+                              if (user instanceof Advisor){
+                                 dispatch.poll();
+                                 advisors.add((Advisor) user);
+                                 if(dispatch.isEmpty())
+                                    callback.success(advisors);
+                              }
+                           }
 
-            @Override
-            public void failure(String message) {
-               FirebaseCrash.log(TAG + ": getPosterAdvisors() -> " + message);
-               dispatch.poll();
-               callback.failure(message);
-            }
-         });
-      }
+                           @Override
+                           public void failure(String message) {
+                              FirebaseCrash.log(TAG + ": getPosterAdvisors() -> " + message);
+                              dispatch.poll();
+                              callback.failure(message);
+                           }
+                        });
+                     }
+                 }
+                 @Override
+                 public void onCancelled(DatabaseError databaseError) {
+                    FirebaseCrash.log(databaseError.toString());
+                 }
+              });
    }
 
    public void getSponsors(final Callback<ArrayList<Sponsors>> callback){
@@ -791,12 +820,12 @@ public class DataService {
 
    }
 
-   private void addIAPStudentToProjects(final IAPStudent student, final Callback<String> callback){
+   private void addIAPStudentToProjects(final IAPStudent student, final Callback<String> callback) {
       final Queue<String> dispatch = new ArrayDeque<>();
       Set<String> projectIDs = student.getProyectMap().keySet();
-      for(final String project : projectIDs){
+      for (final String project : projectIDs) {
          dispatch.add(project);
-         postersRef().child(project).child("TeamMembers").updateChildren(new HashMap<String, Object>(){{
+         postersRef().child(project).child("TeamMembers").updateChildren(new HashMap<String, Object>() {{
             put(student.getUserID(), true);
          }}).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -805,81 +834,21 @@ public class DataService {
                if (!task.isSuccessful()) {
                   callback.failure("addIAPStudentToProjects(): " + task.getException().getMessage());
                }
-               if(dispatch.isEmpty())
+               if (dispatch.isEmpty())
                   callback.success("Student added to all projects successful");
             }
          });
       }
    }
 
-
-
-    public static String parseEmailToKey(String email){
-        int i, split = email.indexOf("@");
-        email = email.substring(0, split);
-        String[] k = email.split("[.]+");
-        String str = "";
-
-        for(i = 0; i < k.length-1; i++)
-            str += k[i] + "_";
-        return str + k[i];
-    }
-
-    public static String keyToName(String key){
-        String ntr = "";
-        int split = key.indexOf("_");
-        ntr += Character.toUpperCase(key.charAt(0));
-        ntr += key.substring(1,split) + " ";
-        ntr += Character.toUpperCase(key.charAt(split+1));
-        ntr += key.substring(split+2);
-        return ntr.replaceAll("[1234567890]+", "");
-    }
-
-
-    private HashMap<String, Object> m(){
-       return new HashMap<String,Object>(){{
-          put("ProjectID", "snsdo");
-          put("TEXT", "sfjvnfnbdfob");
-       }};
-    }
-
-   public static int calculateInSampleSize(
-           BitmapFactory.Options options, int reqWidth, int reqHeight) {
-      // Raw height and width of image
-      final int height = options.outHeight;
-      final int width = options.outWidth;
-      int inSampleSize = 1;
-
-      if (height > reqHeight || width > reqWidth) {
-
-         final int halfHeight = height / 2;
-         final int halfWidth = width / 2;
-
-         // Calculate the largest inSampleSize value that is a power of 2 and keeps both
-         // height and width larger than the requested height and width.
-         while ((halfHeight / inSampleSize) >= reqHeight
-                 && (halfWidth / inSampleSize) >= reqWidth) {
-            inSampleSize *= 2;
-         }
-      }
-
-      return inSampleSize;
-   }
-
-   public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
-                                                        int reqWidth, int reqHeight) {
-
-      // First decode with inJustDecodeBounds=true to check dimensions
-      final BitmapFactory.Options options = new BitmapFactory.Options();
-      options.inJustDecodeBounds = true;
-      BitmapFactory.decodeResource(res, resId, options);
-
-      // Calculate inSampleSize
-      options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
-
-      // Decode bitmap with inSampleSize set
-      options.inJustDecodeBounds = false;
-      return BitmapFactory.decodeResource(res, resId, options);
+   public static String parseEmailToKey(String email){
+      int i, split = email.indexOf("@");
+      email = email.substring(0, split);
+      String[] k = email.split("[.]+");
+      String str = "";
+      for(i = 0; i < k.length-1; i++)
+         str += k[i] + "_";
+      return str + k[i];
    }
 
    public void submitFeedback(final String subject, final String sug, final Callback<String> callback){

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.Models.Vote;
@@ -21,7 +22,7 @@ import com.affiliates.iap.iapspring2017.services.Client;
 import com.affiliates.iap.iapspring2017.services.DataService;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class GeneralVoteActivity extends AppCompatActivity {
+public class GeneralVoteActivity extends BaseActivity {
     private final static String TAG = "GeneralVoteActivity";
 
     private String name, id;
@@ -54,6 +55,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
                 confirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        showProgressDialog("Submitting Vote");
                         vote(type);
                         dialog.dismiss();
                     }
@@ -92,7 +94,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
         if (Constants.getCurrentLoggedInUser().hasVoted(1)) {
             bestPresentation.setBackgroundResource(R.drawable.button_oval_shape_grey);
             bestPresentation.setText("Voted");
-            presentationImage.setImageResource(R.drawable.ic_thumb_up_grey);
+            presentationImage.setImageResource(R.drawable.ic_oral_presentation_grey);
         }
         bestPresentation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +131,12 @@ public class GeneralVoteActivity extends AppCompatActivity {
                 else
                     displaySubmissionDialog(type);
             else
-                Toast.makeText(getBaseContext(), "No Internet Connection, Please Connect", Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(GeneralVoteActivity.this)
+                        .setTitle("Network Error")
+                        .setMessage("Please verify your network connection")
+                        .setPositiveButton("Dismiss", null).create().show();
+
+//                Toast.makeText(getBaseContext(), "No Internet Connection, Please Connect", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getBaseContext(), "Sorry, you need to verify your email first.", Toast.LENGTH_SHORT).show();
 
@@ -143,12 +150,11 @@ public class GeneralVoteActivity extends AppCompatActivity {
             public void success(User data) {
                 Constants.setCurrentLogedInUser(data);
                 //get the latest status on voted
-                Log.v(TAG, "User updated");
-                if (type == 0)
-                    posterImage.setImageResource(R.drawable.ic_poster_icon);
-                else
-                    presentationImage.setImageResource(R.drawable.ic_thumb_up_grey);
-
+//                Log.v(TAG, "User updated");
+//                if (type == 0)
+//                    posterImage.setImageResource(R.drawable.ic_poster_icon);
+//                else
+//                    presentationImage.setImageResource(R.drawable.ic_thumb_up_grey);
             }
 
             @Override
@@ -161,9 +167,17 @@ public class GeneralVoteActivity extends AppCompatActivity {
                 @Override
                 public void success(Vote data) {
                     Log.v(TAG, "Voting completed");
-                    Toast.makeText(getApplicationContext(),
-                            "Submission successful", Toast.LENGTH_SHORT).show();
-                    onBackPressed();
+                    hideProgressDialog();
+                    new AlertDialog.Builder(GeneralVoteActivity.this)
+                            .setTitle("Submission successful")
+                            .setCancelable(false)
+                            .setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    onBackPressed();
+                                }
+                            })
+                            .create().show();
                 }
 
                 @Override
@@ -185,7 +199,7 @@ public class GeneralVoteActivity extends AppCompatActivity {
                     break;
 
             }
-            Toast.makeText(getApplicationContext(), "You've already voted for Best " + voteType, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "You've already voted for Best " + voteType, Toast.LENGTH_LONG).show();
         }
     }
 

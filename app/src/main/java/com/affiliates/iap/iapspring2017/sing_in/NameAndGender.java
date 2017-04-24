@@ -96,9 +96,9 @@ public class NameAndGender extends BaseActivity{
                 user = new UPRMAccount(email);
                 break;
         }
-
         FirebaseAnalytics firebaseAnalytics = FirebaseAnalytics.getInstance(getBaseContext());
         firebaseAnalytics.setUserProperty("Sex", (String) mGender.getItems().get(mGender.getSelectedIndex()));
+        firebaseAnalytics.setUserProperty("AccountType", accType);
         user.setGender((String) mGender.getItems().get(mGender.getSelectedIndex()));
         user.setName(mName.getText().toString());
         Log.v(TAG,"Password: "+password);

@@ -24,123 +24,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp">
 
-        <ImageView
-            android:id="@+id/minus_tech_pres"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginLeft="24dp"
-            android:layout_marginTop="0dp"
-            android:paddingEnd="18dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tx1"
-            app:layout_constraintLeft_toLeftOf="@+id/pres_rating_tech"
-            app:layout_constraintTop_toTopOf="@+id/tx1"
-            app:srcCompat="@drawable/minus_icon" />
-
-        <ImageView
-            android:id="@+id/plus_tech_pres"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
-            android:paddingStart="18dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tx1"
-            app:layout_constraintLeft_toRightOf="@+id/tx1"
-            app:layout_constraintTop_toTopOf="@+id/tx1"
-            app:layout_constraintVertical_bias="0.545"
-            app:srcCompat="@drawable/plus_icon"
-            android:layout_marginRight="8dp"
-            app:layout_constraintRight_toRightOf="@+id/pres_rating_tech"
-            app:layout_constraintHorizontal_bias="1.0" />
-
-        <ImageView
-            android:id="@+id/minus_pres_pres"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:paddingEnd="18dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tx2"
-            app:layout_constraintLeft_toLeftOf="@+id/pres_rating_pres"
-            app:layout_constraintTop_toTopOf="@+id/tx2"
-            app:srcCompat="@drawable/minus_icon" />
-
-        <ImageView
-            android:id="@+id/plus_pres_pres"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="0dp"
-            android:layout_marginTop="0dp"
-            android:paddingStart="18dp"
-            app:layout_constraintBottom_toTopOf="@+id/view2"
-            app:layout_constraintRight_toRightOf="@+id/pres_rating_pres"
-            app:layout_constraintTop_toTopOf="@+id/tx2"
-            app:srcCompat="@drawable/plus_icon" />
-
-        <ImageView
-            android:id="@+id/minus_meth_pres"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="0dp"
-            android:paddingEnd="18dp"
-            app:layout_constraintBottom_toTopOf="@+id/view10"
-            app:layout_constraintLeft_toLeftOf="@+id/pres_rating_method"
-            app:layout_constraintTop_toTopOf="@+id/tx3"
-            app:layout_constraintVertical_bias="0.111"
-            app:srcCompat="@drawable/minus_icon" />
-
-        <ImageView
-            android:id="@+id/plus_meth_pres"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="0dp"
-            android:paddingStart="18dp"
-            app:layout_constraintBottom_toTopOf="@+id/view10"
-            app:layout_constraintRight_toRightOf="@+id/pres_rating_method"
-            app:layout_constraintTop_toTopOf="@+id/tx3"
-            app:srcCompat="@drawable/plus_icon" />
-
-        <ImageView
-            android:id="@+id/minus_res_pres"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:paddingEnd="18dp"
-            app:layout_constraintBottom_toTopOf="@+id/view9"
-            app:layout_constraintLeft_toLeftOf="@+id/pres_rating_res"
-            app:layout_constraintTop_toTopOf="@+id/tx4"
-            app:srcCompat="@drawable/minus_icon" />
-
-        <ImageView
-            android:id="@+id/plus_res_pres"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="0dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="0dp"
-            android:paddingStart="18dp"
-            app:layout_constraintBottom_toTopOf="@+id/view9"
-            app:layout_constraintRight_toRightOf="@+id/pres_rating_res"
-            app:layout_constraintTop_toTopOf="@+id/tx4"
-            app:srcCompat="@drawable/plus_icon" />
-
         <me.zhanghai.android.materialratingbar.MaterialRatingBar
             android:id="@+id/pres_rating_tech"
             android:layout_width="0dp"
@@ -149,8 +32,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="10dp"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp"
+            android:paddingEnd="50dp"
+            android:paddingStart="50dp"
             android:stepSize="1"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -179,8 +62,8 @@
             android:layout_marginTop="8dp"
             android:isIndicator="false"
             android:numStars="5"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp"
+            android:paddingEnd="50dp"
+            android:paddingStart="50dp"
             android:stepSize="1"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -195,8 +78,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="10dp"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp"
+            android:paddingEnd="50dp"
+            android:paddingStart="50dp"
             android:stepSize="1"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -286,8 +169,8 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="4dp"
-            android:paddingEnd="20dp"
-            android:paddingStart="20dp"
+            android:paddingEnd="50dp"
+            android:paddingStart="50dp"
             android:stepSize="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -309,6 +192,119 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tx4" />
+
+        <ImageView
+            android:id="@+id/plus_meth_pres"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="16dp"
+            android:padding="14dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pres_rating_method"
+            app:layout_constraintRight_toRightOf="@+id/pres_rating_method"
+            app:layout_constraintTop_toBottomOf="@+id/view10"
+            app:srcCompat="@drawable/plus_icon" />
+
+        <ImageView
+            android:id="@+id/plus_res_pres"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="8dp"
+            android:padding="14dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pres_rating_res"
+            app:layout_constraintRight_toRightOf="@+id/pres_rating_res"
+            app:layout_constraintTop_toTopOf="@+id/pres_rating_res"
+            app:srcCompat="@drawable/plus_icon" />
+
+        <ImageView
+            android:id="@+id/plus_tech_pres"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="8dp"
+            android:padding="14dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pres_rating_tech"
+            app:layout_constraintRight_toRightOf="@+id/pres_rating_tech"
+            app:layout_constraintTop_toTopOf="@+id/pres_rating_tech"
+            app:srcCompat="@drawable/plus_icon" />
+
+        <ImageView
+            android:id="@+id/minus_meth_pres"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
+            android:padding="14dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pres_rating_method"
+            app:layout_constraintLeft_toLeftOf="@+id/pres_rating_method"
+            app:layout_constraintTop_toBottomOf="@+id/view10"
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/minus_icon" />
+
+        <ImageView
+            android:id="@+id/plus_pres_pres"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="8dp"
+            android:padding="14dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pres_rating_pres"
+            app:layout_constraintRight_toRightOf="@+id/pres_rating_pres"
+            app:layout_constraintTop_toTopOf="@+id/pres_rating_pres"
+            app:srcCompat="@drawable/plus_icon" />
+
+        <ImageView
+            android:id="@+id/minus_res_pres"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
+            android:padding="14dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pres_rating_res"
+            app:layout_constraintLeft_toLeftOf="@+id/pres_rating_res"
+            app:layout_constraintTop_toTopOf="@+id/pres_rating_res"
+            app:srcCompat="@drawable/minus_icon" />
+
+        <ImageView
+            android:id="@+id/minus_pres_pres"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
+            android:padding="14dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pres_rating_pres"
+            app:layout_constraintLeft_toLeftOf="@+id/pres_rating_pres"
+            app:layout_constraintTop_toTopOf="@+id/pres_rating_pres"
+            app:srcCompat="@drawable/minus_icon" />
+
+        <ImageView
+            android:id="@+id/minus_tech_pres"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="8dp"
+            android:padding="14dp"
+            app:layout_constraintBottom_toBottomOf="@+id/pres_rating_tech"
+            app:layout_constraintLeft_toLeftOf="@+id/pres_rating_tech"
+            app:layout_constraintTop_toTopOf="@+id/pres_rating_tech"
+            app:srcCompat="@drawable/minus_icon" />
     </android.support.constraint.ConstraintLayout>
 
 
