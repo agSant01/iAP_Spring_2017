@@ -1,5 +1,8 @@
 ![alt text][logo] 
 # IAP RUM Application for Android 
+![GitHub release](https://img.shields.io/badge/release-v1.2.2-blue.svg)
+![Build status of the master branch](https://img.shields.io/badge/Android%20build-passing-brightgreen.svg)
+![Contributors](https://img.shields.io/badge/contributors-4-lightgrey.svg)
 
 An android application built natively which primary purpose is voting, but will feature useful information for the attendees of the Industrial Affiliates Program (IAP).
 
