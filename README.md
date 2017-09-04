@@ -1,4 +1,5 @@
-![alt text][logo] 
+<img src="https://firebasestorage.googleapis.com/v0/b/iapconfapp.appspot.com/o/WebPhotos%2FLogo%20White%20Background.png?alt=media&token=b7d9421d-6f09-4ceb-8176-5b886c5a6064" height="350" /> 
+
 # IAP RUM Application for Android 
 ![GitHub release](https://img.shields.io/badge/release-v1.2.2-blue.svg)
 ![Build status of the master branch](https://img.shields.io/badge/Android%20build-passing-brightgreen.svg)
@@ -62,7 +63,7 @@ The Industrial Affiliates Program application provides a unique experience for c
 <b>Requires Android</b><br>
 4.4 and up
 
-[logo]: https://lh3.googleusercontent.com/WFgSjTZYe_tjYu5X4MaH9YihmUkH6hwb9SoYvb9RIJP10LOKo02jqWot5Mv5jO2KBEU=w150-rw
+[logo]: https://firebasestorage.googleapis.com/v0/b/iapconfapp.appspot.com/o/WebPhotos%2FLogo%20White%20Background.png?alt=media&token=b7d9421d-6f09-4ceb-8176-5b886c5a6064
 [website]: https://iapconfapp.firebaseapp.com/
 [google_play_store]: https://play.google.com/store/apps/details?id=com.affiliates.iap.iapspring2017&hl=en "Google Play Store"
 [student_of_interest]: https://lh3.googleusercontent.com/6jxmqnBzpj_p7CKib9_EKfH28LTZefU7T6zL9zAUPhEdujfTX1zCprQiOomXhwepA7o=h310-rw "Students of Interest"
