@@ -13,7 +13,7 @@ Funded in 1989 by the Department of Electrical and Computer Engineering (ECE) of
 
 The Industrial Affiliates Program application provides a unique experience for company attendees. With the application the company representatives can see the different posters and connect with the students, with the student profiles they now have immediate access to resumes and contact information. Long gone are the days of paper evaluations, now representatives can evaluate posters and presentations through the application allowing the winner to be determined almost immediately. They can also see the conference itinerary and the student’s posters. The students and professors attending can vote for the best poster and best presentation and see their peer’s posters. You can learn more about the app at [IAP RUM official website.][website] 
 
-##### You can download at [Google Play Store][google_play_store]
+<b>You can download at [Google Play Store][google_play_store]</b>
 
 ### What's New (1.2.2)
 - Can now submit feedback
