@@ -8,9 +8,7 @@
 
 package com.affiliates.iap.iapspring2017.profiles;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -31,7 +29,6 @@ import com.affiliates.iap.iapspring2017.Models.CompanyUser;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.activities.PosterDescriptionActivity;
 import com.affiliates.iap.iapspring2017.activities.PosterViewer;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.DataService;

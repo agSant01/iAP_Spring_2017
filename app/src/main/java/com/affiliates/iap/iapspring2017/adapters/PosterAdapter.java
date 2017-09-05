@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.CompanyUser;
-import com.affiliates.iap.iapspring2017.Models.CompanyVote;
 import com.affiliates.iap.iapspring2017.Models.Poster;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;

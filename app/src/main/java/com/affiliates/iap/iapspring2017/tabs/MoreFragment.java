@@ -24,10 +24,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.affiliates.iap.iapspring2017.activities.CompanyListActivity;
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.R;
+import com.affiliates.iap.iapspring2017.activities.CompanyListActivity;
 import com.affiliates.iap.iapspring2017.activities.FeedBackActivity;
 import com.affiliates.iap.iapspring2017.activities.LocationActivity;
 import com.affiliates.iap.iapspring2017.activities.NoConnectionActivity;

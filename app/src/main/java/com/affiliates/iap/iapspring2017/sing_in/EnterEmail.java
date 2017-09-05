@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.activities.ForgotPasswordActivity;
 import com.affiliates.iap.iapspring2017.services.Client;
 
 public class EnterEmail extends BaseActivity {

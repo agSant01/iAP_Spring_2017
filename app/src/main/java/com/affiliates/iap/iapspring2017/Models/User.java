@@ -91,9 +91,6 @@ public abstract class User implements UserDelegate{
    }
 
    @Override
-   public void vote(String projectID, Vote vote, Context context, Callback callback) throws VoteErrorException {}
-
-   @Override
    public HashMap<String, Object> toMap() {
       return null;
    }
@@ -162,5 +159,4 @@ public abstract class User implements UserDelegate{
 
    public abstract boolean hasVoted(int type);
    public abstract void vote(OverallVote vote);
-
 }

@@ -1,10 +1,10 @@
 package com.affiliates.iap.iapspring2017.sing_in.intro_screens;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 import android.widget.TextView;
 

@@ -20,7 +20,6 @@ import com.affiliates.iap.iapspring2017.Models.User;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

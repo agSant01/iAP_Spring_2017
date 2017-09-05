@@ -14,14 +14,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.affiliates.iap.iapspring2017.Models.CompanyVote;
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.tabs.ScheduleFragment;
-import com.google.android.gms.common.images.ImageManager;
 
 import me.zhanghai.android.materialratingbar.MaterialRatingBar;
 

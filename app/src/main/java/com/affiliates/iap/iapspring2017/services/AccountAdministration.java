@@ -15,8 +15,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import static java.security.AccessController.getContext;
-
 public class AccountAdministration {
     private Context context;
 

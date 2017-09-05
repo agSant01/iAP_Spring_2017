@@ -1,3 +1,11 @@
+//
+//  PasswordActivity.java
+//  IAP
+//
+//  Created by Gabriel S. Santiago on 3/07/17.
+//  Copyright © 2017 IAP Conference UPRM. All rights reserved.
+//
+
 package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
@@ -11,51 +19,63 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
-import com.affiliates.iap.iapspring2017.Constants;
-import com.affiliates.iap.iapspring2017.Models.Advisor;
-import com.affiliates.iap.iapspring2017.Models.CompanyUser;
-import com.affiliates.iap.iapspring2017.Models.IAPStudent;
-import com.affiliates.iap.iapspring2017.Models.UPRMAccount;
-import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.interfaces.Callback;
-import com.affiliates.iap.iapspring2017.services.AccountAdministration;
-import com.affiliates.iap.iapspring2017.services.DataService;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class PasswordActivity extends BaseActivity {
-    private static boolean done;
     private static final String TAG = "PasswordActivity";
-    private AccountAdministration mAdmin;
-    private EditText mPassword;
-    private EditText mConfirm;
-    private ImageView passShow;
-    private ImageView confShow;
-    private Button mBack;
-    private Button mNext;
+    private EditText mPassword, mConfirm;
+    private ImageView passShow, confShow;
+    private Button mBack, mNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
-        mAdmin = new AccountAdministration(getBaseContext());
         bind();
-        final String email = getIntent().getStringExtra("Email");
-        final String accType  = getIntent().getStringExtra("AccountType");
-        Log.v(TAG, email + " " + accType);
+        setBack();
+        setNext();
+        mPassword.requestFocus();
+        setPasswordShow();
+        setConfirmationShow();
+    }
 
+    /**
+     * Binds all the UI components to variables for use
+     */
+    private void bind(){
+        mPassword = (EditText) findViewById(R.id.edit_password);
+        mConfirm = (EditText) findViewById(R.id.edit_confirm_password);
+        mBack = (Button) findViewById(R.id.backButton);
+        mNext = (Button) findViewById(R.id.nextButton);
+        passShow = (ImageView) findViewById(R.id.imageView18);
+        confShow = (ImageView) findViewById(R.id.imageView21);
+    }
+
+    /**
+     * Adds function for the back button
+     */
+    private void setBack(){
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
             }
         });
+    }
 
+    /**
+     * Adds function for the back button
+     */
+    private void setNext(){
+        // Gets email and accountType passed through the intent from the previous activities
+        final String email = getIntent().getStringExtra("Email");
+        final String accType  = getIntent().getStringExtra("AccountType");
+        // adds the on click listener
         mNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int error = validatePassword(mPassword.getText().toString(), mConfirm.getText().toString());
+                // validation of error
                 if( error == 0  ) {
                     final Intent in = new Intent(PasswordActivity.this, NameAndGender.class);
                     in.putExtra("email", email);
@@ -74,65 +94,80 @@ public class PasswordActivity extends BaseActivity {
                 }
             }
         });
-        mPassword.requestFocus();
+        Log.v(TAG, email + " " + accType);
+    }
 
-
+    /**
+     * Set on click listener for the password show icon
+     */
+    private void setPasswordShow(){
         passShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mPassword.getTransformationMethod() != null) {
-                    mPassword.setTransformationMethod(null);
-                    passShow.setImageResource(R.drawable.ic_hide_pass);
-                }else {
-                    mPassword.setTransformationMethod(new PasswordTransformationMethod());
-                    passShow.setImageResource(R.drawable.ic_show_password);
+                if(mPassword.getTransformationMethod() != null) {                     // pass is visible
+                    mPassword.setTransformationMethod(null);                          // set invisible
+                    passShow.setImageResource(R.drawable.ic_hide_pass);               // change icon
+                }else {                                                                     // is invisible
+                    mPassword.setTransformationMethod(new PasswordTransformationMethod());  // set visible
+                    passShow.setImageResource(R.drawable.ic_show_password);                 // change icon
                 }
             }
         });
+    }
 
-
+    /**
+     * Set on click listener for the confirm password show icon
+     */
+    private void setConfirmationShow(){
         confShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mConfirm.getTransformationMethod() != null) {
-                    mConfirm.setTransformationMethod(null);
-                    confShow.setImageResource(R.drawable.ic_hide_pass);
-                }else {
-                    mConfirm.setTransformationMethod(new PasswordTransformationMethod());
-                    confShow.setImageResource(R.drawable.ic_show_password);
+                if(mConfirm.getTransformationMethod() != null) {                     // pass is visible
+                    mConfirm.setTransformationMethod(null);                          // set invisible
+                    confShow.setImageResource(R.drawable.ic_hide_pass);              // change icon
+                }else {                                                                       // is invisible
+                    mConfirm.setTransformationMethod(new PasswordTransformationMethod());     // set visible
+                    confShow.setImageResource(R.drawable.ic_show_password);                   // change icon
                 }
             }
         });
     }
 
-    private void bind(){
-        mPassword = (EditText) findViewById(R.id.edit_password);
-        mConfirm = (EditText) findViewById(R.id.edit_confirm_password);
-        mBack = (Button) findViewById(R.id.backButton);
-        mNext = (Button) findViewById(R.id.nextButton);
-        passShow = (ImageView) findViewById(R.id.imageView18);
-        confShow = (ImageView) findViewById(R.id.imageView21);
-    }
-
+    /**
+     * Used to validate the password
+     * @param pass password
+     * @param confirm password confirmation
+     * @return state
+     */
     public int validatePassword(String pass, String confirm){
-        if(!pass.contentEquals(confirm)) return 1;
-        if(pass.length()<6) return 2;
-        return 0;
+        if(!pass.contentEquals(confirm)) return 1;  // are equal
+        if(pass.length()<6) return 2;               // less than 6 characters
+        return 0;                                   // not valid
     }
 
+    /**
+     * Executed when the native back button of the android is clicked or
+     * otherwise called
+     */
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);
-        finish();
+        overridePendingTransition(R.anim.go_back_out, R.anim.go_back_in);   // animate as sliding to the right
+        finish();                                                           // finish this activity
     }
 
+    /**
+     * Executed when the view is moved to the background
+     */
     @Override
     protected void onPause() {
         super.onPause();
-        hideProgressDialog();
+        hideProgressDialog();               // hide progress dialog if it is active
     }
 
+    /**
+     * Executed when the activity is destroyed
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();

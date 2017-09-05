@@ -13,9 +13,10 @@ import android.util.Log;
 
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
 import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
+import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
 import com.affiliates.iap.iapspring2017.services.DataService;
-import com.affiliates.iap.iapspring2017.interfaces.Callback;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 

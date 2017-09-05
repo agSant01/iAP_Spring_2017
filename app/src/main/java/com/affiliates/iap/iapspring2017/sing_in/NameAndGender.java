@@ -1,15 +1,12 @@
 package com.affiliates.iap.iapspring2017.sing_in;
 
 import android.content.Intent;
-import android.nfc.NdefMessage;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;

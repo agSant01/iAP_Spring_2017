@@ -8,19 +8,21 @@
 
 package com.affiliates.iap.iapspring2017.adapters;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.content.Context;
-import android.view.ViewGroup;
-import android.view.View;
-import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import com.affiliates.iap.iapspring2017.Models.IAPStudent;
 import com.affiliates.iap.iapspring2017.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class StudentsInterestAdapter extends ArrayAdapter<IAPStudent> {
     private static class ViewHolder{

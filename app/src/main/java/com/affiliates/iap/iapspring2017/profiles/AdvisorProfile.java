@@ -8,23 +8,23 @@
 
 package com.affiliates.iap.iapspring2017.profiles;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.affiliates.iap.iapspring2017.BaseActivity;
-import de.hdodenhof.circleimageview.CircleImageView;
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.R;
 import com.squareup.picasso.Picasso;
 
-import android.support.v7.widget.Toolbar;
-
-import android.util.TypedValue;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.content.Intent;
-import android.view.View;
-import android.os.Bundle;
-import android.util.Log;
-import android.net.Uri;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdvisorProfile extends BaseActivity {
     private static final String TAG = "AdvisorProfile";

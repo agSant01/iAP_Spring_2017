@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
@@ -25,13 +24,8 @@ import com.affiliates.iap.iapspring2017.activities.ForgotPasswordActivity;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.services.Client;
-import com.affiliates.iap.iapspring2017.sing_in.AccountType;
 import com.affiliates.iap.iapspring2017.sing_in.EnterEmail;
 import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 public class SignInFragment extends Fragment{
     private static final String TAG = "SignInFragment";

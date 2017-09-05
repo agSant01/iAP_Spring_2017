@@ -8,13 +8,9 @@
 
 package com.affiliates.iap.iapspring2017.services;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.View;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Advisor;
@@ -28,14 +24,11 @@ import com.affiliates.iap.iapspring2017.Models.Sponsors;
 import com.affiliates.iap.iapspring2017.Models.UPRMAccount;
 import com.affiliates.iap.iapspring2017.Models.User;
 import com.affiliates.iap.iapspring2017.Models.Vote;
-import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
-import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,10 +48,6 @@ import com.google.firebase.storage.UploadTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,10 +58,10 @@ import java.util.Set;
 
 public class DataService {
    private static final String TAG = "DataService";
-   private static DataService mDServiceInctance = new DataService();
+   private static DataService mDServiceInstance = new DataService();
    
    public static DataService sharedInstance(){
-      return mDServiceInctance;
+      return mDServiceInstance;
    }
 
    private  DatabaseReference mainRef() {
@@ -129,7 +118,13 @@ public class DataService {
       return mainRef().child("ProjectFeedback");
    }
 
-   public void getUserData(final String id, final Callback<User> callback) throws InvalidAccountTypeExeption{
+
+   /**
+    * Gets user data
+    * @param id            user firebase UID
+    * @param callback      callback used to return the data and keep the process asynchronous
+    */
+   public void getUserData(final String id, final Callback<User> callback) {
       usersRef().child(id).addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot){
@@ -139,11 +134,17 @@ public class DataService {
                callback.failure("No user ID Registered " + id);
                return;
             }
+
+            // get FB response and parde it as a JSON
             JSONObject json =  new JSONObject((Map) dataSnapshot.getValue());
-            String accType =json.optString("AccountType");
+
+            // get accountType
+            String accType = json.optString("AccountType");
             Log.v(TAG, json.toString());
 
             try {
+               // build the user object based on the correct account type
+               // return it through the callback
                switch (User.AccountType.determineAccType(accType)) {
                   case CompanyUser:
                      callback.success(new CompanyUser(json, User.AccountType.CompanyUser, id));
@@ -172,38 +173,57 @@ public class DataService {
          }
          @Override
          public void onCancelled(DatabaseError databaseError) {
+            // an error with the communication occurred
             FirebaseCrash.log(TAG + ": getUserData() -> " + databaseError.toString());
             Log.e(TAG, databaseError.toString());
          }
       });
    }
 
+   /**
+    * Used for every user type except company user, to set as voted on of the categories:
+    * poster o presentation
+    * @param user   user object
+    * @param vote   vote object
+    */
    public void setVoted(User user, final OverallVote vote){
-      if(user.getAccountType() != User.AccountType.CompanyUser){
-         usersRef().child(user.getUserID())
+      if(user.getAccountType() != User.AccountType.CompanyUser){     // user is not company
+         usersRef().child(user.getUserID())                          // get reference to node
                    .child("Voted")
-                   .updateChildren(
-                      new HashMap<String, Object>(){{
+                   .updateChildren(                                  // update the corresponding node
+                      new HashMap<String, Object>(){{                // given by vote.getStringFromTYpe()
                          put(vote.getStringFromType(), true);
                       }});
       }
    }
 
-   public void submitGeneralVote(String projecID, int voteType, final Callback<Vote> callback) throws VoteErrorException{
-      if(voteType != 0 && voteType != 1) {
+   /**
+    * Submit general vote
+    * @param projectID project id
+    * @param voteType  vote type
+    * @param callback  used to return the completion status
+    */
+   public void submitGeneralVote(String projectID, int voteType, final Callback<Vote> callback) {
+      if(voteType != 0 && voteType != 1) {                   // is invalid vote type
          FirebaseCrash.log(TAG +": submitGeneralVoe() -> Vote type value can only be 1 or 0.");
          callback.failure("Vote type value can only be 1 or 0.");
       }
 
+      // generate new reference in DB
       final String voteID = generalVoteRef().push().getKey();
-      final OverallVote vote = new OverallVote(voteID, projecID, voteType);
 
+      // create new overall vote object
+      final OverallVote vote = new OverallVote(voteID, projectID, voteType);
+
+      // get reference
       generalVoteRef().child(vote.getStringFromType()).updateChildren(vote.makeJSON())
          .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+               // relies on leaving the voting method individually on each user type
                Constants.getCurrentLoggedInUser().vote(vote);
-                runGeneralVoteTransaction(vote);
+               // do a transaction: this is for system redundancy
+               runGeneralVoteTransaction(vote);
                callback.success(null);
             }})
          .addOnFailureListener(new OnFailureListener() {
@@ -215,18 +235,27 @@ public class DataService {
          });
    }
 
+   /**
+    * Run transaction on the votes node
+    * @param vote    vote object
+    */
    private void runGeneralVoteTransaction(OverallVote vote){
-      final DatabaseReference ref = generalVoteSummaryRef().child(vote.getStringFromType() + "/" + vote.getProjectID());
+      // gets the reference if exists, otherwise creates a new one
+      final DatabaseReference ref = generalVoteSummaryRef()
+              .child(vote.getStringFromType() + "/" + vote.getProjectID());
+
+      // run transaction on that reference
       ref.runTransaction(new Transaction.Handler() {
          @Override
          public Transaction.Result doTransaction(MutableData mutableData) {
              Object data = mutableData.getValue();
              try{
+                 // add one extra vote for that category
                  Integer score = (Integer) ((data == null) ? 0 : data);
                  score += 1;
                  mutableData.setValue(score);
              }catch(ClassCastException e){
-                Long score = (Long) ((data == null) ? 0 : data);
+                 Long score = (Long) ((data == null) ? 0 : data);
                  score += 1;
                  mutableData.setValue(score);
              }
@@ -242,14 +271,19 @@ public class DataService {
       });
    }
 
-   public void submitCompanyEval(final CompanyVote vote, final Callback<Object> callback) throws VoteErrorException{
-      final DatabaseReference ref = companyVoteRef().push();
-      ref.updateChildren(vote.makeJSON())
+   /**
+    * Submit company evaluation
+    * @param vote       vote object
+    * @param callback   used to return completion status
+    */
+   public void submitCompanyEval(final CompanyVote vote, final Callback<Object> callback) {
+      final DatabaseReference ref = companyVoteRef().push();      // create new reference for the vote
+      ref.updateChildren(vote.makeJSON())                         // update data for the reference
          .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-               runCompanyVoteTransaction(vote);
-               callback.success(null);
+               runCompanyVoteTransaction(vote);                   // when the update of the data on ref finishes
+               callback.success(null);                            // run a transaction of company vote
             }
          })
          .addOnFailureListener(new OnFailureListener() {
@@ -260,13 +294,22 @@ public class DataService {
          });
    }
 
+   /**
+    * Run transaction on the company votes node
+    * @param vote    vote object
+    */
    private void runCompanyVoteTransaction(final CompanyVote vote){
+      // gets the reference if exists, otherwise creates a new one
       final DatabaseReference ref = companyEvalSummaryRef().child(vote.getProjectID());
+
+      // run transaction on the reference child: Presentation
       ref.child("Presentation").runTransaction(new Transaction.Handler() {
          @Override
          public Transaction.Result doTransaction(MutableData mutableData) {
+            // add to the current score, the vote score
             Integer score = ((mutableData.getValue() == null) ? 0 : mutableData.getValue(Integer.class));
             score += vote.getPresentationTotal();
+            // set new added score
             mutableData.setValue(score);
             return Transaction.success(mutableData);
          }
@@ -278,11 +321,14 @@ public class DataService {
          }
       });
 
+      // run transaction on the reference child: Poster
       ref.child("Poster").runTransaction(new Transaction.Handler() {
          @Override
          public Transaction.Result doTransaction(MutableData mutableData) {
+            // add to the current score, the vote score
             Integer score =  ((mutableData.getValue() == null) ? 0 : mutableData.getValue(Integer.class));
             score += vote.getPosterTotal();
+            // set new added score
             mutableData.setValue(score);
             return Transaction.success(mutableData);
          }
@@ -295,13 +341,16 @@ public class DataService {
       });
    }
 
+   /**
+    * Get posters
+    * @param callback used to return HashMap of the posters
+    */
    public void getPosters(final Callback<HashMap<Integer, Poster>> callback) {
       postersRef().orderByChild("number").addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot) {
             JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
-            HashMap<Integer, Poster> poster = new HashMap<Integer, Poster>();
-             int last = -1;
+            HashMap<Integer, Poster> poster = new HashMap<>();
             try {
                Iterator<String> x = json.keys();
                Poster p;
@@ -311,7 +360,6 @@ public class DataService {
                   JSONObject posterObject = json.getJSONObject(name);
                   p = new Poster(posterObject, name);
                   poster.put(p.getPosterNumber(), p);
-                  last = p.getPosterNumber();
                }
             } catch (JSONException e) {
                FirebaseCrash.log(TAG + ": getPosters() -> " + e);
@@ -328,7 +376,12 @@ public class DataService {
       });
    }
 
-   public void getPosterTeamMembers(final Poster poster, final Callback callback){
+   /**
+    * Get Poster team members
+    * @param poster     poster object
+    * @param callback   used to return an arraylist of the team members
+    */
+   public void getPosterTeamMembers(final Poster poster, final Callback<ArrayList<IAPStudent>> callback){
       postersRef().child(poster.getPosterID()).child("TeamMembers")
               .addListenerForSingleValueEvent(new ValueEventListener() {
                  @Override
@@ -338,21 +391,21 @@ public class DataService {
                        return;
                     }
                     JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
-                     Log.e(TAG, json.toString());
+                    Log.e(TAG, json.toString());
                     Iterator<String> ids = json.keys();
-                    final Queue<String> dispatch = new ArrayDeque<String>();
+                    final Queue<String> dispatch = new ArrayDeque<>();
                     final ArrayList<IAPStudent> team = new ArrayList<>();
                     while (ids.hasNext()){
                        String id  = ids.next();
-                       dispatch.add(id);
-                       getUserData(id, new Callback<User>() {
+                       dispatch.add(id);                          // add the id of each student
+                       getUserData(id, new Callback<User>() {     // get data for each student
                           @Override
                           public void success(User user) {
-                             if (user instanceof IAPStudent){
-                                dispatch.poll();
-                                team.add((IAPStudent) user);
-                                if(dispatch.isEmpty()) {
-                                   callback.success(team);
+                             if (user instanceof IAPStudent){     // is IAPStudent
+                                dispatch.poll();                  // remove last added id
+                                team.add((IAPStudent) user);      // add user to team array
+                                if(dispatch.isEmpty()) {          // if dispatch is empty then all students have been processed
+                                   callback.success(team);        // return a success
                                 }
                              }
                           }
@@ -360,8 +413,8 @@ public class DataService {
                           @Override
                           public void failure(String message) {
                              FirebaseCrash.log(TAG + ": getPosterTeamMembers() -> " + message);
-                             dispatch.poll();
-                             callback.failure(message);
+                             dispatch.poll();                     // remove last added is
+                             callback.failure(message);           // return a failure
                           }
                        });
                     }
@@ -375,6 +428,11 @@ public class DataService {
               });
    }
 
+   /**
+    * Get poster advisors
+    * @param poster     poster object
+    * @param callback   used to return advisor array
+    */
    public void getPosterAdvisorMembers(final Poster poster, final Callback<ArrayList<Advisor>> callback){
       postersRef().child(poster.getPosterID())
               .child("Advisors")
@@ -382,12 +440,12 @@ public class DataService {
                  @Override
                  public void onDataChange(DataSnapshot dataSnapshot) {
                     if (!dataSnapshot.exists() || !dataSnapshot.hasChildren()) {
-                       callback.failure("Emptty");
+                       callback.failure("Empty");
                        return;
                     }
                     JSONObject json = new JSONObject((HashMap<String, Object>) dataSnapshot.getValue());
                     Iterator<String> ids = json.keys();
-                    final Queue<String> dispatch = new ArrayDeque<String>();
+                    final Queue<String> dispatch = new ArrayDeque<>();
                     final ArrayList<Advisor> advisors = new ArrayList<>();
                      while (ids.hasNext()){
                         String id  = ids.next();
@@ -419,6 +477,10 @@ public class DataService {
               });
    }
 
+   /**
+    * Get sponsor information
+    * @param callback used to return an array of the sponsors
+    */
    public void getSponsors(final Callback<ArrayList<Sponsors>> callback){
       final ArrayList<Sponsors> sponsorsMap = new ArrayList<>();
       sponsorsRef().addListenerForSingleValueEvent(new ValueEventListener() {
@@ -430,7 +492,7 @@ public class DataService {
                String s  = x.next();
                sponsorsMap.add(new Sponsors(json.optJSONObject(s),s));
             }
-            callback.success(sponsorsMap);
+            callback.success(sponsorsMap);                                    // return success with sponsors array
          }
 
          @Override
@@ -441,6 +503,10 @@ public class DataService {
       });
    }
 
+   /**
+    * Get data for the events
+    * @param callback returns the array of events
+    */
    public void getEvent(final Callback<ArrayList<Event>> callback){
       final ArrayList<Event> events = new ArrayList<>();
       scheduleRef().addListenerForSingleValueEvent(new ValueEventListener() {
@@ -448,13 +514,12 @@ public class DataService {
          public void onDataChange(DataSnapshot dataSnapshot) {
             JSONObject json = new JSONObject((HashMap<String,Object>)dataSnapshot.getValue());
             Iterator<String> it = json.keys();
-            Event e;
             for(int i = 0; i < json.length(); i++){
                JSONObject event = json.optJSONObject(it.next());
                if (event != null)
                   events.add(new Event(event));
             }
-            callback.success(events);
+            callback.success(events);                                          // return success with events array
          }
 
          @Override
@@ -464,38 +529,46 @@ public class DataService {
       });
    }
 
+    /**
+     * Get all students of interests with their respective labels and return them as a Map of [label: array{student_object}]
+     * @param callback  returns all the students of interest in HashMap<String, ArrayList<student_object>> form
+     */
    public void getIAPStudentsOfInterest(final Callback<HashMap<String, ArrayList<IAPStudent>>> callback){
       usersOfInterestRef().child(Constants.getCurrentLoggedInUser().getUserID())
               .addListenerForSingleValueEvent(new ValueEventListener() {
          @Override
          public void onDataChange(DataSnapshot dataSnapshot) {
-            final HashMap<String, ArrayList<IAPStudent>> interest = new HashMap<String, ArrayList<IAPStudent>>();
-            final ArrayList<IAPStudent> liked = new ArrayList<IAPStudent>();
-            final ArrayList<IAPStudent> unLiked = new ArrayList<IAPStudent>();
-            final ArrayList<IAPStudent> undecided = new ArrayList<IAPStudent>();
-            if (dataSnapshot.getValue() != null){
+            // create the HashMap to return
+            final HashMap<String, ArrayList<IAPStudent>> interest = new HashMap<>();
+
+            // create arrays to populate
+            final ArrayList<IAPStudent> liked = new ArrayList<>();
+            final ArrayList<IAPStudent> unLiked = new ArrayList<>();
+            final ArrayList<IAPStudent> undecided = new ArrayList<>();
+            if (dataSnapshot.getValue() != null){                                       // verifies that there is data on reference
                Log.v(TAG, "WHAT");
-               final JSONObject json = new JSONObject((HashMap<String,Object>) dataSnapshot.getValue());
-               final Iterator<String> it = json.keys();
-               final Queue<String> diapatch = new ArrayDeque<String>();
-               while (it.hasNext()) {
-                  final String id = it.next();
-                  diapatch.add(id);
+               final JSONObject json = new JSONObject(
+                       (HashMap<String,Object>) dataSnapshot.getValue());
+               final Iterator<String> studentIDs = json.keys();                         // get student ids from the json
+               final Queue<String> dispatch = new ArrayDeque<>();                       // used to keep task synchronous
+               while (studentIDs.hasNext()) {
+                  final String id = studentIDs.next();
+                  dispatch.add(id);                                                     // add id to the dispatch
                   Log.v(TAG, id);
-                  getUserData(id, new Callback<User>() {
+                  getUserData(id, new Callback<User>() {                                // get student data
                      @Override
                      public void success(User data) {
-                        diapatch.poll();
-                        if(json.optString(id).equals("Like")) {
+                        dispatch.poll();                                                // pop successful task from dispatch
+                        if(json.optString(id).equals("Like")) {                         // student label == Like
                            Log.v(TAG, "like");
                            liked.add((IAPStudent) data);
-                        }else if (json.optString(id).equals("Unlike")) {
+                        }else if (json.optString(id).equals("Unlike")) {                // student label == Unlike
                            Log.v(TAG, "unlike");
                            unLiked.add((IAPStudent) data);
-                        } else if (json.optString(id).equals("Undecided")){
+                        } else if (json.optString(id).equals("Undecided")){             // student label == Undecided
                            undecided.add((IAPStudent) data);
                         }
-                        if(diapatch.isEmpty()){
+                        if(dispatch.isEmpty()){                                         // if dispatch is empty all student data was queried
                            Log.v(TAG, "getStudInterest sec");
                            interest.put("liked", liked);
                            interest.put("unliked", unLiked);
@@ -505,7 +578,14 @@ public class DataService {
                      }
                      @Override
                      public void failure(String message) {
-                        diapatch.poll();
+                        dispatch.poll();
+                        if(dispatch.isEmpty()){
+                            Log.v(TAG, "getStudInterest failure last");
+                            interest.put("liked", liked);
+                            interest.put("unliked", unLiked);
+                            interest.put("undecided", undecided);
+                            callback.success(interest);
+                        }
                         Log.e(TAG, message);
                      }
                   });
@@ -526,15 +606,20 @@ public class DataService {
       });
    }
 
+    /**
+     * Set interest for a student
+     * @param id            student firebase UID
+     * @param interest     future status of student
+     */
    public void setInterestForStudent(final String id, final String interest){
-      usersOfInterestRef().child(Constants.getCurrentLoggedInUser().getUserID())
-              .updateChildren(new HashMap<String, Object>() {{ put(id, interest);}})
+      usersOfInterestRef().child(Constants.getCurrentLoggedInUser().getUserID())                // get reference to the user node of userOfInterest
+              .updateChildren(new HashMap<String, Object>() {{ put(id, interest);}})            // update child data of that node
               .addOnCompleteListener(new OnCompleteListener<Void>() {
                  @Override
                  public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()){
+                    if (task.isSuccessful()){                                                   // task is successful
                        Log.v(TAG, "setInterestForStudent(): succesfull -> " + id);
-                    } else {
+                    } else {                                                                    // task is unsuccessful
                        FirebaseCrash.log(TAG + "setInterestForStudent(): unsuccesfull ");
                        Log.v(TAG, "setInterestForStudent(): unsuccesfull -> " + id);
                     }
@@ -542,14 +627,20 @@ public class DataService {
               });
    }
 
-   public void updateUserData(final User user,final Uri uri, final Callback<User> callback){
-       if(uri != null){
-            DataService.sharedInstance().uploadUserResume(user, uri, new Callback<User>() {
+    /**
+     * Update user data
+     * @param user          user object
+     * @param resumeUri     resume uri
+     * @param callback      returns updated User object
+     */
+   public void updateUserData(final User user,final Uri resumeUri, final Callback<User> callback){
+       if(resumeUri != null){                                                                        // if resumeUri is not null update resume and user info
+            uploadUserResume(user, resumeUri, new Callback<User>() {
                 @Override
-                public void success(User data) {
+                public void success(User data) {                                                     // after success of updating resume update user info
                     Log.v(TAG, "uploadUserResume() succesfull");
-                    usersRef().child(Constants.getCurrentLoggedInUser().getUserID())
-                            .updateChildren(user.toMap())
+                    usersRef().child(Constants.getCurrentLoggedInUser().getUserID())                 // get user ref
+                            .updateChildren(user.toMap())                                            // update values
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
@@ -557,7 +648,7 @@ public class DataService {
                               FirebaseCrash.log("DataService.class -> updateUserData(): " + task.getException().getMessage());
                               callback.failure("DataService.class -> updateUserData(): " + task.getException().getMessage());
                            }
-                           callback.success(user);
+                           callback.success(user);                                                   // return updated user object
                         }
                     });
                 }
@@ -566,7 +657,7 @@ public class DataService {
                    FirebaseCrash.log(TAG + ": uploadUserResume() -> " +message);
                 }
             });
-       }else{
+       }else{                                                                                        // resumeUri is null: only update user data
            usersRef().child(user.getUserID())
                    .updateChildren(user.toMap()).addOnCompleteListener(new OnCompleteListener<Void>() {
                @Override
@@ -580,23 +671,28 @@ public class DataService {
        }
    }
 
+    /**
+     * Upload user image to Firebase Storage and update it on user information node
+     * @param user          user object
+     * @param bytes         image in bytes array
+     * @param callback      returns updated user object
+     */
    public void uploadUserImage(final User user, byte[] bytes, final Callback<User> callback){
       Log.v(TAG, "uploadUserImage()");
       // Create file metadata including the content type
-      StorageMetadata metadata = new StorageMetadata.Builder()
+      StorageMetadata metadata = new StorageMetadata.Builder()                                  // creates metadata for the image upload
               .setContentType("image/png")
               .build();
 
       //Register observers to listen for when the download is done or if it fails
-      StorageReference s = FirebaseStorage.getInstance().getReference()
+      StorageReference s = FirebaseStorage.getInstance().getReference()                         // get (or create reference if not exists) of the profile image in FB storage
               .child("ProfilePictures").child(user.getUserID()+"_ProfileImage.png");
       Log.v(TAG, "uploadUserImage()+ storageRef");
-
-      UploadTask uploadTask = s.putBytes(bytes ,metadata);
+      UploadTask uploadTask = s.putBytes(bytes ,metadata);                                      // start upload and save the uploadTask object
 
       uploadTask.addOnFailureListener(new OnFailureListener() {
          @Override
-         public void onFailure(@NonNull Exception exception) {
+         public void onFailure(@NonNull Exception exception) {                                  // failure
             // Handle unsuccessful uploads
             Log.v(TAG, "uploadUserImage() ->  task failure");
             FirebaseCrash.log(TAG+  ": uploadUserImage() ->  task failure");
@@ -604,16 +700,22 @@ public class DataService {
          }
       }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
          @Override
-         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {                          // success
             // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
             Log.v(TAG, "uploadUserImage() ->  task success: " + taskSnapshot.getTotalByteCount());
-            Uri downloadUrl = taskSnapshot.getDownloadUrl();
-            Constants.getCurrentLoggedInUser().setPhotoURL(downloadUrl.toString());
+            Uri downloadUrl = taskSnapshot.getDownloadUrl();                                    // get download url
+            Constants.getCurrentLoggedInUser().setPhotoURL(downloadUrl.toString());             // update data on user
             callback.success(user);
          }
       });
    }
 
+    /**
+     * Upload user resume on Storage and update its downloadURL on the user information node on DB
+     * @param user          user object
+     * @param uri           resume uri
+     * @param callback      return updated user object
+     */
    private void uploadUserResume(final User user, Uri uri,final Callback<User> callback){
        Log.v(TAG, "uploadUserResume()");
        // Create file metadata including the content type
@@ -645,6 +747,12 @@ public class DataService {
        });
    }
 
+    /**
+     * Verify if the user has the permission to create an account with the asked privileges
+     * @param accountType       account type requested
+     * @param email             user email
+     * @param callback          returns user object
+     */
    public void verifyUser(User.AccountType accountType, final String email , final Callback<User> callback) {
       switch (accountType) {
          case Advisor:
@@ -851,6 +959,12 @@ public class DataService {
       return str + k[i];
    }
 
+    /**
+     * Submit feedback
+     * @param subject     feedback subject
+     * @param sug         suggestion
+     * @param callback    returns success or failure
+     */
    public void submitFeedback(final String subject, final String sug, final Callback<String> callback){
       feedBackRef().push().updateChildren(new HashMap<String, Object>(){{
          put("Subject", subject);

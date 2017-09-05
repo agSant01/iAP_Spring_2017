@@ -10,7 +10,6 @@ package com.affiliates.iap.iapspring2017;
 
 import android.app.ProgressDialog;
 import android.support.annotation.VisibleForTesting;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ProgressBar;

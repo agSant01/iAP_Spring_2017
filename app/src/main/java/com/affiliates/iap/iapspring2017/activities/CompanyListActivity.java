@@ -31,7 +31,7 @@ import com.google.firebase.crash.FirebaseCrash;
 import java.util.ArrayList;
 
 public class CompanyListActivity extends BaseActivity {
-    private static final String TAG = "ComapanyList";
+    private static final String TAG = "CompanyList";
 
     private CompanyListAdapter mCompanyListAdapter;
     private AlphaAnimation mFadeOutAnimation;
@@ -43,17 +43,33 @@ public class CompanyListActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout._listview_activity);
-
         bind();
         setToolbar();
         setProgressBar();
+        setListView();
+    }
 
+    /**
+     * Binds all the UI components to variables for use
+     */
+    private void bind(){
+        mListView = (ListView) findViewById(R.id._listview);
+        mProgresBar = (ProgressBar) findViewById(R.id.progressBar);
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_company);
+    }
+
+    /**
+     * Sets company data on the listView
+     */
+    private void setListView(){
+        // Checks if there was previous data on memory
         if(Constants.getSponsor() == null)
-            DataService.sharedInstance().getSponsors(new Callback() {
+            // Gets data from the server
+            DataService.sharedInstance().getSponsors(new Callback<ArrayList<Sponsors>>() {
                 @Override
-                public void success(Object data) {
-                    Constants.setSponsor((ArrayList<Sponsors>) data);
-                    setListView();
+                public void success(ArrayList<Sponsors> data) {
+                    Constants.setSponsor(data);               // saves it on memory
+                    setListAdapter();                         // sets the adapter of the data to the listView
                     Log.v(TAG,"Get Sponsors Success!");
                 }
 
@@ -63,40 +79,43 @@ public class CompanyListActivity extends BaseActivity {
                     Log.e(TAG, message);
                 }
             });
-        else {
-           setListView();
+        else {                             // previous data on memory
+            setListAdapter();              // sets the adapter of the data to the listView
         }
     }
 
-    private void bind(){
-        mListView = (ListView) findViewById(R.id._listview);
-        mProgresBar = (ProgressBar) findViewById(R.id.progressBar);
-        mToolbar = (Toolbar) findViewById(R.id.toolbar_company);
-    }
-
-    private void setListView(){
+    /**
+     * Bundles the data into the CompanyListAdapter and sets it to the listView
+     */
+    private void setListAdapter(){
+        // creates the adapter
         mCompanyListAdapter = new CompanyListAdapter(getBaseContext(), Constants.getSponsor());
         mListView.setAdapter(mCompanyListAdapter);
+
+        // on click: get url of company and open that url on the default web browser
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String url = Constants.getSponsor().get(position).getWebsite();
-                Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(in);
+                String url = Constants.getSponsor().get(position).getWebsite();    // get url
+                Intent in = new Intent(Intent.ACTION_VIEW, Uri.parse(url));        // create new intent
+                startActivity(in);                                                 // start intent
             }
         });
         mProgresBar.startAnimation(mFadeOutAnimation);
-        mProgresBar.setVisibility(ProgressBar.INVISIBLE);
+        mProgresBar.setVisibility(ProgressBar.INVISIBLE);                          // hide progressbar
     }
 
+    /**
+     *  Sets the toolbar
+     */
     private void setToolbar(){
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        mToolbar.setNavigationIcon(R.drawable.ic_back_arrow);                   // set back_arrow icon
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {      // when clicked execute onBackPressed()
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -104,6 +123,9 @@ public class CompanyListActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Sets the properties of the progress bar
+     */
     private void setProgressBar(){
         mProgresBar.setVisibility(ProgressBar.VISIBLE);
         mProgresBar.setVerticalFadingEdgeEnabled(true);

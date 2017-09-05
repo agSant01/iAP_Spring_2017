@@ -8,15 +8,13 @@
 
 package com.affiliates.iap.iapspring2017.Models;
 
-import java.text.SimpleDateFormat;
-import java.text.ParseException;
-import org.json.JSONObject;
-
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.affiliates.iap.iapspring2017.services.DataService;
+import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Event implements Comparable<Event>{

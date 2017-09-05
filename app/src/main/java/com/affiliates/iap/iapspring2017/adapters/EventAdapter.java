@@ -9,8 +9,6 @@
 package com.affiliates.iap.iapspring2017.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +19,8 @@ import android.widget.TextView;
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.Models.Event;
 import com.affiliates.iap.iapspring2017.R;
-import com.affiliates.iap.iapspring2017.interfaces.Callback;
-import com.affiliates.iap.iapspring2017.services.DataService;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 

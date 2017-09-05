@@ -8,8 +8,6 @@
 
 package com.affiliates.iap.iapspring2017.activities;
 
-import com.affiliates.iap.iapspring2017.R;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.affiliates.iap.iapspring2017.BaseActivity;
+import com.affiliates.iap.iapspring2017.R;
 
 public class LocationActivity extends BaseActivity{
 
