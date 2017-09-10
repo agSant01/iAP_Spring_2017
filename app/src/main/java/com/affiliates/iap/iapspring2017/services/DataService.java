@@ -838,7 +838,14 @@ public class DataService {
       }
    }
 
+   /**
+    * Create new user in DB and Auth.
+    * @param user       user object
+    * @param password   password
+    * @param callback   used to return result
+    */
    public void createNewUser(final User user, String password, final Callback<String> callback){
+      // creeate user with email and password
       FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.getEmail(), password)
               .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
          @Override
@@ -847,7 +854,6 @@ public class DataService {
                Log.v(TAG, task.getException().getMessage());
                FirebaseCrash.log(TAG + "createNewUser() -> " + task.getException().getMessage());
                callback.failure(task.getException().getLocalizedMessage());
-               return;
             } else {
                final FirebaseUser firebaseUser = task.getResult().getUser();
                user.setID(firebaseUser.getUid());
@@ -903,6 +909,11 @@ public class DataService {
       });
    }
 
+   /**
+    * Add advisors to the projects they are in charge of.
+    * @param advisor    advisor object
+    * @param callback   returns result
+    */
    private void addAdvisorToProjects(final Advisor advisor, final Callback<String> callback){
       final Queue<String> dispatch = new ArrayDeque<>();
       if (advisor.getProjects() != null) {
@@ -928,21 +939,33 @@ public class DataService {
 
    }
 
+   /**
+    * Add the students to their respective project nodes in the DB.
+    * @param student    iapstudent object
+    * @param callback   returns result
+    */
    private void addIAPStudentToProjects(final IAPStudent student, final Callback<String> callback) {
+      // used to keep task synchronous
       final Queue<String> dispatch = new ArrayDeque<>();
+      // get the project id's of the student object
       Set<String> projectIDs = student.getProyectMap().keySet();
+      // iterate to add the student id to each project
       for (final String project : projectIDs) {
+         // add id to the dispatch
          dispatch.add(project);
+         // add the studentID to the TeamMembers node of the project reference in the DB
          postersRef().child(project).child("TeamMembers").updateChildren(new HashMap<String, Object>() {{
             put(student.getUserID(), true);
-         }}).addOnCompleteListener(new OnCompleteListener<Void>() {
+         }}).addOnCompleteListener(new OnCompleteListener<Void>() {     // listen to the result
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-               dispatch.poll();
+               dispatch.poll();                    // remove the ID from the dispatch
                if (!task.isSuccessful()) {
+                  // success
                   callback.failure("addIAPStudentToProjects(): " + task.getException().getMessage());
                }
                if (dispatch.isEmpty())
+                  // iterated through all the projects
                   callback.success("Student added to all projects successful");
             }
          });

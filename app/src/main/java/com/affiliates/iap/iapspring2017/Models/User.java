@@ -9,11 +9,11 @@
 package com.affiliates.iap.iapspring2017.Models;
 
 import android.content.Context;
+import android.test.suitebuilder.annotation.Suppress;
 import android.util.Log;
 
 import com.affiliates.iap.iapspring2017.Constants;
 import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
-import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
 import com.affiliates.iap.iapspring2017.interfaces.Callback;
 import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
 import com.affiliates.iap.iapspring2017.services.AccountAdministration;
@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.crash.FirebaseCrash;
 
+import java.lang.annotation.Documented;
 import java.util.HashMap;
 
 public abstract class User implements UserDelegate{
@@ -37,6 +38,15 @@ public abstract class User implements UserDelegate{
    private String email;
    private String name;
 
+   /**
+    * User constructor used when the user creates an account
+    * @param email
+    * @param name
+    * @param userID
+    * @param gender
+    * @param accType
+    * @param photoURL
+    */
    User(String email, String name, String userID,String gender, AccountType accType, String photoURL){
       if (accType == AccountType.NA){
          throw new InvalidAccountTypeExeption("User(): Invalid account type" + accType);
@@ -49,6 +59,11 @@ public abstract class User implements UserDelegate{
       this.name = name;
    }
 
+   /**
+    * Constructor used when the user already has an account in the DB.
+    * @param email
+    * @param accountType
+    */
    User(String email, AccountType accountType){
       this.accountType = accountType;
       this.photoURL = "NA";
@@ -59,6 +74,12 @@ public abstract class User implements UserDelegate{
       Log.v(TAG, email);
    }
 
+   /**
+    * Login for user
+    * @param email
+    * @param password
+    * @param callback   return user object or failure
+    */
    public static void login(String email, String password, final Callback<User> callback) {
       FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password).
          addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -83,6 +104,11 @@ public abstract class User implements UserDelegate{
          });
    }
 
+   /**
+    * Logout
+    * @param context
+    * @throws FirebaseAuthException
+    */
    public void logOut(Context context) throws FirebaseAuthException{
       FirebaseAuth.getInstance().signOut();
       AccountAdministration aa = new AccountAdministration(context);
@@ -95,6 +121,9 @@ public abstract class User implements UserDelegate{
       return null;
    }
 
+   /**
+    * Enum of account types
+    */
    public enum AccountType{
       CompanyUser, IAPStudent, Advisor, UPRMAccount, NA;
       public static AccountType determineAccType(String typeString){
@@ -113,6 +142,7 @@ public abstract class User implements UserDelegate{
       }
    }
 
+   // getters and setters
    public AccountType getAccountType() {
       return accountType;
    }
