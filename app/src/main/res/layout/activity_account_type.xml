@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.affiliates.iap.iapspring2017.sing_in.AccountType">
+    tools:context="com.affiliates.iap.iapspring2017.Authentication.CreateAccount.AccountType">
 
     <View
         android:id="@+id/view16"

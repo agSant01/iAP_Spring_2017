@@ -8,7 +8,7 @@
 
 package com.affiliates.iap.iapspring2017.Models;
 
-import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
+import com.affiliates.iap.iapspring2017.Exceptions.VoteErrorException;
 import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.HashMap;

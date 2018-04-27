@@ -54,10 +54,10 @@
             app:tabIndicatorHeight="2dp" />
     </android.support.design.widget.AppBarLayout>
 
-    <com.affiliates.iap.iapspring2017.interfaces.CustomViewPager
+    <com.affiliates.iap.iapspring2017.Interfaces.CustomViewPager
         android:id="@+id/viewpager_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    </com.affiliates.iap.iapspring2017.interfaces.CustomViewPager>
+    </com.affiliates.iap.iapspring2017.Interfaces.CustomViewPager>
 </android.support.design.widget.CoordinatorLayout>

@@ -11,12 +11,12 @@ package com.affiliates.iap.iapspring2017.Models;
 import android.content.Context;
 import android.util.Log;
 
-import com.affiliates.iap.iapspring2017.Constants;
-import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
-import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
-import com.affiliates.iap.iapspring2017.interfaces.Callback;
-import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
-import com.affiliates.iap.iapspring2017.services.DataService;
+import com.affiliates.iap.iapspring2017.Exceptions.InvalidAccountTypeExeption;
+import com.affiliates.iap.iapspring2017.Exceptions.VoteErrorException;
+import com.affiliates.iap.iapspring2017.Interfaces.Callback;
+import com.affiliates.iap.iapspring2017.Interfaces.UserDelegate;
+import com.affiliates.iap.iapspring2017.Services.ConstantsService;
+import com.affiliates.iap.iapspring2017.Services.DataService;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
@@ -75,7 +75,7 @@ public class CompanyUser extends User implements UserDelegate {
    @Override
    public void vote(final String projectID, final Vote vote, final Context context, final Callback callback) throws VoteErrorException {
       if (vote instanceof CompanyVote){
-         DataService.sharedInstance().submitCompanyEval( (CompanyVote) vote, new Callback() {
+         DataService.sharedInstance().submitCompanyEval( (CompanyVote) vote, new Callback<Object>() {
             @Override
             public void success(Object data) {
                setVoted(projectID);
@@ -149,27 +149,27 @@ public class CompanyUser extends User implements UserDelegate {
    }
 
    public boolean isLiked(String id){
-      if(Constants.getLikedStudents() == null) return false;
-      for(int i = 0; i < Constants.getLikedStudents().size(); i++){
-         if(Constants.getLikedStudents().get(i).getUserID().equals(id))
+      if(ConstantsService.getLikedStudents() == null) return false;
+      for(int i = 0; i < ConstantsService.getLikedStudents().size(); i++){
+         if(ConstantsService.getLikedStudents().get(i).getUserID().equals(id))
             return true;
       }
       return false;
    }
 
     public boolean isUnliked(String id) {
-       if (Constants.getUnlikedStudents() == null) return false;
-       for (int i = 0; i < Constants.getUnlikedStudents().size(); i++) {
-          if (Constants.getUnlikedStudents().get(i).getUserID().equals(id))
+       if (ConstantsService.getUnlikedStudents() == null) return false;
+       for (int i = 0; i < ConstantsService.getUnlikedStudents().size(); i++) {
+          if (ConstantsService.getUnlikedStudents().get(i).getUserID().equals(id))
              return true;
        }
        return false;
     }
 
     public boolean isUndecided(String id) {
-       if (Constants.getUndecidedStudents() == null) return false;
-       for (int i = 0; i < Constants.getUndecidedStudents().size(); i++) {
-          if (Constants.getUndecidedStudents().get(i).getUserID().equals(id))
+       if (ConstantsService.getUndecidedStudents() == null) return false;
+       for (int i = 0; i < ConstantsService.getUndecidedStudents().size(); i++) {
+          if (ConstantsService.getUndecidedStudents().get(i).getUserID().equals(id))
              return true;
        }
        return false;

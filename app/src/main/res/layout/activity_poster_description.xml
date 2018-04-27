@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:theme="@style/AppTheme.NoActionBar"
-    tools:context=".activities.PosterDescriptionActivity">
+    tools:context=".Tabs.PostersTab.PosterDescription.PosterDescriptionActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -269,7 +269,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view5"
-                tools:context=".MainActivity" />
+                tools:context=".Tabs.TabController.HomeActivity" />
 
             <TextView
                 android:id="@+id/advisors"
@@ -296,7 +296,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view6"
-                tools:context=".MainActivity" />
+                tools:context=".Tabs.TabController.HomeActivity" />
 
             <Button
                 android:id="@+id/button_evaluate"

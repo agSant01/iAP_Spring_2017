@@ -27,92 +27,92 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".sing_in.SignInActivity"
+            android:name=".Authentication.SignInActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Tabs.TabController.HomeActivity"
             android:label="Schedule"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
         <activity
-            android:name=".activities.FeedBackActivity"
+            android:name=".Tabs.MoreTab.FeedBackActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
         <activity
-            android:name=".activities.PosterDescriptionActivity"
+            android:name=".Tabs.PostersTab.PosterDescription.PosterDescriptionActivity"
             android:label="Posters"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".Tabs.TabController.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
         <activity
-            android:name=".activities.LocationActivity"
+            android:name=".Tabs.MoreTab.LocationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen">
         </activity>
         <activity
-            android:name=".activities.ForgotPasswordActivity"
+            android:name=".Authentication.ForgotPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen">
         </activity>
         <activity
-            android:name=".sing_in.NameAndGender"
+            android:name=".Authentication.CreateAccount.NameAndGender"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen">
         </activity>
         <activity
-            android:name=".profiles.IAPStudentProfile"
+            android:name=".Profiles.IAPStudentProfile"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen">
         </activity>
         <activity
-            android:name=".profiles.AdvisorProfile"
+            android:name=".Profiles.AdvisorProfile"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen">
         </activity>
         <activity
-            android:name=".evaluation_center.EvaluationActivity"
+            android:name=".EvaluationCenter.EvaluationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen">
         </activity>
         <activity
-            android:name=".activities.CompanyListActivity"
+            android:name=".Tabs.MoreTab.Sponsors.CompanyListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen"></activity>
         <activity
-            android:name=".activities.StudentsOfInterestActivity"
+            android:name=".Tabs.MoreTab.StudentsOfInterest.StudentsOfInterestActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen"></activity>
         <activity
-            android:name=".activities.ProfileEditActivity"
+            android:name=".Tabs.MoreTab.ProfileEditActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen"></activity>
         <activity
-            android:name=".sing_in.EnterEmail"
+            android:name=".Authentication.CreateAccount.EnterEmail"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
         <activity
-            android:name=".sing_in.AccountType"
+            android:name=".Authentication.CreateAccount.AccountType"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
         <activity
-            android:name=".sing_in.EmailConfirmation"
+            android:name=".Authentication.CreateAccount.EmailConfirmation"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
         <activity
-            android:name=".sing_in.PasswordActivity"
+            android:name=".Authentication.CreateAccount.PasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
         <activity
-            android:name=".evaluation_center.GeneralVoteActivity"
+            android:name=".EvaluationCenter.GeneralVoteActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
         <activity
-            android:name=".activities.NoConnectionActivity"
+            android:name=".NoConnectionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
         <activity
-            android:name=".activities.PosterViewer"
+            android:name=".Tabs.PostersTab.PosterDescription.PosterViewer"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
     </application>

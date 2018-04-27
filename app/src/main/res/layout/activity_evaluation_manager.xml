@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.affiliates.iap.iapspring2017.MainActivity"
+    tools:context="com.affiliates.iap.iapspring2017.Tabs.TabController.HomeActivity"
     app:theme="@style/AppTheme.NoActionBar">
 
     <android.support.design.widget.AppBarLayout

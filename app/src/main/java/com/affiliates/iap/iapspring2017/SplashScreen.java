@@ -14,12 +14,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 
+import com.affiliates.iap.iapspring2017.Authentication.SignInActivity;
+import com.affiliates.iap.iapspring2017.Interfaces.Callback;
 import com.affiliates.iap.iapspring2017.Models.User;
-import com.affiliates.iap.iapspring2017.interfaces.Callback;
-import com.affiliates.iap.iapspring2017.services.AccountAdministration;
-import com.affiliates.iap.iapspring2017.services.Client;
-import com.affiliates.iap.iapspring2017.services.DataService;
-import com.affiliates.iap.iapspring2017.sing_in.SignInActivity;
+import com.affiliates.iap.iapspring2017.Services.AccountAdministration;
+import com.affiliates.iap.iapspring2017.Services.Client;
+import com.affiliates.iap.iapspring2017.Services.ConstantsService;
+import com.affiliates.iap.iapspring2017.Services.DataService;
+import com.affiliates.iap.iapspring2017.Tabs.TabController.HomeActivity;
 import com.google.firebase.auth.FirebaseAuthException;
 
 public class SplashScreen extends Activity {
@@ -58,8 +60,8 @@ public class SplashScreen extends Activity {
                                 @Override
                                 public void success(User user) {
                                     Log.v(TAG, "Get user data successfull");
-                                    Constants.setCurrentLogedInUser(user);
-                                    Intent in = new Intent(SplashScreen.this, MainActivity.class);
+                                    ConstantsService.setCurrentLogedInUser(user);
+                                    Intent in = new Intent(SplashScreen.this, HomeActivity.class);
                                     startActivity(in);
                                     finish();
                                 }
@@ -69,7 +71,7 @@ public class SplashScreen extends Activity {
                                     Log.e(TAG, "Failed get data curentRegisteringUserData");
                                     if (message.contains("No user ID Registered"))
                                         try {
-                                            Constants.getCurrentLoggedInUser().logOut(getBaseContext());
+                                            ConstantsService.getCurrentLoggedInUser().logOut(getBaseContext());
                                         } catch (FirebaseAuthException e) {
                                             e.printStackTrace();
                                         } catch (NullPointerException exep) {

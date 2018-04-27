@@ -11,11 +11,11 @@ package com.affiliates.iap.iapspring2017.Models;
 import android.content.Context;
 import android.util.Log;
 
-import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
-import com.affiliates.iap.iapspring2017.exeptions.VoteErrorException;
-import com.affiliates.iap.iapspring2017.interfaces.Callback;
-import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
-import com.affiliates.iap.iapspring2017.services.DataService;
+import com.affiliates.iap.iapspring2017.Exceptions.InvalidAccountTypeExeption;
+import com.affiliates.iap.iapspring2017.Exceptions.VoteErrorException;
+import com.affiliates.iap.iapspring2017.Interfaces.Callback;
+import com.affiliates.iap.iapspring2017.Interfaces.UserDelegate;
+import com.affiliates.iap.iapspring2017.Services.DataService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,7 +45,7 @@ public class Advisor extends User implements UserDelegate {
       this.webPage = "NA";
    }
 
-   private Advisor(Void d, JSONObject data, AccountType accountType, String id) throws JSONException{
+   private Advisor(Void d, JSONObject data, AccountType accountType, String id) throws JSONException {
       super(data.optString("Email"), data.optString("Name"), id,data.optString("Sex"), accountType, data.optString("PhotoURL"));
       this.projects = parseData(data.optJSONObject("Projects"));
       this.researchIntent = data.optString("ResearchIntent");

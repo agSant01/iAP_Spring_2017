@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:theme="@style/AppTheme.NoActionBar"
-    tools:context=".activities.PosterDescriptionActivity">
+    tools:context=".Tabs.PostersTab.PosterDescription.PosterDescriptionActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

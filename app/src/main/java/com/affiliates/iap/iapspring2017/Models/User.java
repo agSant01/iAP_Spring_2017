@@ -9,15 +9,14 @@
 package com.affiliates.iap.iapspring2017.Models;
 
 import android.content.Context;
-import android.test.suitebuilder.annotation.Suppress;
 import android.util.Log;
 
-import com.affiliates.iap.iapspring2017.Constants;
-import com.affiliates.iap.iapspring2017.exeptions.InvalidAccountTypeExeption;
-import com.affiliates.iap.iapspring2017.interfaces.Callback;
-import com.affiliates.iap.iapspring2017.interfaces.UserDelegate;
-import com.affiliates.iap.iapspring2017.services.AccountAdministration;
-import com.affiliates.iap.iapspring2017.services.DataService;
+import com.affiliates.iap.iapspring2017.Exceptions.InvalidAccountTypeExeption;
+import com.affiliates.iap.iapspring2017.Interfaces.Callback;
+import com.affiliates.iap.iapspring2017.Interfaces.UserDelegate;
+import com.affiliates.iap.iapspring2017.Services.AccountAdministration;
+import com.affiliates.iap.iapspring2017.Services.ConstantsService;
+import com.affiliates.iap.iapspring2017.Services.DataService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -25,7 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.crash.FirebaseCrash;
 
-import java.lang.annotation.Documented;
 import java.util.HashMap;
 
 public abstract class User implements UserDelegate{
@@ -113,7 +111,7 @@ public abstract class User implements UserDelegate{
       FirebaseAuth.getInstance().signOut();
       AccountAdministration aa = new AccountAdministration(context);
       aa.saveUserID("second");
-      Constants.setCurrentLogedInUser(null);
+      ConstantsService.setCurrentLogedInUser(null);
    }
 
    @Override
