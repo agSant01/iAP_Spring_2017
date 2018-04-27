@@ -48,7 +48,7 @@ public class EventAdapter extends ArrayAdapter<Event> implements StickyListHeade
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup){
         ViewHolder viewHolder;
-        Event event = getItem(position);
+        final Event event = getItem(position);
         if (convertView == null){
             convertView = inflater.inflate(R.layout.cell_event, viewGroup, false);
             viewHolder = new ViewHolder(convertView);

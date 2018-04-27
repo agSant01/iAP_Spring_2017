@@ -24,6 +24,7 @@ public class Event implements Comparable<Event>{
    private String eventType;
    private Date startDate;
    private Date endDate;
+   private boolean isPresentation;
 
    public Event(JSONObject data) {
       format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -51,6 +52,10 @@ public class Event implements Comparable<Event>{
    }
 
    public Date getEndDate() {return endDate;}
+
+   public boolean isPresentation(){
+      return this.isPresentation;
+   }
 
    public String getStartTime(){
       String s = format.format(startDate);

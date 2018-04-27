@@ -48,45 +48,39 @@
         <activity
             android:name=".Tabs.MoreTab.LocationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashScreen">
-        </activity>
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".Authentication.ForgotPasswordActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashScreen">
-        </activity>
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".Authentication.CreateAccount.NameAndGender"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashScreen">
-        </activity>
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".Profiles.IAPStudentProfile"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashScreen">
-        </activity>
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".Profiles.AdvisorProfile"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashScreen">
-        </activity>
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".EvaluationCenter.EvaluationActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashScreen">
-        </activity>
+            android:theme="@style/SplashScreen"></activity>
         <activity
             android:name=".Tabs.MoreTab.Sponsors.CompanyListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashScreen"></activity>
+            android:theme="@style/SplashScreen" />
         <activity
             android:name=".Tabs.MoreTab.StudentsOfInterest.StudentsOfInterestActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashScreen"></activity>
+            android:theme="@style/SplashScreen" />
         <activity
             android:name=".Tabs.MoreTab.ProfileEditActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashScreen"></activity>
+            android:theme="@style/SplashScreen" />
         <activity
             android:name=".Authentication.CreateAccount.EnterEmail"
             android:screenOrientation="portrait"
@@ -113,6 +107,10 @@
             android:theme="@style/SplashScreen" />
         <activity
             android:name=".Tabs.PostersTab.PosterDescription.PosterViewer"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashScreen" />
+        <activity
+            android:name=".activities.ScheduleDetailedView"
             android:screenOrientation="portrait"
             android:theme="@style/SplashScreen" />
     </application>

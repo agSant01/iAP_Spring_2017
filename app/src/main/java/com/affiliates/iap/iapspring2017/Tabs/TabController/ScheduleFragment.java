@@ -8,6 +8,7 @@
 
 package com.affiliates.iap.iapspring2017.Tabs.TabController;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.AdapterView;
 import android.widget.ProgressBar;
 
 import com.affiliates.iap.iapspring2017.Interfaces.Callback;
@@ -23,6 +25,7 @@ import com.affiliates.iap.iapspring2017.R;
 import com.affiliates.iap.iapspring2017.Services.ConstantsService;
 import com.affiliates.iap.iapspring2017.Services.DataService;
 import com.affiliates.iap.iapspring2017.Tabs.EventTab.EventAdapter;
+import com.affiliates.iap.iapspring2017.activities.ScheduleDetailedView;
 
 import java.util.ArrayList;
 
@@ -83,7 +86,15 @@ public class ScheduleFragment extends Fragment {
             mEventAdapter = new EventAdapter(getContext(), ConstantsService.getEvents());
             mListView.setAdapter(mEventAdapter);
             mListView.setSelection(ConstantsService.currentEvent);
-            Log.v(TAG, "ITEM " + ConstantsService.currentEvent);
+            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.d(TAG, "onItemClick: "+ConstantsService.getEvents().get(position).getEventName());
+                    Intent in = new Intent(getActivity().getBaseContext(), ScheduleDetailedView.class);
+                    startActivity(in);
+                }
+            });
+            Log.v(TAG,"ITEM " + ConstantsService.currentEvent);
             mPB.startAnimation(fadeOutAnimation);
             mPB.setVisibility(ProgressBar.INVISIBLE);
         }

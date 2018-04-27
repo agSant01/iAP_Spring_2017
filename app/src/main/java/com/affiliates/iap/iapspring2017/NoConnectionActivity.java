@@ -14,12 +14,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.affiliates.iap.iapspring2017.Extensions.BaseActivity;
-import com.affiliates.iap.iapspring2017.Services.AccountAdministration;
 import com.affiliates.iap.iapspring2017.Services.Client;
 
 public class NoConnectionActivity extends BaseActivity {
     private Client mClient;
-    private AccountAdministration mAccAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +27,6 @@ public class NoConnectionActivity extends BaseActivity {
         final String Tmessage = "Connection Established";
 
         mClient = new Client(getBaseContext());
-        mAccAdmin = new AccountAdministration(getBaseContext());
 
         Button tryAgain = (Button) findViewById(R.id.try_again);
         tryAgain.setOnClickListener(new View.OnClickListener() {        // Listener for try again
@@ -38,7 +35,7 @@ public class NoConnectionActivity extends BaseActivity {
                 showProgressDialog();
                 if (mClient.isConnectionAvailable()){
                     hideProgressDialog();
-                    createShortToast(Tmessage).show();
+                    showShortToast(Tmessage);
                     if(getIntent().getStringExtra("Splash") != null){
                         if(getIntent().getStringExtra("Splash").equals("splash"))
                             startActivity(new Intent(getBaseContext(), SplashScreen.class));
@@ -47,7 +44,7 @@ public class NoConnectionActivity extends BaseActivity {
                 } else {
                     //There is no internet yet.
                     hideProgressDialog();
-                    createShortToast(message).show();
+                    showShortToast(message);
                 }
             }
         });
