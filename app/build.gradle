@@ -65,6 +65,7 @@ dependencies {
     compile 'se.emilsjolander:stickylistheaders:2.6.0'
     compile 'com.github.barteksc:android-pdf-viewer:2.5.1'
     compile 'commons-io:commons-io:2.4'
+    compile 'com.squareup.retrofit2:retrofit:2.4.0'
     testCompile 'junit:junit:4.12'
 }
 
